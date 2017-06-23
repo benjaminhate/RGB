@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour {
 	public bool dead = false;
 	public bool respawn = false;
 	public bool finish = false;
+	public bool obstacleCollide = false;
+	public bool obstacleKill = false;
+	public string obstacle;
 
 	private Rigidbody2D rd2d;
 	private SpriteRenderer renderer;
@@ -23,6 +26,13 @@ public class PlayerController : MonoBehaviour {
 		rd2d = GetComponent<Rigidbody2D>();
 		renderer = GetComponent<SpriteRenderer> ();
 		anim = GetComponent<Animation> ();
+	}
+
+	void Update() {
+		if (Input.GetKeyDown (KeyCode.R) && !respawn && !dead) {
+			respawn = true;
+			dead = true;
+		}
 	}
 	
 	void FixedUpdate () {
@@ -48,8 +58,11 @@ public class PlayerController : MonoBehaviour {
 	{
 		if(coll.gameObject.CompareTag("Obstacles") && !finish && !dead)
 		{
+			obstacleCollide = true;
+			obstacle = coll.gameObject.name;
 			if (!CompareColor (renderer.color, coll.gameObject.GetComponent<SpriteRenderer> ().color)) {
 				dead = true;
+				obstacleKill = true;
 				StartCoroutine (Death());
 			}
 				
@@ -57,8 +70,17 @@ public class PlayerController : MonoBehaviour {
 		if (coll.gameObject.CompareTag ("LevelFinish")) {
 			if (!finish) {
 				GameObject timerCanvas = GameObject.Find ("TimerCanvas");
-				SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript>().getTimer());
+				if (timerCanvas != null) {
+					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().getTimer ());
+				}
 				StartCoroutine (Finish ());
+			}
+		}
+
+		if (coll.gameObject.CompareTag ("TutoTransition")) {
+			GameObject tuto = GameObject.Find ("TutoCanvas");
+			if (tuto != null) {
+				tuto.GetComponent<TutoScript> ().transObjective.setDone (true);
 			}
 		}
 	}
@@ -82,6 +104,7 @@ public class PlayerController : MonoBehaviour {
 		yield return StartCoroutine (RotateAnimation ());
 		anim.PlayQueued ("DeathAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
+		obstacleKill = false;
 		respawn = true;
 	}
 
@@ -100,6 +123,11 @@ public class PlayerController : MonoBehaviour {
 		if(coll.gameObject.CompareTag("Colorer")){
 			renderer.color=coll.gameObject.GetComponent<SpriteRenderer>().color;
 		}
+	}
+
+	void OnTriggerExit2D(Collider2D coll){
+		if (coll.gameObject.CompareTag ("Obstacles"))
+			obstacleCollide = false;
 	}
 
 	bool CompareColor(Color color1,Color color2){
