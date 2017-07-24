@@ -7,6 +7,7 @@ using System;
 public class PlayerData {
 
 	public List<Scene> scenes;
+	public List<Category> categories;
 	public string path;
 
 	public PlayerData setPath(string path){
@@ -27,5 +28,13 @@ public class PlayerData {
 	public PlayerData addScenesItem(Scene scene){
 		this.scenes.Add (scene);
 		return this;
+	}
+
+	public PlayerData setCategories(List<Category> categories){
+		this.categories = categories;
+		return this;
+	}
+	public List<Category> getCategories(){
+		return this.categories;
 	}
 }

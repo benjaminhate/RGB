@@ -56,6 +56,8 @@
      <Compile Include="Assets\Scripts\LevelStart.cs" />
      <Compile Include="Assets\Scripts\MainCameraController.cs" />
      <Compile Include="Assets\Scripts\MenuScript.cs" />
+     <Compile Include="Assets\Scripts\Objects\Category.cs" />
+     <Compile Include="Assets\Scripts\Objects\Level.cs" />
      <Compile Include="Assets\Scripts\Objects\PlayerData.cs" />
      <Compile Include="Assets\Scripts\Objects\Scene.cs" />
      <Compile Include="Assets\Scripts\PauseScript.cs" />
