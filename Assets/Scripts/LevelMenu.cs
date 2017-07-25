@@ -15,7 +15,7 @@ public class LevelMenu : MonoBehaviour {
 	public Button categorySelector;
 	public Button returnButton;
 	public Text menuText;
-	public List<Category> categories;
+	private List<Category> categories;
 
 	private int actualScroll = 1;
 	private int maxScroll;
@@ -142,6 +142,7 @@ public class LevelMenu : MonoBehaviour {
 			SetCategoryMenu (categories);
 			SaveLoad.SaveInit (categories);
 		}
+		categories = data.getCategories ();
 	}
 
 	void OnClickCategoryButton(List<Category> categories,Category category){
