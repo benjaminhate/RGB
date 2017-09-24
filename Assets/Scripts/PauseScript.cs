@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PauseScript : MonoBehaviour {
 
-	private bool pause = false;
+	static bool pause = false;
 
-	public GameObject menu;
+	static public GameObject menu;
 
 	void Update(){
 		if (Input.GetKeyDown (KeyCode.Escape)) {
