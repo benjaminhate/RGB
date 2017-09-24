@@ -32,4 +32,8 @@ public class TimerScript : MonoBehaviour {
 		int hundredths = t % 100;
 		return string.Format ("{0:00}:{1:00}.{2:00}", minutes, seconds, hundredths);
 	}
+
+	public void Reset(){
+		timer = 0;
+	}
 }

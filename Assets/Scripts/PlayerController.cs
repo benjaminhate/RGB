@@ -29,15 +29,21 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyDown (KeyCode.R) && !respawn && !dead) {
-			respawn = true;
-			dead = true;
+		if (Input.GetKeyDown (KeyCode.R)) {
+			Refresh ();
 		}
 	}
 	
 	void FixedUpdate () {
 		if(!dead && !finish)
 			MovePlayer ();
+	}
+
+	public void Refresh(){
+		if (!respawn && !dead) {
+			respawn = true;
+			dead = true;
+		}
 	}
 
 	void MovePlayer(){
