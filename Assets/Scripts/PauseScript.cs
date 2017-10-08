@@ -7,10 +7,10 @@ using System.IO;
 
 public class PauseScript : MonoBehaviour {
 
-	static bool pause = false;
-	static bool pauseCheck = false;
+	static bool pause;
+	static bool pauseCheck;
 
-	PlayerData data = new PlayerData();
+	PlayerData data;
 	bool volume;
 
 	public GameObject menu;
@@ -19,6 +19,8 @@ public class PauseScript : MonoBehaviour {
 	static GameObject pauseMenu;
 
 	void Start(){
+		pause = false;
+		pauseCheck = false;
 		pauseMenu = menu;
 		data = SaveLoad.Load ();
 		if (data != null) {

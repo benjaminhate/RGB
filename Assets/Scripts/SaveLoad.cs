@@ -120,7 +120,6 @@ public class SaveLoad {
 		if (level != null) {
 			level.setCompleted (true);
 			level.setBlocked (false);
-			Debug.Log ("new timer " + timer + " old timer " + level.getTimer ());
 			if (timer < level.getTimer () || level.getTimer () == 0)
 				level.setTimer (timer);
 		}

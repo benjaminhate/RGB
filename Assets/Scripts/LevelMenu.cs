@@ -17,8 +17,10 @@ public class LevelMenu : MonoBehaviour {
 	public Text menuText;
 	private List<Category> categories;
 
-	private int actualScroll = 1;
+	private int actualScroll;
 	private int maxScroll;
+	private int selectorWidth;
+	private int selectorHeight;
 
 	private Category GetCategoryWithName(string name) {
 		foreach (Category category in categories) {
@@ -128,6 +130,8 @@ public class LevelMenu : MonoBehaviour {
 	}
 
 	private void ResetMenuButton(){
+		actualScroll = 1;
+		selector.GetComponent<RectTransform> ().sizeDelta = selectorWidth * Vector2.right + selectorHeight * Vector2.up;
 		Button[] menuButtonList = selector.GetComponentsInChildren<Button> ();
 		foreach (Button menuButton in menuButtonList) {
 			Destroy (menuButton.gameObject);
@@ -135,14 +139,17 @@ public class LevelMenu : MonoBehaviour {
 	}
 
 	void Start () {
+		actualScroll = 1;
+		selectorWidth = 100;
+		selectorHeight = 90;
 		PlayerData data = SaveLoad.Load ();
 		if (data != null) {
 			SetCategoryMenu (data.categories);
+			categories = data.getCategories ();
 		} else {
 			SetCategoryMenu (categories);
 			SaveLoad.SaveInit (categories);
 		}
-		categories = data.getCategories ();
 	}
 
 	void OnClickCategoryButton(List<Category> categories,Category category){
