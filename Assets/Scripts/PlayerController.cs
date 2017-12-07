@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public string obstacle;
 
 	private Rigidbody2D rd2d;
-	private SpriteRenderer renderer;
+	private SpriteRenderer spriteRenderer;
 	private Animation anim;
 
 	private float moveHDelay = 0;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 		rd2d = GetComponent<Rigidbody2D>();
-		renderer = GetComponent<SpriteRenderer> ();
+		spriteRenderer = GetComponent<SpriteRenderer> ();
 		anim = GetComponent<Animation> ();
 	}
 
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			obstacleCollide = true;
 			obstacle = coll.gameObject.name;
-			if (!CompareColor (renderer.color, coll.gameObject.GetComponent<SpriteRenderer> ().color)) {
+			if (!CompareColor (spriteRenderer.color, coll.gameObject.GetComponent<SpriteRenderer> ().color)) {
 				dead = true;
 				obstacleKill = true;
 				StartCoroutine (Death());
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D coll){
 		if(coll.gameObject.CompareTag("Colorer")){
-			renderer.color=coll.gameObject.GetComponent<SpriteRenderer>().color;
+			spriteRenderer.color=coll.gameObject.GetComponent<SpriteRenderer>().color;
 		}
 	}
 

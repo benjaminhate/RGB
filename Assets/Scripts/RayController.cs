@@ -11,7 +11,7 @@ public class RayController : MonoBehaviour {
 	private Color green = new Color(0f,0.8f,0f,1f);
 	private Color blue = new Color (0.1f, 0.3f, 1f, 1f);
 
-	private SpriteRenderer renderer;
+	private SpriteRenderer spriteRenderer;
 
 	public float speed;
 	public float range;
@@ -26,19 +26,19 @@ public class RayController : MonoBehaviour {
 	void Start () {
 		currentPos = transform.position;
 		dist = range * 0.1f;
-		renderer = GetComponent<SpriteRenderer> ();
+		spriteRenderer = GetComponent<SpriteRenderer> ();
 		switch (myColor){
 		case Colors.RED:
-			renderer.color = red;
+			spriteRenderer.color = red;
 			break;
 		case Colors.GREEN:
-			renderer.color = green;
+			spriteRenderer.color = green;
 			break;
 		case Colors.BLUE:
-			renderer.color = blue;
+			spriteRenderer.color = blue;
 			break;
 		default:
-			renderer.color = red;
+			spriteRenderer.color = red;
 			break;
 		}
 	}

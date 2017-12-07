@@ -26,6 +26,30 @@ public class PlayerData {
 		return this.categories;
 	}
 
+    public Category getCategoryWithName(String name)
+    {
+        foreach(Category category in categories)
+        {
+            if (category.getName() == name)
+            {
+                return category;
+            }
+        }
+        return null;
+    }
+
+    public Category getCategoryWithId(int id)
+    {
+        foreach(Category category in categories)
+        {
+            if (category.id == id)
+            {
+                return category;
+            }
+        }
+        return null;
+    }
+
 	public PlayerData setVolume(bool volume){
 		this.volume = volume;
 		return this;
@@ -33,4 +57,18 @@ public class PlayerData {
 	public bool getVolume(){
 		return this.volume;
 	}
+
+    public String toString()
+    {
+        String sb = "PlayerData : "
+            + "\n volume : "
+            + this.volume.ToString()
+            + "\n path : "
+            + this.path;
+        foreach(Category category in categories)
+        {
+            sb += "\n" + category.toString();
+        }
+        return sb;
+    }
 }

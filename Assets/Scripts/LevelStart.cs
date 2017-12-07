@@ -9,7 +9,7 @@ public class LevelStart : MonoBehaviour {
 	public float startRot;
 
 	public GameObject player;
-	public Camera camera;
+	public Camera mainCamera;
 
 	public enum Colors {RED,GREEN,BLUE};
 	public Colors levelColor;
@@ -50,7 +50,7 @@ public class LevelStart : MonoBehaviour {
 	void PlacePlayer(){
 		player.transform.position = new Vector3 (startX, startY, 0);
 		player.transform.eulerAngles = new Vector3 (0, 0, startRot);
-		camera.transform.position = new Vector3 (startX, startY, -1);
+		mainCamera.transform.position = new Vector3 (startX, startY, -1);
 		SpriteRenderer renderer = player.GetComponent<SpriteRenderer> ();
 		switch (levelColor){
 		case Colors.RED:

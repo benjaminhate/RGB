@@ -25,24 +25,24 @@ public class CameraController : MonoBehaviour {
 	private bool directionA;
 	private bool stop = false;
 
-	private SpriteRenderer renderer;
+	private SpriteRenderer spriteRenderer;
 
 	void Start () {
-		directionA = true;
-		renderer = GetComponent<SpriteRenderer> ();
+        directionA = true;
+		spriteRenderer = GetComponent<SpriteRenderer> ();
 		transform.rotation = Quaternion.Euler (0, 0, degA);
 		switch (myColor){
 		case Colors.RED:
-			renderer.color = red;
+			spriteRenderer.color = red;
 			break;
 		case Colors.GREEN:
-			renderer.color = green;
+			spriteRenderer.color = green;
 			break;
 		case Colors.BLUE:
-			renderer.color = blue;
+			spriteRenderer.color = blue;
 			break;
 		default:
-			renderer.color = red;
+			spriteRenderer.color = red;
 			break;
 		}
 	}

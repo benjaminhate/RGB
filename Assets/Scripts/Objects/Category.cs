@@ -10,12 +10,14 @@ public class Category {
 	public List<Level> levels;
 	public bool completed;
 	public bool blocked;
+    public int id;
 
-	public Category(string name,List<Level> levels,bool completed,bool blocked) {
+	public Category(string name,List<Level> levels,bool completed,bool blocked,int id) {
 		this.name = name;
 		this.levels = levels;
 		this.completed = completed;
 		this.blocked = blocked;
+        this.id = id;
 	}
 
 	public Category setName(string name) {
@@ -26,6 +28,17 @@ public class Category {
 	public string getName() {
 		return this.name;
 	}
+
+    public Category setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public int getId()
+    {
+        return this.id;
+    }
 
 	public Category setCompleted(bool completed){
 		this.completed = completed;
@@ -82,9 +95,35 @@ public class Category {
 		return levels;
 	}
 
+    public Level getLevelWithName(String name)
+    {
+        foreach(Level level in levels)
+        {
+            if (level.name == name)
+            {
+                return level;
+            }
+        }
+        return null;
+    }
+
+    public Level getLevelWithId(int id)
+    {
+        foreach(Level level in levels)
+        {
+            if (level.id == id)
+            {
+                return level;
+            }
+        }
+        return null;
+    }
+
 	public string toString() {
-		string sb = "Category : \n name : "
-		            + this.name
+        string sb = "Category : \n name : "
+                    + this.name
+                    + "\n id : "
+                    + this.id.ToString()
 		            + "\n completed : "
 		            + this.completed.ToString ()
 		            + "\n blocked : "

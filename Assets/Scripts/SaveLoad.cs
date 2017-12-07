@@ -76,6 +76,26 @@ public class SaveLoad {
 		return data;
 	}
 
+    public static PlayerData Save(PlayerData data)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file;
+
+        if (!File.Exists(path))
+        {
+            file = File.Create(path);
+        }
+        else
+        {
+            file = File.Open(path, FileMode.Open);
+        }
+
+        bf.Serialize(file, data);
+        file.Close();
+
+        return data;
+    }
+
 	public static PlayerData SaveLevel() {
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file;

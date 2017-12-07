@@ -11,12 +11,14 @@ public class Level {
 	public bool completed;
 	public bool blocked;
 	public string sceneName;
+    public int id;
 
-	public Level(string name,float timer,bool completed,bool blocked){
+	public Level(string name,float timer,bool completed,bool blocked,int id){
 		this.name = name;
 		this.timer = timer;
 		this.completed = completed;
 		this.blocked = blocked;
+        this.id = id;
 	}
 
 	public Level setName(string name){
@@ -26,6 +28,17 @@ public class Level {
 	public string getName(){
 		return this.name;
 	}
+
+    public Level setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public int getId()
+    {
+        return this.id;
+    }
 
 	public Level setTimer(float timer){
 		this.timer = timer;
@@ -61,7 +74,9 @@ public class Level {
 
 	public string toString() {
 		return "Level : \n name : " 
-			+ this.name 
+			+ this.name
+            + "\n id : "
+            + this.id.ToString()
 			+ "\n completed : " 
 			+ this.completed.ToString () 
 			+ "\n blocked : " 
