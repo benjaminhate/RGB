@@ -78,11 +78,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AudioScript.cs" />
     <Compile Include="Assets\Scripts\BeginScript.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\ColorerController.cs" />
     <Compile Include="Assets\Scripts\DetectorController.cs" />
     <Compile Include="Assets\Scripts\EndMenuScript.cs" />
+    <Compile Include="Assets\Scripts\EndTutorial.cs" />
     <Compile Include="Assets\Scripts\LevelFinish.cs" />
     <Compile Include="Assets\Scripts\LevelMenu.cs" />
     <Compile Include="Assets\Scripts\LevelStart.cs" />

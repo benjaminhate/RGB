@@ -9,6 +9,7 @@ public class PlayerData {
 	public List<Category> categories;
 	public string path;
 	public bool volume;
+    public bool tutorial;
 
 	public PlayerData setPath(string path){
 		this.path = path;
@@ -57,6 +58,16 @@ public class PlayerData {
 	public bool getVolume(){
 		return this.volume;
 	}
+
+    public PlayerData setTutorial(bool tutorial)
+    {
+        this.tutorial = tutorial;
+        return this;
+    }
+    public bool getTutorial()
+    {
+        return this.tutorial;
+    }
 
     public String toString()
     {

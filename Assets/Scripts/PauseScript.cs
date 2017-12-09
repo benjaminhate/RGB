@@ -72,6 +72,11 @@ public class PauseScript : MonoBehaviour {
 		volumeOn.gameObject.SetActive (volume);
 		volumeOff.gameObject.SetActive (!volume);
 		SaveLoad.SaveVolume (volume);
+        AudioScript audio = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioScript>();
+        if (audio != null)
+        {
+            audio.UpdateVolume();
+        }
 	}
 
 	void Pause(){

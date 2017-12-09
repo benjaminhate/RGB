@@ -47,6 +47,19 @@ public class SaveLoad {
 		}
 	}
 
+    private static bool GetTutorial()
+    {
+        PlayerData data = Load();
+        if (data != null)
+        {
+            return data.tutorial;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 	private static void setAllCompletedCategories(List<Category> categories) {
 		foreach (Category category in categories) {
 			if (category.getCompletedLevels ().Count == category.getLevels ().Count) {
@@ -55,28 +68,7 @@ public class SaveLoad {
 		}
 	}
 
-	public static PlayerData SaveInit(List<Category> categories){
-		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file;
-
-		PlayerData data = new PlayerData();
-		data.setCategories (categories);
-		data.setVolume (GetVolume ());
-		data.setPath(path);
-
-		if (!File.Exists (path)) {
-			file = File.Create (path);
-		}else {
-			file = File.Open (path, FileMode.Open);
-		}
-			
-		bf.Serialize(file, data);
-		file.Close();
-
-		return data;
-	}
-
-    public static PlayerData Save(PlayerData data)
+    private static PlayerData SaveData(PlayerData data)
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file;
@@ -96,10 +88,24 @@ public class SaveLoad {
         return data;
     }
 
-	public static PlayerData SaveLevel() {
-		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file;
+	public static PlayerData SaveInit(List<Category> categories){
+		
+		PlayerData data = new PlayerData();
+		data.setCategories (categories);
+		data.setVolume (GetVolume ());
+        data.setTutorial(GetTutorial());
+		data.setPath(path);
 
+        return SaveData(data);
+		
+	}
+
+    public static PlayerData Save(PlayerData data)
+    {
+        return SaveData(data);
+    }
+
+	public static PlayerData SaveLevel() {
 		List<Category> categories = GetListOfCategories ();
 		string levelName = SceneManager.GetActiveScene ().name;
 		Level level = SearchLevelNameInSave (categories, levelName);
@@ -116,24 +122,13 @@ public class SaveLoad {
 		PlayerData data = new PlayerData();
 		data.setCategories (categories);
 		data.setVolume (GetVolume ());
-		data.setPath(path);
+        data.setTutorial(GetTutorial());
+        data.setPath(path);
 
-		if (!File.Exists (path)) {
-			file = File.Create (path);
-		}else {
-			file = File.Open (path, FileMode.Open);
-		}
-
-		bf.Serialize(file, data);
-		file.Close();
-
-		return data;
+        return SaveData(data);
 	}
 
 	public static PlayerData SaveTimer(float timer){
-		BinaryFormatter bf = new BinaryFormatter ();
-		FileStream file;
-
 		string levelName = SceneManager.GetActiveScene ().name;
 		List<Category> categories = GetListOfCategories ();
 		Level level = SearchLevelNameInSave (categories, levelName);
@@ -148,41 +143,35 @@ public class SaveLoad {
 
 		PlayerData data = new PlayerData ();
 		data.setVolume (GetVolume ());
-		data.setCategories (categories);
+        data.setTutorial(GetTutorial());
+        data.setCategories (categories);
 		data.setPath (path);
 
-		if (!File.Exists (path)) {
-			file = File.Create (path);
-		} else {
-			file = File.Open (path,FileMode.Open);
-		}
-
-		bf.Serialize (file, data);
-		file.Close ();
-
-		return data;
-	}
+        return SaveData(data);
+    }
 
 	public static PlayerData SaveVolume(bool volume){
-		BinaryFormatter bf = new BinaryFormatter ();
-		FileStream file;
 
 		PlayerData data = new PlayerData ();
 		data.setCategories (GetListOfCategories ());
 		data.setPath (path);
 		data.setVolume (volume);
+        data.setTutorial(GetTutorial());
 
-		if (!File.Exists (path)) {
-			file = File.Create (path);
-		} else {
-			file = File.Open (path,FileMode.Open);
-		}
+        return SaveData(data);
+    }
 
-		bf.Serialize (file, data);
-		file.Close ();
+    public static PlayerData SaveTutorial(bool tutorial)
+    {
 
-		return data;
-	}
+        PlayerData data = new PlayerData();
+        data.setCategories(GetListOfCategories());
+        data.setPath(path);
+        data.setVolume(GetVolume());
+        data.setTutorial(tutorial);
+
+        return SaveData(data);
+    }
 
 	public static PlayerData Load() {
 		if (File.Exists (path)) {
