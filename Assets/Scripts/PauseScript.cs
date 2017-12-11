@@ -16,6 +16,7 @@ public class PauseScript : MonoBehaviour {
 	public GameObject menu;
 	public Button volumeButton;
 	public Text infoText;
+    public bool pauseEnable;
 
 	private string textType;
 
@@ -49,7 +50,7 @@ public class PauseScript : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Input.GetKeyDown (KeyCode.Escape)) {
+		if (Input.GetKeyDown (KeyCode.Escape) && pauseEnable) {
 			pause = !pause;
 			pauseCheck = true;
 		}
@@ -72,10 +73,10 @@ public class PauseScript : MonoBehaviour {
 		volumeOn.gameObject.SetActive (volume);
 		volumeOff.gameObject.SetActive (!volume);
 		SaveLoad.SaveVolume (volume);
-        AudioScript audio = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioScript>();
+        GameObject audio = GameObject.FindGameObjectWithTag("Audio");
         if (audio != null)
         {
-            audio.UpdateVolume();
+            audio.GetComponent<AudioScript>().UpdateVolume();
         }
 	}
 
@@ -93,9 +94,6 @@ public class PauseScript : MonoBehaviour {
 	}
 
 	public void RefreshButton(){
-		/*GameObject.Find ("Player").GetComponent<PlayerController> ().Refresh ();
-		GameObject.Find ("TimerCanvas").GetComponent<TimerScript> ().Reset ();
-		ResumeButton ();*/
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
 

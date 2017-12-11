@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Objective {
 	public virtual string getDescription (){
@@ -332,6 +333,7 @@ public class TutoScript : MonoBehaviour {
 	public GameObject ColorerTransition;
 
 	public Text tutoText;
+    public Image quitTuto;
 
 	public TransitionObjective transObjective=new TransitionObjective();
 	private bool transition;
@@ -351,7 +353,7 @@ public class TutoScript : MonoBehaviour {
 	private int active = 0;
 	private int maxActive=0;
 
-	void Start(){
+    void Start(){
 		objectiveList.Add (moveObjective);
 		wallList.Add (MoveWall);
 		transitionList.Add (MoveTransition);
@@ -375,6 +377,8 @@ public class TutoScript : MonoBehaviour {
 		transitionList.Add (ColorerTransition);
 		objectiveList.Add (finishObjective);
 		maxActive = objectiveList.Count-1;
+
+        Resume();
 	}
 
 	void Update(){
@@ -396,5 +400,30 @@ public class TutoScript : MonoBehaviour {
 		} else {
 			tutoText.text = objectiveList [active].getDescription ();
 		}
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitTuto();
+        }
 	}
+
+    void QuitTuto()
+    {
+        quitTuto.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.visible = true;
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+        quitTuto.gameObject.SetActive(false);
+        Cursor.visible = false;
+    }
+
+    public void Quit()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("StartMenu", LoadSceneMode.Single);
+    }
 }

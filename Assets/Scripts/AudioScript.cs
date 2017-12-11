@@ -5,14 +5,24 @@ using UnityEngine;
 public class AudioScript : MonoBehaviour {
 
     private AudioSource source;
+    private static GameObject instance;
 
     void Awake()
     {
         source = GetComponent<AudioSource>();
+        if(instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this.gameObject;
+        }
         DontDestroyOnLoad(this.gameObject);
     }
 
-	void Start () {
+    void Start () {
         UpdateVolume();
     }
 
@@ -22,7 +32,10 @@ public class AudioScript : MonoBehaviour {
         if (volume)
         {
             AudioListener.volume = 1f;
-            source.Play();
+            if (!source.isPlaying)
+            {
+                source.Play();
+            }
         }
         else
         {

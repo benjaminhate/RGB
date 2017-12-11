@@ -16,8 +16,8 @@ public class BeginScript : MonoBehaviour {
 
 	private string textType;
 
-	// Use this for initialization
 	void Start () {
+        mainCamera.GetComponent<PauseScript>().pauseEnable = false;
 		Time.timeScale = 0f;
 		mainCamera.enabled = false;
 		beginCamera.enabled = true;
@@ -37,10 +37,9 @@ public class BeginScript : MonoBehaviour {
 		levelText.text = textType + "-Level " + textLevel;
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		if (Input.anyKeyDown)
-			BeginGame ();
+        if (Input.anyKeyDown)
+            BeginGame();
 	}
 
 	void BeginGame () {
@@ -50,5 +49,6 @@ public class BeginScript : MonoBehaviour {
 		Time.timeScale = 1f;
 		player.GetComponent<PlayerController> ().respawn = true;
 		player.GetComponent<PlayerController> ().dead = true;
-	}
+        mainCamera.GetComponent<PauseScript>().pauseEnable = true;
+    }
 }

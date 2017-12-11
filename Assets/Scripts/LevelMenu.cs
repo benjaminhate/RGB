@@ -43,8 +43,9 @@ public class LevelMenu : MonoBehaviour {
 			maxScroll += 1;
 			Button categorySel = Instantiate (categorySelector, selector.transform);
 			categorySel.gameObject.SetActive (true);
-			selector.GetComponent<RectTransform> ().sizeDelta += i * 70 * Vector2.right;
-			categorySel.GetComponent<RectTransform> ().localPosition += 70 * i * Vector3.right;
+            float value = categorySel.GetComponent<RectTransform>().rect.width + 10;
+			selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
+			categorySel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
 			i += 1;
 			Image lockImg = categorySel.transform.Find ("Lock").GetComponent<Image> ();
 			Image completedImg = categorySel.transform.Find ("Completed").GetComponent<Image> ();
@@ -93,8 +94,9 @@ public class LevelMenu : MonoBehaviour {
 				maxScroll += 1;
 				Button levelSel = Instantiate (levelSelector, selector.transform);
 				levelSel.gameObject.SetActive (true);
-				selector.GetComponent<RectTransform> ().sizeDelta += i * 70 * Vector2.right;
-				levelSel.GetComponent<RectTransform> ().localPosition += 70 * i * Vector3.right;
+                float value = levelSel.GetComponent<RectTransform>().rect.width + 10;
+				selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
+				levelSel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
 				i += 1;
 				Image lockImg = levelSel.transform.Find ("Lock").GetComponent<Image> ();
 				Image completedImg = levelSel.transform.Find ("Completed").GetComponent<Image> ();
@@ -165,7 +167,8 @@ public class LevelMenu : MonoBehaviour {
 		Button[] levelSelectors = selector.GetComponentsInChildren<Button> ();
 		if (actualScroll < maxScroll) {
 			foreach (Button button in levelSelectors) {
-				button.GetComponent<RectTransform> ().localPosition -= 70 * Vector3.right;
+                button.GetComponent<RectTransform>().localPosition -=
+                    (button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 			}
 			actualScroll += 1;
 		}
@@ -175,7 +178,8 @@ public class LevelMenu : MonoBehaviour {
 		Button[] levelSelectors = selector.GetComponentsInChildren<Button> ();
 		if (actualScroll > 1) {
 			foreach (Button button in levelSelectors) {
-				button.GetComponent<RectTransform> ().localPosition += 70 * Vector3.right;
+                button.GetComponent<RectTransform>().localPosition +=
+                    (button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 			}
 			actualScroll -= 1;
 		}
