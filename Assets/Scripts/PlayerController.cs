@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour {
 	public string obstacle;
 
 	private Rigidbody2D rd2d;
-	private SpriteRenderer spriteRenderer;
 	private Animation anim;
 
 	private float moveHDelay = 0;
@@ -24,7 +23,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 		rd2d = GetComponent<Rigidbody2D>();
-		spriteRenderer = GetComponent<SpriteRenderer> ();
 		anim = GetComponent<Animation> ();
 	}
 
@@ -32,10 +30,14 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.R)) {
 			Refresh ();
 		}
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            MapSaveLoad.SaveMapFromScene();
+        }
 	}
 	
 	void FixedUpdate () {
-		if(!dead && !finish)
+		if(IsMoving())
 			MovePlayer ();
 	}
 
@@ -43,15 +45,22 @@ public class PlayerController : MonoBehaviour {
 		if (!respawn && !dead) {
 			respawn = true;
 			dead = true;
+            GameObject.Find("TimerCanvas").GetComponent<TimerScript>().ResetTimer();
 		}
 	}
+
+    public bool IsMoving()
+    {
+        return !dead && !finish;
+    }
 
 	void MovePlayer(){
 		float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
 		float speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
 		float rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
-		if (Mathf.Abs (moveHorizontal) == 1 || Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) > 0 || Mathf.Abs (moveVertical) == 1 || Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) > 0) {
+		if (Mathf.Abs (moveHorizontal) == 1 || Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) > 0 
+            || Mathf.Abs (moveVertical) == 1 || Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) > 0) {
 			rd2d.rotation = rot;
 			speedRate *= decceleration;
 		}
@@ -66,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			obstacleCollide = true;
 			obstacle = coll.gameObject.name;
-			if (!CompareColor (spriteRenderer.color, coll.gameObject.GetComponent<SpriteRenderer> ().color)) {
+            if (!GetComponent<ColorElement>().SameColor(coll.GetComponent<ColorElement>())) {
 				dead = true;
 				obstacleKill = true;
 				StartCoroutine (Death());
@@ -75,9 +84,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		if (coll.gameObject.CompareTag ("LevelFinish")) {
 			if (!finish) {
-				GameObject timerCanvas = GameObject.Find ("TimerCanvas");
-				if (timerCanvas != null) {
-					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().getTimer ());
+                GameObject timerCanvas = GameObject.Find("TimerCanvas");
+                if (timerCanvas != null) {
+					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ());
 				}
 				StartCoroutine (Finish ());
 			}
@@ -119,27 +128,20 @@ public class PlayerController : MonoBehaviour {
 		yield return StartCoroutine (RotateAnimation ());
 		anim.PlayQueued ("FinishAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
-		GameObject levelFinish = GameObject.Find ("LevelFinish");
+		GameObject levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish");
 		finish = false;
-		SceneManager.LoadScene (levelFinish.gameObject.GetComponent<LevelFinish> ().nextLevel, LoadSceneMode.Single);
+		SceneManager.LoadScene (levelFinish.GetComponent<LevelFinish> ().nextLevel, LoadSceneMode.Single);
 		Cursor.visible = true;
 	}
 
 	void OnTriggerStay2D(Collider2D coll){
 		if(coll.gameObject.CompareTag("Colorer")){
-			spriteRenderer.color=coll.gameObject.GetComponent<SpriteRenderer>().color;
+            GetComponent<ColorElement>().ChangeColor(coll.GetComponent<ColorElement>().GetColor());
 		}
 	}
 
 	void OnTriggerExit2D(Collider2D coll){
 		if (coll.gameObject.CompareTag ("Obstacles"))
 			obstacleCollide = false;
-	}
-
-	bool CompareColor(Color color1,Color color2){
-		if (color1.r == color2.r && color1.g == color2.g && color1.b == color2.b && color1.a == color2.a)
-			return true;
-		else
-			return false;
 	}
 }

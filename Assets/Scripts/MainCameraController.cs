@@ -5,15 +5,13 @@ using UnityEngine;
 public class MainCameraController : MonoBehaviour {
 
 	public GameObject player;
-
-	private Vector3 offset;
+    private float basePosZ = -10f;
 
 	void Start () {
-		offset = transform.position - player.transform.position;
-		transform.position = player.transform.position;
+		transform.position = new Vector3(player.transform.position.x, player.transform.position.y, basePosZ);
 	}
 
     void LateUpdate () {
-		transform.position = player.transform.position + offset;
+		transform.position = new Vector3(player.transform.position.x, player.transform.position.y, basePosZ);
 	}
 }

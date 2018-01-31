@@ -5,24 +5,24 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class BeginScript : MonoBehaviour {
-
-	public GameObject beginCanvas;
+    
 	public GameObject timerCanvas;
 	public Text levelText;
 	public Camera mainCamera;
 	public Camera beginCamera;
-
+    
 	public GameObject player;
+
+    public string levelName;
 
 	private string textType;
 
 	void Start () {
-        mainCamera.GetComponent<PauseScript>().pauseEnable = false;
+        GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = false;
 		Time.timeScale = 0f;
 		mainCamera.enabled = false;
 		beginCamera.enabled = true;
 		timerCanvas.SetActive (false);
-		string levelName = SceneManager.GetActiveScene ().name;
 		string levelType = levelName.Substring (levelName.Length-1, 1);
 		string textLevel = levelName.Substring (levelName.Length-2, 1);
 		if (string.Compare(levelType,"E")==0) {
@@ -43,12 +43,12 @@ public class BeginScript : MonoBehaviour {
 	}
 
 	void BeginGame () {
-		beginCanvas.SetActive (false);
+		this.gameObject.SetActive (false);
 		timerCanvas.SetActive (true);
 		mainCamera.enabled = true;
 		Time.timeScale = 1f;
 		player.GetComponent<PlayerController> ().respawn = true;
 		player.GetComponent<PlayerController> ().dead = true;
-        mainCamera.GetComponent<PauseScript>().pauseEnable = true;
+        GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = true;
     }
 }

@@ -20,6 +20,8 @@ public class PauseScript : MonoBehaviour {
 
 	private string textType;
 
+    public string levelName;
+
 	static GameObject pauseMenu;
 
 	void Start(){
@@ -34,7 +36,6 @@ public class PauseScript : MonoBehaviour {
 		}
 		VolumeButton ();
 		Menu (false);
-		string levelName = SceneManager.GetActiveScene ().name;
 		string levelType = levelName.Substring (levelName.Length-1, 1);
 		string textLevel = levelName.Substring (levelName.Length-2, 1);
 		if (string.Compare(levelType,"E")==0) {

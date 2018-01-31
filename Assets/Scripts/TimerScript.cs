@@ -9,18 +9,23 @@ public class TimerScript : MonoBehaviour {
 	public GameObject player;
 	public float timer;
 
-	public float getTimer(){
+	public float GetTimer(){
 		return timer;
 	}
 
+    public void ResetTimer()
+    {
+        timer = 0;
+    }
+
 	// Use this for initialization
 	void Start () {
-		timer = 0;
+        ResetTimer();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(!player.GetComponent<PlayerController> ().finish)
+		if(player.GetComponent<PlayerController>().IsMoving())
 			timer += Time.deltaTime;
 		timerText.text = FormatSeconds (timer);
 	}

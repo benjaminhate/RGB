@@ -8,7 +8,7 @@ using System.IO;
 
 public class SaveLoad {
 
-	static string path = Application.dataPath + "/save.gd";
+	static string path = Path.Combine(Application.persistentDataPath,"save.gd");
 
 	private static Level SearchLevelNameInSave(List<Category> categories,string levelName){
 		foreach (Category category in categories) {
