@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/LevelCreator.unity
+- path: Assets/Scenes/Levels/3-Hard/Level2H.unity
   isLoaded: 1
   isActive: 1

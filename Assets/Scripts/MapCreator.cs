@@ -28,27 +28,15 @@ public class MapCreator : MonoBehaviour{
             {
                 switch (element.GetElementType())
                 {
-                    /*case MapElement.MapElementType.BACKGROUND:
-                        CreateBackground(element);
-                        break;*/
                     case MapElement.MapElementType.GAME:
                         CreateGame((MapGame)element);
                         break;
                     case MapElement.MapElementType.COLORER:
                         CreateColorer((MapElementColored)element);
                         break;
-                    /*case MapElement.MapElementType.LEVELFINISH:
-                        CreateLevelFinish((MapLevelFinish)element);
-                        break;*/
-                    /*case MapElement.MapElementType.LEVELSTART:
-                        CreateLevelStart((MapLevelStart)element);
-                        break;*/
                     case MapElement.MapElementType.OBSTACLE:
                         CreateObstacle((MapObstacle)element);
                         break;
-                    /*case MapElement.MapElementType.PLAYER:
-                        CreatePlayer((MapPlayer)element);
-                        break;*/
                     case MapElement.MapElementType.WALL:
                         CreateWall(element);
                         break;
@@ -120,6 +108,7 @@ public class MapCreator : MonoBehaviour{
     {
         GameObject beginCanvas = GetChildWithTag(game, "BeginCanvas");
         beginCanvas.GetComponent<BeginScript>().mainCamera = mainCamera;
+        beginCanvas.GetComponent<BeginScript>().levelName = mapData.GetLevelName();
     }
 
     public void ModifyMainCamera(GameObject game)
