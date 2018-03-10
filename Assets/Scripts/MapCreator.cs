@@ -17,11 +17,31 @@ public class MapCreator : MonoBehaviour{
     public GameObject rayPrefab;
 
     public Camera mainCamera;
+    public GameObject levelContainer;
+
+    private string levelName = "Level1E";
 
     private MapData mapData;
 
-	void Start () {
-        mapData = MapSaveLoad.LoadMap();
+    void Awake()
+    {
+        GameObject levelSelector = GameObject.FindGameObjectWithTag("LevelSelector");
+        if (levelSelector)
+        {
+            levelName = levelSelector.name;
+            Destroy(levelSelector);
+        }
+    }
+
+    void Start () {
+        CreateLevel(levelName);
+    }
+
+    private void CreateLevel(string levelName)
+    {
+        Debug.Log("Creating level : " + levelName);
+        mapData = MapSaveLoad.LoadMap(levelName);
+        Debug.Log(mapData);
         if (mapData != null)
         {
             foreach (MapElement element in mapData.GetElements())
@@ -45,6 +65,16 @@ public class MapCreator : MonoBehaviour{
                 }
             }
         }
+    }
+
+    public void ChangeLevel(string levelName)
+    {
+        foreach(Transform child in levelContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        mainCamera.GetComponent<MainCameraController>().enabled = false;
+        CreateLevel(levelName);
     }
 
     private GameObject GetChildWithTag(GameObject parent,string tag)
@@ -85,14 +115,14 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateColorer(MapElementColored element)
     {
-        GameObject colorer = Instantiate(colorerPrefab);
+        GameObject colorer = Instantiate(colorerPrefab, levelContainer.transform);
         SetGameObjectTransform(colorer, element);
         ChangeGameObjectColor(colorer, element);
     }
 
     public void CreateGame(MapGame element)
     {
-        GameObject game = Instantiate(gamePrefab);
+        GameObject game = Instantiate(gamePrefab, levelContainer.transform);
         SetGameObjectTransform(game, element);
         ModifyBackground(game, element.GetBackground());
         ModifyMainCamera(game);
@@ -114,6 +144,7 @@ public class MapCreator : MonoBehaviour{
     public void ModifyMainCamera(GameObject game)
     {
         mainCamera.GetComponent<MainCameraController>().player = GetChildWithTag(game, "Player");
+        mainCamera.GetComponent<MainCameraController>().enabled = true;
     }
 
     public void ModifyLevelFinish(GameObject game, MapLevelFinish element)
@@ -156,7 +187,7 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateCamera(MapCamera element)
     {
-        GameObject camera = Instantiate(cameraPrefab);
+        GameObject camera = Instantiate(cameraPrefab, levelContainer.transform);
         SetGameObjectTransform(camera, element);
         ChangeGameObjectColor(camera, element);
         CameraController cameraController = camera.GetComponent<CameraController>();
@@ -169,7 +200,7 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateDetector(MapDetector element)
     {
-        GameObject detector = Instantiate(detectorPrefab);
+        GameObject detector = Instantiate(detectorPrefab, levelContainer.transform);
         SetGameObjectTransform(detector, element);
         GameObject detectorRay = detector.GetComponentInChildren<DetectorController>().gameObject;
         ChangeGameObjectColor(detectorRay, element);
@@ -180,7 +211,7 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateRay(MapRay element)
     {
-        GameObject ray = Instantiate(rayPrefab);
+        GameObject ray = Instantiate(rayPrefab, levelContainer.transform);
         SetGameObjectTransform(ray, element);
         ChangeGameObjectColor(ray, element);
         RayController rayController = ray.GetComponent<RayController>();
@@ -208,7 +239,7 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateWall(MapElement element)
     {
-        GameObject wall = Instantiate(wallPrefab);
+        GameObject wall = Instantiate(wallPrefab, levelContainer.transform);
         SetGameObjectTransform(wall, element);
     }
 }

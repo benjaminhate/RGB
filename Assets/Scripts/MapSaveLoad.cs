@@ -8,10 +8,11 @@ using System.IO;
 
 public class MapSaveLoad : MonoBehaviour {
 
-    static string path = Path.Combine(Application.persistentDataPath, "map.gd");
+    static string defaultPath = Path.Combine(Application.persistentDataPath,"maps");
 
     public static MapData SaveMap(MapData data)
     {
+        string path = Path.Combine(defaultPath, data.GetLevelName() + ".gd");
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file;
 
@@ -68,7 +69,6 @@ public class MapSaveLoad : MonoBehaviour {
             }
             if (obj.GetComponentInChildren<DetectorController>()!=null)
             {
-                // Correct problems with Detector first
                 MapDetector detector = new MapDetector(obj);
                 mapData.AddElement(detector);
             }
@@ -91,8 +91,10 @@ public class MapSaveLoad : MonoBehaviour {
         return SaveMap(mapData);
     }
 
-    public static MapData LoadMap()
+    public static MapData LoadMap(string levelName)
     {
+        string path = Path.Combine(defaultPath, levelName + ".gd");
+        Debug.Log(path);
         if (File.Exists(path))
         {
             BinaryFormatter bf = new BinaryFormatter();

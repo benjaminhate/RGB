@@ -274,11 +274,11 @@ public class ColorerObjective : Objective {
 		string redColor = red ? "green" : "red";
 		string greenColor = green ? "green" : "red";
 		string blueColor = blue ? "green" : "red";
-		return "Le coloreur n'est PAS un obstacle.\n" +
-			"Il permet de changer de couleur.\n" +
-			"<color="+redColor+">Passez en couleur rouge</color>\n" +
-			"<color="+blueColor+">Passez en couleur bleue</color>\n" +
-			"<color="+greenColor+">Passez en couleur verte</color>\n";
+        return "Le coloreur n'est PAS un obstacle.\n" +
+            "Il permet de changer de couleur.\n" +
+            "<color=" + greenColor + ">Passez en couleur verte</color>\n" +
+            "<color=" + blueColor + ">Passez en couleur bleue</color>\n" +
+            "<color=" + redColor + ">Passez en couleur rouge</color>\n";
 	}
 
 	public override bool isCompleted (){

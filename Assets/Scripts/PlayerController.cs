@@ -45,7 +45,10 @@ public class PlayerController : MonoBehaviour {
 		if (!respawn && !dead) {
 			respawn = true;
 			dead = true;
-            GameObject.Find("TimerCanvas").GetComponent<TimerScript>().ResetTimer();
+            GameObject timerCanvas = GameObject.Find("TimerCanvas");
+            if (timerCanvas) {
+                timerCanvas.GetComponent<TimerScript>().ResetTimer();
+            }
 		}
 	}
 
@@ -130,8 +133,17 @@ public class PlayerController : MonoBehaviour {
 		yield return StartCoroutine (WaitForAnimation (anim));
 		GameObject levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish");
 		finish = false;
-		SceneManager.LoadScene (levelFinish.GetComponent<LevelFinish> ().nextLevel, LoadSceneMode.Single);
-		Cursor.visible = true;
+        if (levelFinish.GetComponent<LevelFinish>())
+        {
+            GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>()
+                .ChangeLevel(levelFinish.GetComponent<LevelFinish>().nextLevel);
+            //SceneManager.LoadScene (levelFinish.GetComponent<LevelFinish> ().nextLevel, LoadSceneMode.Single);
+            Cursor.visible = true;
+        }
+        if (levelFinish.GetComponent<EndTutorial>())
+        {
+            SceneManager.LoadScene("StartMenu", LoadSceneMode.Single);
+        }
 	}
 
 	void OnTriggerStay2D(Collider2D coll){

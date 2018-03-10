@@ -160,7 +160,11 @@ public class LevelMenu : MonoBehaviour {
 	}
 
 	void OnClickLevelButton(Level level){
-		SceneManager.LoadScene (level.getSceneName(), LoadSceneMode.Single);
+        Debug.Log(level.getSceneName());
+        GameObject levelGameObject = new GameObject(level.getSceneName());
+        levelGameObject.gameObject.tag = "LevelSelector";
+        DontDestroyOnLoad(levelGameObject);
+		SceneManager.LoadScene ("LevelCreator", LoadSceneMode.Single);
 	}
 
 	public void OnClickRightButton(){
