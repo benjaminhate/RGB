@@ -1,4 +1,4 @@
-OSXStandalone
+WindowsStandalone
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MapSaveLoad
 dc07d7ad69b399a46e92c483bf1c04ca UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
@@ -115,6 +115,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.LoadStartMenu
 61fa51a4af5e876444fd26f8e8cca8bb Assembly-CSharp.dll:.TutoScript
 20ba87b13509fd886cb467f112acb8cd Assembly-CSharp.dll:.LevelStart
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.EditorLevelSelector
 6366511218bef45cbbbf94e6444d9e19 Assembly-CSharp.dll:.RayController
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
@@ -143,11 +144,11 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingRenderer
-fc9bf49fd0442a05deeb3d98a6d6905f Assembly-CSharp.dll:.MenuScript
+3aa8d04b30f8f5f583aca0da882c2dce Assembly-CSharp.dll:.MenuScript
 48eceff4a15c18b232463062430aca1e Assembly-CSharp.dll:.DetectorController
 91e06ccc0186710234d43aefa15b10d2 Assembly-CSharp.dll:.TimerScript
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.EndTutorial
 104560e9eae9310bb2deb4915ae64fab Assembly-CSharp.dll:.CameraController
 2a7317cee56d9cae638c753918791be4 Assembly-CSharp.dll:.ColorElement
 21fa4a18cd4d2fffaff335cbc4a828be Assembly-CSharp.dll:.LevelMenu
-d408d6ebbde3f56840e2ea3d8a0c8cba Assembly-CSharp.dll:.MapCreator
+e96aa70a06730ad385cc7c9080fb76c6 Assembly-CSharp.dll:.MapCreator

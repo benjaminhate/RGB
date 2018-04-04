@@ -13,7 +13,9 @@ public class LevelStart : MonoBehaviour {
 
 	void Start(){
 		Cursor.visible = false;
-		SaveLoad.SaveLevel ();
+        string levelName = GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>().GetMapData().GetLevelName();
+        Debug.Log(levelName);
+        SaveLoad.SaveLevel (levelName);
 		PlacePlayer ();
 	}
 

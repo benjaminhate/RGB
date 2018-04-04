@@ -82,6 +82,13 @@ public class Level {
 			+ "\n blocked : " 
 			+ this.blocked.ToString () 
 			+ "\n scene name : " 
-			+ this.sceneName;
+			+ this.sceneName
+            + "\n timer : "
+            + this.timer;
 	}
+
+    public Level Clone()
+    {
+        return new Level(this.name, this.timer, this.completed, this.blocked, this.id);
+    }
 }

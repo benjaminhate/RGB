@@ -130,8 +130,21 @@ public class MapCreator : MonoBehaviour{
         ModifyLevelStart(game, element.GetLevelStart());
         ModifyPlayer(game, element.GetPlayer());
         ModifyBeginCanvas(game);
+        ModifyBeginCamera(game);
         mainCamera.enabled = false;
         game.GetComponent<PauseScript>().levelName = mapData.GetLevelName();
+    }
+
+    public void ModifyBeginCamera(GameObject game)
+    {
+        GameObject mainBackground = GetChildWithTag(game, "MainBackground");
+        float scaleX = mainBackground.transform.localScale.x / 2.49f;
+        float scaleY = mainBackground.transform.localScale.y / 2f;
+        float maxScale = Mathf.Max(scaleX, scaleY) * 10;
+        Debug.Log("Max scale : " + maxScale);
+        Camera beginCamera = GameObject.Find("BeginCamera").GetComponent<Camera>();
+        beginCamera.orthographic = true;
+        beginCamera.orthographicSize = maxScale;
     }
 
     public void ModifyBeginCanvas(GameObject game)
@@ -241,5 +254,10 @@ public class MapCreator : MonoBehaviour{
     {
         GameObject wall = Instantiate(wallPrefab, levelContainer.transform);
         SetGameObjectTransform(wall, element);
+    }
+
+    public MapData GetMapData()
+    {
+        return mapData;
     }
 }

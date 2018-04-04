@@ -134,4 +134,14 @@ public class Category {
 		}
 		return sb + "\n]";
 	}
+
+    public Category Clone()
+    {
+        List<Level> levels = new List<Level>();
+        foreach(Level lvl in this.levels)
+        {
+            levels.Add(lvl.Clone());
+        }
+        return new Category(this.name, levels, this.completed, this.blocked, this.id);
+    }
 }

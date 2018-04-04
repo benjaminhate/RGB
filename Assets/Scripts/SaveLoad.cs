@@ -11,8 +11,10 @@ public class SaveLoad {
 	static string path = Path.Combine(Application.persistentDataPath,"save.gd");
 
 	private static Level SearchLevelNameInSave(List<Category> categories,string levelName){
+        Debug.Log("Level name : " + levelName);
 		foreach (Category category in categories) {
 			foreach (Level level in category.getLevels()) {
+                Debug.Log("Level in Save : " + level.getSceneName());
 				if (level.getSceneName ().CompareTo (levelName) == 0)
 					return level;
 			}
@@ -60,7 +62,33 @@ public class SaveLoad {
         }
     }
 
-	private static void setAllCompletedCategories(List<Category> categories) {
+    private static string GetLanguage()
+    {
+        PlayerData data = Load();
+        if (data != null)
+        {
+            return data.language;
+        }
+        else
+        {
+            return "English";
+        }
+    }
+
+    private static bool GetFirstTime()
+    {
+        PlayerData data = Load();
+        if (data != null)
+        {
+            return data.firstTime;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private static void SetAllCompletedCategories(List<Category> categories) {
 		foreach (Category category in categories) {
 			if (category.getCompletedLevels ().Count == category.getLevels ().Count) {
 				category.setCompleted (true);
@@ -89,12 +117,9 @@ public class SaveLoad {
     }
 
 	public static PlayerData SaveInit(List<Category> categories){
-		
-		PlayerData data = new PlayerData();
+
+        PlayerData data = LoadNew();
 		data.setCategories (categories);
-		data.setVolume (GetVolume ());
-        data.setTutorial(GetTutorial());
-		data.setPath(path);
 
         return SaveData(data);
 		
@@ -105,9 +130,8 @@ public class SaveLoad {
         return SaveData(data);
     }
 
-	public static PlayerData SaveLevel() {
+	public static PlayerData SaveLevel(string levelName) {
 		List<Category> categories = GetListOfCategories ();
-		string levelName = SceneManager.GetActiveScene ().name;
 		Level level = SearchLevelNameInSave (categories, levelName);
 		if (level != null) {
 			level.setBlocked (false);
@@ -117,13 +141,11 @@ public class SaveLoad {
 		if (category != null) {
 			category.setBlocked (false);
 		}
-		setAllCompletedCategories (categories);
+		SetAllCompletedCategories (categories);
 
-		PlayerData data = new PlayerData();
-		data.setCategories (categories);
-		data.setVolume (GetVolume ());
-        data.setTutorial(GetTutorial());
-        data.setPath(path);
+        PlayerData data = LoadNew();
+        data.setCategories(categories);
+        //new PlayerData(categories, path, GetVolume(), GetTutorial(), GetLanguage(), GetFirstTime());
 
         return SaveData(data);
 	}
@@ -139,41 +161,59 @@ public class SaveLoad {
 				level.setTimer (timer);
 		}
 
-		setAllCompletedCategories (categories);
+		SetAllCompletedCategories (categories);
 
-		PlayerData data = new PlayerData ();
-		data.setVolume (GetVolume ());
-        data.setTutorial(GetTutorial());
-        data.setCategories (categories);
-		data.setPath (path);
+        PlayerData data = LoadNew();
+        data.setCategories(categories);
+        //new PlayerData (categories,path,GetVolume(),GetTutorial(),GetLanguage(),GetFirstTime());
 
         return SaveData(data);
     }
 
 	public static PlayerData SaveVolume(bool volume){
 
-		PlayerData data = new PlayerData ();
-		data.setCategories (GetListOfCategories ());
-		data.setPath (path);
-		data.setVolume (volume);
-        data.setTutorial(GetTutorial());
+        PlayerData data = LoadNew();
+        data.setVolume(volume);
+        //new PlayerData (GetListOfCategories(), path, volume, GetTutorial(), GetLanguage(), GetFirstTime());
 
         return SaveData(data);
     }
 
     public static PlayerData SaveTutorial(bool tutorial)
     {
-
-        PlayerData data = new PlayerData();
-        data.setCategories(GetListOfCategories());
-        data.setPath(path);
-        data.setVolume(GetVolume());
+        PlayerData data = LoadNew();
         data.setTutorial(tutorial);
+        //new PlayerData(GetListOfCategories(), path, GetVolume(), tutorial, GetLanguage(), GetFirstTime());
 
         return SaveData(data);
     }
 
-	public static PlayerData Load() {
+    public static PlayerData SaveLanguage(string language)
+    {
+        PlayerData data = LoadNew();
+        data.setLanguage(language);
+        //new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), language, GetFirstTime());
+
+        return SaveData(data);
+    }
+
+    public static PlayerData SaveFirstTime(bool firstTime)
+    {
+        PlayerData data = LoadNew();
+        data.setFirstTime(firstTime);
+        //new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), GetLanguage(), firstTime);
+
+        return SaveData(data);
+    }
+
+    public static PlayerData LoadNew()
+    {
+        PlayerData data = Load();
+        if (data == null) data = new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), GetLanguage(), GetFirstTime());
+        return data;
+    }
+
+    public static PlayerData Load() {
 		if (File.Exists (path)) {
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream file = File.Open (path, FileMode.Open);

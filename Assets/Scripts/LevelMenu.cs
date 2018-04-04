@@ -161,6 +161,7 @@ public class LevelMenu : MonoBehaviour {
 
 	void OnClickLevelButton(Level level){
         Debug.Log(level.getSceneName());
+        //GameObject levelGameObject = new GameObject("Level1E");
         GameObject levelGameObject = new GameObject(level.getSceneName());
         levelGameObject.gameObject.tag = "LevelSelector";
         DontDestroyOnLoad(levelGameObject);

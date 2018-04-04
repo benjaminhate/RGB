@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages>
+  
+  <English>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="tutorial">Tutorial</string>
+
+    <string name="resetConfirmationText">Do you want to erase your save ?</string>
+    <string name="startTutoConfirmationText">You didn't play the tutorial.
+Do you want to start it ?</string>
+    
+    <string name="tutoTransition">Go to the next room to continue.</string>
+    <string name="tutoMove">Press Z,Q,S,D or the arrow keys to move.</string>
+    <string name="tutoMoveUp">Up</string>
+    <string name="tutoMoveDown">Down</string>
+    <string name="tutoMoveRight">Right</string>
+    <string name="tutoMoveLeft">Left</string>
+    <string name="tutoDiagonal">Press an up/down key and a left/right key at the same time to move diagonally.</string>
+    <string name="tutoDiagonalUpRight">Up right diagonal</string>
+    <string name="tutoDiagonalDownLeft">Down left diagonal</string>
+    <string name="tutoRay">The ray is an obstacle.
+Like all of the obstacles, if you touch it without the same color, you will die.
+The ray can translate or not move.
+    </string>
+    <string name="tutoRayDeath">Die on the ray</string>
+    <string name="tutoDetector">The detector is an obstacle.
+It can grow and collapse or not move.
+    </string>
+    <string name="tutoDetectorDeath">Die on the detector</string>
+    <string name="tutoCamera">The camera is an obstacle.
+It can only turn around.
+    </string>
+    <string name="tutoCameraDeath">Die on the camera</string>
+    <string name="tutoRespawn">If you press R, you will restart the level.</string>
+    <string name="tutoRespawnTouch">Press R</string>
+    <string name="tutoColorer">The colorer is NOT an obstacle.
+It allows you to change color.
+    </string>
+    <string name="tutoColorerGreen">Turn green</string>
+    <string name="tutoColorerBlue">Turn blue</string>
+    <string name="tutoColorerRed">Turn red</string>
+    <string name="tutoEnd">Go to the end to complete the tutorial.</string>
+    <string name="tutoQuit">Do you want to quit the tutorial ?</string>
+  </English>
+  
+  <French>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="tutorial">Tutoriel</string>
+
+    <string name="resetConfirmationText">Voulez vous effacer votre sauvegarde ?</string>
+    <string name="startTutoConfirmationText">Vous n'avez pas effectué le tutoriel.
+Voulez vous faire le tutoriel ?</string>
+    
+    <string name="tutoTransition">Allez jusqu'à la prochaine salle pour continuer.</string>
+    <string name="tutoMove">Appuyez sur Z,Q,S,D ou sur les flèches directionnelles pour vous déplacer.</string>
+    <string name="tutoMoveUp">Haut</string>
+    <string name="tutoMoveDown">Bas</string>
+    <string name="tutoMoveRight">Droite</string>
+    <string name="tutoMoveLeft">Gauche</string>
+    <string name="tutoDiagonal">Appuyez sur une touche haut/bas et une touche gauche/droite en même temps pour vous déplacez en diagonale.</string>
+    <string name="tutoDiagonalUpRight">Diagonale haut droite</string>
+    <string name="tutoDiagonalDownLeft">Diagonale bas gauche</string>
+    <string name="tutoRay">Le rayon est un obstacle.
+Comme tous les obstacles, si vous le touchez sans avoir la même couleur, vous mourez.
+Le rayon peut se déplacer d'avant en arrière ou ne pas bouger.</string>
+    <string name="tutoRayDeath">Mourez sur le rayon</string>
+    <string name="tutoDetector">Le détecteur est un obstacle.
+Il peut s'étendre et se détendre ou ne pas bouger.</string>
+    <string name="tutoDetectorDeath">Mourez sur le détecteur</string>
+    <string name="tutoCamera">La caméra est un obstacle.
+Elle ne peut que tourner.</string>
+    <string name="tutoCameraDeath">Mourez sur la caméra</string>
+    <string name="tutoRespawn">Si vous appuyez sur la touche R, vous recommencez le niveau.</string>
+    <string name="tutoRespawnTouch">Appuyez sur R</string>
+    <string name="tutoColorer">Le coloreur n'est PAS un obstacle.
+Il permet de changer de couleur.</string>
+    <string name="tutoColorerGreen">Passez en couleur verte</string>
+    <string name="tutoColorerBlue">Passez en couleur bleue</string>
+    <string name="tutoColorerRed">Passez en couleur rouge</string>
+    <string name="tutoEnd">Allez sur la fin afin de finir le tutoriel.</string>
+    <string name="tutoQuit">Voulez vous quitter le tutoriel ?</string>
+  </French>
+  
+</languages>

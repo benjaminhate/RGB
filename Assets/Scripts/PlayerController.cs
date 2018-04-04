@@ -88,9 +88,9 @@ public class PlayerController : MonoBehaviour {
 		if (coll.gameObject.CompareTag ("LevelFinish")) {
 			if (!finish) {
                 GameObject timerCanvas = GameObject.Find("TimerCanvas");
-                if (timerCanvas != null) {
+                /*if (timerCanvas != null) {
 					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ());
-				}
+				}*/
 				StartCoroutine (Finish ());
 			}
 		}

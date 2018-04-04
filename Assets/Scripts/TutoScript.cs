@@ -5,8 +5,16 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Objective {
-	public virtual string getDescription (){
-		return "";
+
+    protected LanguageController lang;
+
+    public void Init()
+    {
+        lang = new LanguageController(SaveLoad.Load().getLanguage());
+    }
+
+    public virtual string getDescription (){
+        return "";
 	}
 
 	public virtual bool isCompleted (){
@@ -25,7 +33,8 @@ public class TransitionObjective : Objective {
 	}
 
 	public override string getDescription(){
-		return "Allez jusqu'à la prochaine salle pour continuer";
+        base.Init();
+        return lang.GetString("tutoTransition");
 	}
 
 	public override bool isCompleted(){
@@ -54,15 +63,16 @@ public class MoveObjective : Objective {
 	}
 
 	public override string getDescription(){
-		string upColor = up ? "green" : "red";
+        base.Init();
+        string upColor = up ? "green" : "red";
 		string downColor = down ? "green" : "red";
 		string rightColor = right ? "green" : "red";
 		string leftColor = left ? "green" : "red";
-		return "Appuyez sur Z,Q,S,D ou sur les flèches directionnelles pour vous déplacer.\n" +
-			"<color="+upColor+">Haut</color>\n" +
-			"<color="+downColor+">Bas</color>\n" +
-			"<color="+rightColor+">Droite</color>\n" +
-			"<color="+leftColor+">Gauche</color>";
+        return lang.GetString("tutoMove") + "\n" +
+            "<color=" + upColor + ">" + lang.GetString("tutoMoveUp") + "</color>\n" +
+            "<color=" + downColor + ">" + lang.GetString("tutoMoveDown") + "</color>\n" +
+            "<color=" + rightColor + ">" + lang.GetString("tutoMoveRight") + "</color>\n" +
+            "<color=" + leftColor + ">" + lang.GetString("tutoMoveLeft") + "</color>";
 	}
 
 	public override bool isCompleted(){
@@ -101,11 +111,12 @@ public class DiagObjective : Objective {
 	}
 
 	public override string getDescription(){
-		string uprightColor = upright ? "green" : "red";
+        base.Init();
+        string uprightColor = upright ? "green" : "red";
 		string downleftColor = downleft ? "green" : "red";
-		return "Appuyez sur une touche haut/bas et une touche gauche/droite en même temps pour vous déplacez en diagonale.\n" +
-		"<color=" + uprightColor + ">Diagonale haut droite</color>\n" +
-		"<color=" + downleftColor + ">Diagonale bas gauche</color>\n";
+        return lang.GetString("tutoDiagonal") + "\n" +
+        "<color=" + uprightColor + ">" + lang.GetString("tutoDiagonalUpRight") + "</color>\n" +
+        "<color=" + downleftColor + ">" + lang.GetString("tutoDiagonalDownLeft") + "</color>\n";
 	}
 
 	public override bool isCompleted(){
@@ -137,11 +148,10 @@ public class RayObjective : Objective {
 	}
 
 	public override string getDescription(){
-		string deadColor = rayDead ? "green" : "red";
-		return "Le rayon est un obstacle.\n" +
-			"Comme tous les obstacles, si vous le touchez sans avoir la même couleur, vous mourez.\n" +
-			"Le rayon peut se déplacer d'avant en arrière ou ne pas bouger.\n" +
-			"<color="+deadColor+">Mourez sur le rayon </color>";
+        base.Init();
+        string deadColor = rayDead ? "green" : "red";
+        return lang.GetString("tutoRay") + "\n" +
+            "<color=" + deadColor + ">" + lang.GetString("tutoRayDeath") + "</color>";
 	}
 
 	public override bool isCompleted(){
@@ -166,10 +176,10 @@ public class DetectorObjective : Objective {
 	}
 
 	public override string getDescription(){
-		string deadColor = detectorDead ? "green" : "red";
-		return "Le détecteur est un obstacle.\n" +
-			"Il peut s'étendre et se détendre ou ne pas bouger.\n" +
-			"<color="+deadColor+">Mourez sur le détecteur</color>";
+        base.Init();
+        string deadColor = detectorDead ? "green" : "red";
+        return lang.GetString("tutoDetector") + "\n" +
+            "<color=" + deadColor + ">" + lang.GetString("tutoDetectorDeath") + "</color>";
 	}
 
 	public override bool isCompleted(){
@@ -194,10 +204,10 @@ public class CameraObjective : Objective {
 	}
 
 	public override string getDescription(){
-		string deadColor = cameraDead ? "green" : "red";
-		return "La caméra est un obstacle.\n" +
-			"Elle ne peut que tourner.\n" +
-			"<color="+deadColor+">Mourez sur la caméra</color>";
+        base.Init();
+        string deadColor = cameraDead ? "green" : "red";
+        return lang.GetString("tutoCamera") + "\n" +
+            "<color=" + deadColor + ">" + lang.GetString("tutoCameraDeath") + "</color>";
 	}
 
 	public override bool isCompleted(){
@@ -222,9 +232,10 @@ public class RespawnObjective : Objective {
 	}
 
 	public override string getDescription (){
-		string keyColor = key ? "green" : "red";
-		return "Si vous appuyez sur la touche R, vous recommencez le niveau.\n" +
-			"<color="+keyColor+">Appuyez sur R</color>";
+        base.Init();
+        string keyColor = key ? "green" : "red";
+        return lang.GetString("tutoRespawn") + "\n" +
+            "<color=" + keyColor + ">" + lang.GetString("tutoRespawnTouch") + "</color>";
 	}
 
 	public override bool isCompleted (){
@@ -271,14 +282,14 @@ public class ColorerObjective : Objective {
 	}
 
 	public override string getDescription (){
-		string redColor = red ? "green" : "red";
+        base.Init();
+        string redColor = red ? "green" : "red";
 		string greenColor = green ? "green" : "red";
 		string blueColor = blue ? "green" : "red";
-        return "Le coloreur n'est PAS un obstacle.\n" +
-            "Il permet de changer de couleur.\n" +
-            "<color=" + greenColor + ">Passez en couleur verte</color>\n" +
-            "<color=" + blueColor + ">Passez en couleur bleue</color>\n" +
-            "<color=" + redColor + ">Passez en couleur rouge</color>\n";
+        return lang.GetString("tutoColorer") + "\n" +
+            "<color=" + greenColor + ">" + lang.GetString("tutoColorerGreen") + "</color>\n" +
+            "<color=" + blueColor + ">" + lang.GetString("tutoColorerBlue") + "</color>\n" +
+            "<color=" + redColor + ">" + lang.GetString("tutoColorerRed") + "</color>\n";
 	}
 
 	public override bool isCompleted (){
@@ -311,7 +322,8 @@ public class FinishObjective : Objective {
 		start.startRot = 0;
 	}
 	public override string getDescription (){
-		return "Allez sur la fin afin de finir le tutoriel.";
+        base.Init();
+        return lang.GetString("tutoEnd");
 	}
 }
 
@@ -353,6 +365,19 @@ public class TutoScript : MonoBehaviour {
 	private int active = 0;
 	private int maxActive=0;
 
+    private LanguageController lang;
+    private GameObject quitText;
+    private GameObject quitConfirm;
+    private GameObject quitCancel;
+
+    void Awake()
+    {
+        lang = new LanguageController(SaveLoad.Load().getLanguage());
+        quitText = GameObject.Find("QuitText");
+        quitConfirm = GameObject.Find("QuitConfirm");
+        quitCancel = GameObject.Find("QuitCancel");
+    }
+
     void Start(){
 		objectiveList.Add (moveObjective);
 		wallList.Add (MoveWall);
@@ -382,6 +407,7 @@ public class TutoScript : MonoBehaviour {
 	}
 
 	void Update(){
+        UpdateText();
 		if (transObjective.isCompleted ()) {
 			transition = false;
 			transObjective.setDone (false);
@@ -406,6 +432,13 @@ public class TutoScript : MonoBehaviour {
             QuitTuto();
         }
 	}
+
+    private void UpdateText()
+    {
+        quitText.GetComponent<Text>().text = lang.GetString("tutoQuit");
+        quitConfirm.GetComponentInChildren<Text>().text = lang.GetString("yes");
+        quitCancel.GetComponentInChildren<Text>().text = lang.GetString("no");
+    }
 
     void QuitTuto()
     {

@@ -28,7 +28,12 @@ public class AudioScript : MonoBehaviour {
 
     public void UpdateVolume()
     {
-        bool volume = SaveLoad.Load().getVolume();
+        PlayerData data = SaveLoad.Load();
+        bool volume = false;
+        if (data != null)
+        {
+            volume = data.getVolume();
+        }
         if (volume)
         {
             AudioListener.volume = 1f;

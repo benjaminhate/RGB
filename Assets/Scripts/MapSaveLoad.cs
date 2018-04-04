@@ -8,11 +8,11 @@ using System.IO;
 
 public class MapSaveLoad : MonoBehaviour {
 
-    static string defaultPath = Path.Combine(Application.persistentDataPath,"maps");
+    public static string defaultPath = Path.Combine(Application.persistentDataPath,"maps");
 
     public static MapData SaveMap(MapData data)
     {
-        string path = Path.Combine(defaultPath, data.GetLevelName() + ".gd");
+        string path = Path.Combine(defaultPath, data.GetLevelName() + ".bytes");
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file;
 
@@ -93,7 +93,7 @@ public class MapSaveLoad : MonoBehaviour {
 
     public static MapData LoadMap(string levelName)
     {
-        string path = Path.Combine(defaultPath, levelName + ".gd");
+        string path = Path.Combine(defaultPath, levelName + ".bytes");
         Debug.Log(path);
         if (File.Exists(path))
         {
