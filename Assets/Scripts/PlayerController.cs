@@ -21,7 +21,12 @@ public class PlayerController : MonoBehaviour {
 	private float moveHDelay = 0;
 	private float moveVDelay = 0;
 
+    private Joystick joystick;
+
 	void Start () {
+#if UNITY_ANDROID
+        joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
+#endif
 		rd2d = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animation> ();
 	}
@@ -30,7 +35,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.R)) {
 			Refresh ();
 		}
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             MapSaveLoad.SaveMapFromScene();
         }
@@ -58,16 +63,29 @@ public class PlayerController : MonoBehaviour {
     }
 
 	void MovePlayer(){
-		float moveHorizontal = Input.GetAxis("Horizontal");
-		float moveVertical = Input.GetAxis("Vertical");
-		float speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
+        float moveHorizontal = 0;
+        float moveVertical = 0;
+#if UNITY_ANDROID
+        Vector2 dir = joystick.GetDirection();
+        dir *= 1.5f;
+        if (Mathf.Abs(dir.x) > 1f) dir.x = Mathf.Sign(dir.x) * 1f;
+        if (Mathf.Abs(dir.y) > 1f) dir.y = Mathf.Sign(dir.y) * 1f;
+        Debug.Log(dir);
+        moveHorizontal = dir.x;
+        moveVertical = dir.y;
+#else
+        moveHorizontal = Input.GetAxis("Horizontal");
+		moveVertical = Input.GetAxis("Vertical");
+        Debug.Log(new Vector2(moveHorizontal,moveVertical));
+#endif
+        float speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
 		float rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
-		if (Mathf.Abs (moveHorizontal) == 1 || Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) > 0 
-            || Mathf.Abs (moveVertical) == 1 || Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) > 0) {
+        if ((Mathf.Abs (moveHorizontal) != 0 && Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) >= 0 )
+            || (Mathf.Abs (moveVertical) != 0 & Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) >= 0)) {
 			rd2d.rotation = rot;
 			speedRate *= decceleration;
 		}
-		moveHDelay = moveHorizontal;
+        moveHDelay = moveHorizontal;
 		moveVDelay = moveVertical;
 		transform.Translate (speed * speedRate * Vector3.up * Time.deltaTime);
 	}
@@ -88,9 +106,11 @@ public class PlayerController : MonoBehaviour {
 		if (coll.gameObject.CompareTag ("LevelFinish")) {
 			if (!finish) {
                 GameObject timerCanvas = GameObject.Find("TimerCanvas");
-                /*if (timerCanvas != null) {
-					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ());
-				}*/
+                if (timerCanvas != null) {
+                    Debug.Log("Saving Timer");
+					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ()
+                        ,GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>().GetMapData().GetLevelName());
+				}
 				StartCoroutine (Finish ());
 			}
 		}

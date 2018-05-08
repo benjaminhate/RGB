@@ -17,7 +17,11 @@ public class BeginScript : MonoBehaviour {
 
 	private string textType;
 
+    private JoystickController joystick;
+
 	void Start () {
+        joystick = GameObject.FindObjectOfType<JoystickController>();
+        joystick.Activate(false);
         GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = false;
 		Time.timeScale = 0f;
 		mainCamera.enabled = false;
@@ -50,5 +54,8 @@ public class BeginScript : MonoBehaviour {
 		player.GetComponent<PlayerController> ().respawn = true;
 		player.GetComponent<PlayerController> ().dead = true;
         GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = true;
+#if UNITY_ANDROID
+        joystick.Activate(true);
+#endif
     }
 }

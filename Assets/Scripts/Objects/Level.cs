@@ -13,13 +13,15 @@ public class Level {
 	public string sceneName;
     public int id;
 
-	public Level(string name,float timer,bool completed,bool blocked,int id){
-		this.name = name;
-		this.timer = timer;
-		this.completed = completed;
-		this.blocked = blocked;
+    public Level(string name, string sceneName, float timer, bool completed, bool blocked, int id)
+    {
+        this.name = name;
+        this.sceneName = sceneName;
+        this.timer = timer;
+        this.completed = completed;
+        this.blocked = blocked;
         this.id = id;
-	}
+    }
 
 	public Level setName(string name){
 		this.name = name;
@@ -89,6 +91,6 @@ public class Level {
 
     public Level Clone()
     {
-        return new Level(this.name, this.timer, this.completed, this.blocked, this.id);
+        return new Level(this.name, this.sceneName, this.timer, this.completed, this.blocked, this.id);
     }
 }

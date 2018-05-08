@@ -24,7 +24,12 @@ public class PauseScript : MonoBehaviour {
 
 	static GameObject pauseMenu;
 
+    private JoystickController joystick;
+
 	void Start(){
+#if UNITY_ANDROID
+        joystick = GameObject.FindObjectOfType<JoystickController>();
+#endif
 		pause = false;
 		pauseCheck = false;
 		pauseMenu = menu;
@@ -95,7 +100,9 @@ public class PauseScript : MonoBehaviour {
 	}
 
 	public void RefreshButton(){
-		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+        MapCreator creator = GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>();
+        string levelName = creator.GetMapData().GetLevelName();
+        creator.ChangeLevel(levelName);
 	}
 
 	public void MenuButton(){
@@ -107,6 +114,9 @@ public class PauseScript : MonoBehaviour {
 	}
 
 	void Menu(bool open){
+#if UNITY_ANDROID
+        joystick.Activate(!open);
+#endif
 		Cursor.visible = open;
 		pauseMenu.SetActive (open);
 	}

@@ -1,4 +1,4 @@
-WindowsStandalone
+Android
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MapSaveLoad
 dc07d7ad69b399a46e92c483bf1c04ca UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
@@ -139,6 +139,7 @@ d38df9c0e999251e49bbd7110d28f422 Assembly-CSharp.dll:.PauseScript
 baef386fbaf1e82b8a7953acbfff959e Assembly-CSharp.dll:.LevelFinish
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.AudioScript
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.EditorScript
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Joystick
 bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.AudioSpatializerMicrosoft
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInput
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule

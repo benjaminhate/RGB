@@ -150,8 +150,9 @@ public class SaveLoad {
         return SaveData(data);
 	}
 
-	public static PlayerData SaveTimer(float timer){
-		string levelName = SceneManager.GetActiveScene ().name;
+	public static PlayerData SaveTimer(float timer,string levelName){
+        Debug.Log("Save Timer : " + timer);
+		//string levelName = SceneManager.GetActiveScene ().name;
 		List<Category> categories = GetListOfCategories ();
 		Level level = SearchLevelNameInSave (categories, levelName);
 		if (level != null) {
