@@ -1,6 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Objects;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelStart : MonoBehaviour {
 
@@ -11,41 +12,42 @@ public class LevelStart : MonoBehaviour {
 	public GameObject player;
 	public Camera mainCamera;
 
-	void Start(){
+	private void Start(){
 		Cursor.visible = false;
-        string levelName = GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>().GetMapData().GetLevelName();
+		var mapCreator = GameObject.FindGameObjectWithTag("MapCreator");
+        var levelName = mapCreator == null ? SceneManager.GetActiveScene().name : mapCreator.GetComponent<MapCreator>()?.GetMapData().GetLevelName();
         Debug.Log(levelName);
         SaveLoad.SaveLevel (levelName);
 		PlacePlayer ();
 	}
 
-	void Update(){
+	private void Update(){
 		if (player.GetComponent<PlayerController> ().respawn) {
 			StartCoroutine (Respawn ());
 		}
 	}
 
-	private IEnumerator WaitForAnimation ( Animation animation )
+	private IEnumerator WaitForAnimation ( Animation animationPlaying )
 	{
 		do
 		{
 			yield return null;
-		} while ( animation.isPlaying );
+		} while ( animationPlaying.isPlaying );
 	}
 
-	IEnumerator Respawn(){
+	private IEnumerator Respawn(){
 		PlacePlayer ();
 		player.GetComponent<PlayerController> ().respawn = false;
-		Animation anim = player.GetComponent<Animation> ();
+		var anim = player.GetComponent<Animation> ();
 		anim.PlayQueued ("RespawnAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
 		player.GetComponent<PlayerController> ().dead = false;
 	}
 
-	void PlacePlayer(){
+	private void PlacePlayer(){
 		player.transform.position = new Vector3 (startX, startY, 0);
 		player.transform.eulerAngles = new Vector3 (0, 0, startRot);
 		mainCamera.transform.position = new Vector3 (startX, startY, -1);
-        player.GetComponent<ColorElement>().ChangeColor(GetComponent<ColorElement>().GetColor());
+        player.GetComponent<ColorElement>().ChangeColor(GetComponent<ColorElement>().Color);
 	}
 }

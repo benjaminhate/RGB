@@ -1,23 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapLevelStart : MapElementColored {
-    private float startX;
-    private float startY;
-    private float startRot;
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapLevelStart : MapElementColored {
+        private float startX;
+        private float startY;
+        private float startRot;
 
-    public MapLevelStart(GameObject obj) : base(obj)
-    {
-        LevelStart start = obj.GetComponent<LevelStart>();
-        this.startX = start.startX;
-        this.startY = start.startY;
-        this.startRot = start.startRot;
+        public MapLevelStart(GameObject obj) : base(obj)
+        {
+            var start = obj.GetComponent<LevelStart>();
+            startX = start.startX;
+            startY = start.startY;
+            startRot = start.startRot;
+        }
+
+        public float GetStartX() { return startX; }
+        public float GetStartY() { return startY; }
+        public float GetStartRot() { return startRot; }
     }
-
-    public float GetStartX() { return this.startX; }
-    public float GetStartY() { return this.startY; }
-    public float GetStartRot() { return this.startRot; }
 }

@@ -1,32 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapElementColored : MapElement {
-    // Colorer, LevelStart, Obstacles
-    private ColorElement.ColorType color;
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapElementColored : MapElement {
+        // Colorer, LevelStart, Obstacles
+        public Color Color { get; private set; }
 
-    public MapElementColored(GameObject obj) : base(obj)
-    {
-        ColorElement color = obj.GetComponent<ColorElement>();
-        if(color!=null)
-            this.color = color.GetColor();
-    }
+        public MapElementColored(GameObject obj) : base(obj)
+        {
+            var color = obj.GetComponent<ColorElement>();
+            if(color != null)
+                Color = color.Color;
+        }
 
-    public MapElementColored() : base()
-    {
+        public MapElementColored() : base()
+        {
 
-    }
+        }
 
-    public void ChangeColorType(ColorElement.ColorType colorType)
-    {
-        this.color = colorType;
-    }
-
-    public ColorElement.ColorType GetColor()
-    {
-        return this.color;
+        public void ChangeColor(Color other)
+        {
+            Color = other;
+        }
     }
 }

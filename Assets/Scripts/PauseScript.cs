@@ -1,17 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
+using Objects;
 
 public class PauseScript : MonoBehaviour {
+	private static bool _pause;
+	private static bool _pauseCheck;
 
-	static bool pause;
-	static bool pauseCheck;
-
-	PlayerData data;
-	bool volume;
+	private PlayerData data;
+	private bool volume;
 
 	public GameObject menu;
 	public Button volumeButton;
@@ -22,47 +23,47 @@ public class PauseScript : MonoBehaviour {
 
     public string levelName;
 
-	static GameObject pauseMenu;
+    private static GameObject _pauseMenu;
 
     private JoystickController joystick;
 
-	void Start(){
+    private void Start(){
 #if UNITY_ANDROID
         joystick = GameObject.FindObjectOfType<JoystickController>();
 #endif
-		pause = false;
-		pauseCheck = false;
-		pauseMenu = menu;
+		_pause = false;
+		_pauseCheck = false;
+		_pauseMenu = menu;
 		data = SaveLoad.Load ();
 		if (data != null) {
-			volume = !data.getVolume ();
+			volume = !data.GetVolume ();
 		} else {
 			volume = false;
 		}
 		VolumeButton ();
 		Menu (false);
-		string levelType = levelName.Substring (levelName.Length-1, 1);
-		string textLevel = levelName.Substring (levelName.Length-2, 1);
-		if (string.Compare(levelType,"E")==0) {
+		var levelType = levelName.Substring (levelName.Length-1, 1);
+		var textLevel = levelName.Substring (levelName.Length-2, 1);
+		if (string.CompareOrdinal(levelType,"E")==0) {
 			textType="Easy";
 		}
-		if (string.Compare(levelType,"M")==0) {
+		if (string.CompareOrdinal(levelType,"M")==0) {
 			textType="Medium";
 		}
-		if (string.Compare(levelType,"H")==0) {
+		if (string.CompareOrdinal(levelType,"H")==0) {
 			textType="Hard";
 		}
 		infoText.text = textType + "-Level " + textLevel;
 	}
 
-	void Update(){
+    private void Update(){
 		if (Input.GetKeyDown (KeyCode.Escape) && pauseEnable) {
-			pause = !pause;
-			pauseCheck = true;
+			_pause = !_pause;
+			_pauseCheck = true;
 		}
-		if (pauseCheck) {
-			pauseCheck = false;
-			if (pause) {
+		if (_pauseCheck) {
+			_pauseCheck = false;
+			if (_pause) {
 				Pause ();
 				Menu (true);
 			} else {
@@ -73,35 +74,35 @@ public class PauseScript : MonoBehaviour {
 	}
 
 	public void VolumeButton(){
-		Image volumeOn = volumeButton.transform.Find ("VolumeOn").GetComponent<Image> ();
-		Image volumeOff = volumeButton.transform.Find ("VolumeOff").GetComponent<Image> ();
+		var volumeOn = volumeButton.transform.Find ("VolumeOn").GetComponent<Image> ();
+		var volumeOff = volumeButton.transform.Find ("VolumeOff").GetComponent<Image> ();
 		volume = !volume;
 		volumeOn.gameObject.SetActive (volume);
 		volumeOff.gameObject.SetActive (!volume);
 		SaveLoad.SaveVolume (volume);
-        GameObject audio = GameObject.FindGameObjectWithTag("Audio");
+        var audio = GameObject.FindGameObjectWithTag("Audio");
         if (audio != null)
         {
             audio.GetComponent<AudioScript>().UpdateVolume();
         }
 	}
 
-	void Pause(){
+	private void Pause(){
 		Time.timeScale = 0f;
 	}
 
-	void Resume(){
+	private void Resume(){
 		Time.timeScale = 1f;
 	}
 
 	public void ResumeButton(){
-		pause = false;
-		pauseCheck = true;
+		_pause = false;
+		_pauseCheck = true;
 	}
 
 	public void RefreshButton(){
-        MapCreator creator = GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>();
-        string levelName = creator.GetMapData().GetLevelName();
+        var creator = GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>();
+        var levelName = creator.GetMapData().GetLevelName();
         creator.ChangeLevel(levelName);
 	}
 
@@ -113,11 +114,11 @@ public class PauseScript : MonoBehaviour {
 		Application.Quit ();
 	}
 
-	void Menu(bool open){
+	private void Menu(bool open){
 #if UNITY_ANDROID
         joystick.Activate(!open);
 #endif
 		Cursor.visible = open;
-		pauseMenu.SetActive (open);
+		_pauseMenu.SetActive (open);
 	}
 }

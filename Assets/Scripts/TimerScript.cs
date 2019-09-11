@@ -19,23 +19,23 @@ public class TimerScript : MonoBehaviour {
     }
 
 	// Use this for initialization
-	void Start () {
+	private void Start () {
         ResetTimer();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	private void Update () {
 		if(player.GetComponent<PlayerController>().IsMoving())
 			timer += Time.deltaTime;
 		timerText.text = FormatSeconds (timer);
 	}
 
-	string FormatSeconds(float timer){
-		int t = (int)(timer * 100.0f);
-		int minutes = t / (60 * 100);
-		int seconds = (t % (60 * 100)) / 100;
-		int hundredths = t % 100;
-		return string.Format ("{0:00}:{1:00}.{2:00}", minutes, seconds, hundredths);
+	private string FormatSeconds(float timer){
+		var t = (int)(timer * 100.0f);
+		var minutes = t / (60 * 100);
+		var seconds = (t % (60 * 100)) / 100;
+		var hundredths = t % 100;
+		return $"{minutes:00}:{seconds:00}.{hundredths:00}";
 	}
 
 	public void Reset(){

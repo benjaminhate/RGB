@@ -7,7 +7,7 @@ public class JoystickController : MonoBehaviour {
     public GameObject joystick;
 
 	// Use this for initialization
-	void Start () {
+	private void Start () {
         // joystick = GameObject.FindGameObjectWithTag("Joystick");
 	}
 	

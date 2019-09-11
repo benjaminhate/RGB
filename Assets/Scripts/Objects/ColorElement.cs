@@ -1,61 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using ScriptableObjects;
 using UnityEngine;
 
-public class ColorElement : MonoBehaviour{
-    public enum ColorType { RED, GREEN, BLUE };
-    public ColorType color;
+namespace Objects
+{
+    public class ColorElement : MonoBehaviour{
+        public ColorScriptableObject colorSo;
 
-    private Color red = new Color(1f, 0.2f, 0.2f, 1f);
-    private Color green = new Color(0f, 0.8f, 0f, 1f);
-    private Color blue = new Color(0.1f, 0.3f, 1f, 1f);
+        private readonly Color red = new Color(1f, 0.2f, 0.2f, 1f);
+        private readonly Color green = new Color(0f, 0.8f, 0f, 1f);
+        private readonly Color blue = new Color(0.1f, 0.3f, 1f, 1f);
 
-    public ColorElement(ColorType type)
-    {
-        this.color = type;
-    }
+        public Color Color { get; private set; }
 
-    public ColorElement()
-    {
-        this.color = ColorType.RED;
-    }
-
-    public ColorType GetColor()
-    {
-        return color;
-    }
-
-    public bool SameColor(ColorElement color)
-    {
-        return (int)this.color == (int)color.color;
-    }
-
-    public void ChangeColor(ColorType colorType)
-    {
-        color = colorType;
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
+        public bool SameColor(ColorScriptableObject other)
         {
-            switch (colorType)
-            {
-                case ColorType.RED:
-                    spriteRenderer.color = red;
-                    break;
-                case ColorType.GREEN:
-                    spriteRenderer.color = green;
-                    break;
-                case ColorType.BLUE:
-                    spriteRenderer.color = blue;
-                    break;
-                default:
-                    spriteRenderer.color = red;
-                    break;
-            }
+            return colorSo.color == other.color;
         }
-    }
 
-    void Start()
-    {
-        ChangeColor(color);   
+        public void ChangeColor(Color other)
+        {
+            Color = other;
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) return;
+
+            spriteRenderer.color = Color;
+        }
+
+        private void Start()
+        {
+            ChangeColor(colorSo.color);
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using System.Linq;
+using Objects;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
@@ -22,13 +24,9 @@ public class LevelMenu : MonoBehaviour {
 	private int selectorWidth;
 	private int selectorHeight;
 
-	private Category GetCategoryWithName(string name) {
-		foreach (Category category in categories) {
-			if (category.getName ().CompareTo (name) == 0) {
-				return category;
-			}
-		}
-		return null;
+	private Category GetCategoryWithName(string categoryName)
+	{
+		return categories.FirstOrDefault(category => string.Compare(category.GetName(), categoryName, StringComparison.Ordinal) == 0);
 	}
 
 	private void SetCategoryMenu(List<Category> categories) {
@@ -37,22 +35,22 @@ public class LevelMenu : MonoBehaviour {
 		returnButton.onClick.AddListener (() => {
 			SceneManager.LoadScene("StartMenu",LoadSceneMode.Single);
 		});
-		int i = 0;
+		var i = 0;
 		maxScroll = 0;
-		foreach (Category category in categories) {
+		foreach (var category in categories) {
 			maxScroll += 1;
-			Button categorySel = Instantiate (categorySelector, selector.transform);
+			var categorySel = Instantiate (categorySelector, selector.transform);
 			categorySel.gameObject.SetActive (true);
-            float value = categorySel.GetComponent<RectTransform>().rect.width + 10;
+            var value = categorySel.GetComponent<RectTransform>().rect.width + 10;
 			selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
 			categorySel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
 			i += 1;
-			Image lockImg = categorySel.transform.Find ("Lock").GetComponent<Image> ();
-			Image completedImg = categorySel.transform.Find ("Completed").GetComponent<Image> ();
-			Text categorySelName = categorySel.transform.Find ("Name").GetComponent<Text> ();
-			Text categorySelLevels = categorySel.transform.Find ("Levels").GetComponent<Text> ();
-			Text categorySelLevelCount = categorySelLevels.transform.Find ("Level Count").GetComponent<Text> ();
-			if (category.getBlocked ()) {
+			var lockImg = categorySel.transform.Find ("Lock").GetComponent<Image> ();
+			var completedImg = categorySel.transform.Find ("Completed").GetComponent<Image> ();
+			var categorySelName = categorySel.transform.Find ("Name").GetComponent<Text> ();
+			var categorySelLevels = categorySel.transform.Find ("Levels").GetComponent<Text> ();
+			var categorySelLevelCount = categorySelLevels.transform.Find ("Level Count").GetComponent<Text> ();
+			if (category.GetBlocked ()) {
 				lockImg.gameObject.SetActive (true);
 				categorySelName.gameObject.SetActive (false);
 				categorySelLevels.gameObject.SetActive (false);
@@ -64,14 +62,14 @@ public class LevelMenu : MonoBehaviour {
 				categorySelName.gameObject.SetActive (true);
 				categorySelLevels.gameObject.SetActive (true);
 				categorySelLevelCount.gameObject.SetActive (true);
-				if (category.getCompleted ()) {
+				if (category.GetCompleted ()) {
 					completedImg.gameObject.SetActive (true);
 				} else {
 					completedImg.gameObject.SetActive (false);
 				}
-				categorySelName.text = category.getName ();
+				categorySelName.text = category.GetName ();
 				categorySelLevels.text = "Levels";
-				categorySelLevelCount.text = category.getUnblockedLevels ().Count + " / " + category.getLevels ().Count;
+				categorySelLevelCount.text = category.GetUnblockedLevels ().Count + " / " + category.GetLevels ().Count;
 				categorySel.interactable = true;
 				categorySel.onClick.AddListener (() => {
 					OnClickCategoryButton (categories,category);
@@ -87,23 +85,23 @@ public class LevelMenu : MonoBehaviour {
 			SetCategoryMenu(categories);
 		});
 		if (category != null) {
-			menuText.text = category.getName ();
-			int i = 0;
+			menuText.text = category.GetName ();
+			var i = 0;
 			maxScroll = 0;
-			foreach (Level level in category.getLevels()) {
+			foreach (var level in category.GetLevels()) {
 				maxScroll += 1;
-				Button levelSel = Instantiate (levelSelector, selector.transform);
+				var levelSel = Instantiate (levelSelector, selector.transform);
 				levelSel.gameObject.SetActive (true);
-                float value = levelSel.GetComponent<RectTransform>().rect.width + 10;
+                var value = levelSel.GetComponent<RectTransform>().rect.width + 10;
 				selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
 				levelSel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
 				i += 1;
-				Image lockImg = levelSel.transform.Find ("Lock").GetComponent<Image> ();
-				Image completedImg = levelSel.transform.Find ("Completed").GetComponent<Image> ();
-				Text levelSelName = levelSel.transform.Find ("Name").GetComponent<Text> ();
-				Text levelSelTimer = levelSel.transform.Find ("Timer").GetComponent<Text> ();
-				Text levelSelTimerText = levelSelTimer.transform.Find ("Timer Text").GetComponent<Text> ();
-				if (level.getBlocked ()) {
+				var lockImg = levelSel.transform.Find ("Lock").GetComponent<Image> ();
+				var completedImg = levelSel.transform.Find ("Completed").GetComponent<Image> ();
+				var levelSelName = levelSel.transform.Find ("Name").GetComponent<Text> ();
+				var levelSelTimer = levelSel.transform.Find ("Timer").GetComponent<Text> ();
+				var levelSelTimerText = levelSelTimer.transform.Find ("Timer Text").GetComponent<Text> ();
+				if (level.GetBlocked ()) {
 					lockImg.gameObject.SetActive (true);
 					levelSelName.gameObject.SetActive (false);
 					levelSelTimer.gameObject.SetActive (false);
@@ -113,10 +111,10 @@ public class LevelMenu : MonoBehaviour {
 					lockImg.gameObject.SetActive (false);
 					levelSelName.gameObject.SetActive (true);
 					levelSelTimer.gameObject.SetActive (true);
-					levelSelName.text = level.getName ();
-					if (level.getCompleted()) {
+					levelSelName.text = level.GetName ();
+					if (level.GetCompleted()) {
 						levelSelTimer.text = "Best time";
-						levelSelTimerText.text = (Mathf.Round (level.getTimer () * 100f) / 100f).ToString ();
+						levelSelTimerText.text = (Mathf.Round (level.GetTimer () * 100f) / 100f).ToString ();
 						completedImg.gameObject.SetActive (true);
 					} else {
 						levelSelTimer.gameObject.SetActive (false);
@@ -134,60 +132,60 @@ public class LevelMenu : MonoBehaviour {
 	private void ResetMenuButton(){
 		actualScroll = 1;
 		selector.GetComponent<RectTransform> ().sizeDelta = selectorWidth * Vector2.right + selectorHeight * Vector2.up;
-		Button[] menuButtonList = selector.GetComponentsInChildren<Button> ();
-		foreach (Button menuButton in menuButtonList) {
+		var menuButtonList = selector.GetComponentsInChildren<Button> ();
+		foreach (var menuButton in menuButtonList) {
 			Destroy (menuButton.gameObject);
 		}
 	}
 
-	void Start () {
+	private void Start () {
 		actualScroll = 1;
 		selectorWidth = 100;
 		selectorHeight = 90;
-		PlayerData data = SaveLoad.Load ();
+		var data = SaveLoad.Load ();
 		if (data != null) {
 			SetCategoryMenu (data.categories);
-			categories = data.getCategories ();
+			categories = data.GetCategories ();
 		} else {
 			SetCategoryMenu (categories);
 			SaveLoad.SaveInit (categories);
 		}
 	}
 
-	void OnClickCategoryButton(List<Category> categories,Category category){
+	private void OnClickCategoryButton(List<Category> categories,Category category){
 		ResetMenuButton ();
 		SetLevelMenu (categories, category);
 	}
 
-	void OnClickLevelButton(Level level){
-        Debug.Log(level.getSceneName());
+	private void OnClickLevelButton(Level level){
+        Debug.Log(level.GetSceneName());
         //GameObject levelGameObject = new GameObject("Level1E");
-        GameObject levelGameObject = new GameObject(level.getSceneName());
+        var levelGameObject = new GameObject(level.GetSceneName());
         levelGameObject.gameObject.tag = "LevelSelector";
         DontDestroyOnLoad(levelGameObject);
 		SceneManager.LoadScene ("LevelCreator", LoadSceneMode.Single);
 	}
 
 	public void OnClickRightButton(){
-		Button[] levelSelectors = selector.GetComponentsInChildren<Button> ();
-		if (actualScroll < maxScroll) {
-			foreach (Button button in levelSelectors) {
-                button.GetComponent<RectTransform>().localPosition -=
-                    (button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
-			}
-			actualScroll += 1;
+		var levelSelectors = selector.GetComponentsInChildren<Button> ();
+		if (actualScroll >= maxScroll) return;
+		
+		foreach (var button in levelSelectors) {
+			button.GetComponent<RectTransform>().localPosition -=
+				(button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 		}
+		actualScroll += 1;
 	}
 
 	public void OnClickLeftButton(){
-		Button[] levelSelectors = selector.GetComponentsInChildren<Button> ();
-		if (actualScroll > 1) {
-			foreach (Button button in levelSelectors) {
-                button.GetComponent<RectTransform>().localPosition +=
-                    (button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
-			}
-			actualScroll -= 1;
+		var levelSelectors = selector.GetComponentsInChildren<Button> ();
+		if (actualScroll <= 1) return;
+		
+		foreach (var button in levelSelectors) {
+			button.GetComponent<RectTransform>().localPosition +=
+				(button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 		}
+		actualScroll -= 1;
 	}
 	
 

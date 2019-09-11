@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Objects;
+using Objects.Map;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,9 +25,9 @@ public class MapCreator : MonoBehaviour{
 
     private MapData mapData;
 
-    void Awake()
+    private void Awake()
     {
-        GameObject levelSelector = GameObject.FindGameObjectWithTag("LevelSelector");
+        var levelSelector = GameObject.FindGameObjectWithTag("LevelSelector");
         if (levelSelector)
         {
             levelName = levelSelector.name;
@@ -33,7 +35,7 @@ public class MapCreator : MonoBehaviour{
         }
     }
 
-    void Start () {
+    private void Start () {
         CreateLevel(levelName);
     }
 
@@ -44,20 +46,20 @@ public class MapCreator : MonoBehaviour{
         Debug.Log(mapData);
         if (mapData != null)
         {
-            foreach (MapElement element in mapData.GetElements())
+            foreach (var element in mapData.GetElements())
             {
                 switch (element.GetElementType())
                 {
-                    case MapElement.MapElementType.GAME:
+                    case MapElement.MapElementType.Game:
                         CreateGame((MapGame)element);
                         break;
-                    case MapElement.MapElementType.COLORER:
+                    case MapElement.MapElementType.Colorer:
                         CreateColorer((MapElementColored)element);
                         break;
-                    case MapElement.MapElementType.OBSTACLE:
+                    case MapElement.MapElementType.Obstacle:
                         CreateObstacle((MapObstacle)element);
                         break;
-                    case MapElement.MapElementType.WALL:
+                    case MapElement.MapElementType.Wall:
                         CreateWall(element);
                         break;
                     default:
@@ -77,13 +79,13 @@ public class MapCreator : MonoBehaviour{
         CreateLevel(levelName);
     }
 
-    private GameObject GetChildWithTag(GameObject parent,string tag)
+    private GameObject GetChildWithTag(GameObject parent,string childTag)
     {
         GameObject child;
-        for(int i = 0; i < parent.transform.childCount; i++)
+        for(var i = 0; i < parent.transform.childCount; i++)
         {
             child = parent.transform.GetChild(i).gameObject;
-            if (child.CompareTag(tag))
+            if (child.CompareTag(childTag))
                 return child;
         }
         return null;
@@ -103,26 +105,26 @@ public class MapCreator : MonoBehaviour{
     {
         if (obj != null && element != null && obj.GetComponent<ColorElement>() != null)
         {
-            obj.GetComponent<ColorElement>().ChangeColor(element.GetColor());
+            obj.GetComponent<ColorElement>().ChangeColor(element.Color);
         }
     }
 
     public void ModifyBackground(GameObject game, MapElement element)
     {
-        GameObject background = GetChildWithTag(game, "MainBackground");
+        var background = GetChildWithTag(game, "MainBackground");
         SetGameObjectTransform(background, element);
     }
 
     public void CreateColorer(MapElementColored element)
     {
-        GameObject colorer = Instantiate(colorerPrefab, levelContainer.transform);
+        var colorer = Instantiate(colorerPrefab, levelContainer.transform);
         SetGameObjectTransform(colorer, element);
         ChangeGameObjectColor(colorer, element);
     }
 
     public void CreateGame(MapGame element)
     {
-        GameObject game = Instantiate(gamePrefab, levelContainer.transform);
+        var game = Instantiate(gamePrefab, levelContainer.transform);
         SetGameObjectTransform(game, element);
         ModifyBackground(game, element.GetBackground());
         ModifyMainCamera(game);
@@ -137,19 +139,20 @@ public class MapCreator : MonoBehaviour{
 
     public void ModifyBeginCamera(GameObject game)
     {
-        GameObject mainBackground = GetChildWithTag(game, "MainBackground");
-        float scaleX = mainBackground.transform.localScale.x / 2.49f;
-        float scaleY = mainBackground.transform.localScale.y / 2f;
-        float maxScale = Mathf.Max(scaleX, scaleY) * 10;
+        var mainBackground = GetChildWithTag(game, "MainBackground");
+        var localScale = mainBackground.transform.localScale;
+        var scaleX = localScale.x / 2.49f;
+        var scaleY = localScale.y / 2f;
+        var maxScale = Mathf.Max(scaleX, scaleY) * 10;
         Debug.Log("Max scale : " + maxScale);
         Camera.main.orthographicSize = maxScale;
-        GameObject beginCamera = GameObject.Find("BeginCamera");
+        var beginCamera = GameObject.Find("BeginCamera");
         beginCamera.transform.position = mainBackground.transform.position;
     }
 
     public void ModifyBeginCanvas(GameObject game)
     {
-        GameObject beginCanvas = GetChildWithTag(game, "BeginCanvas");
+        var beginCanvas = GetChildWithTag(game, "BeginCanvas");
         beginCanvas.GetComponent<BeginScript>().mainCamera = mainCamera;
         beginCanvas.GetComponent<BeginScript>().levelName = mapData.GetLevelName();
     }
@@ -162,17 +165,17 @@ public class MapCreator : MonoBehaviour{
 
     public void ModifyLevelFinish(GameObject game, MapLevelFinish element)
     {
-        GameObject levelFinish = game.GetComponentInChildren<LevelFinish>().gameObject;
+        var levelFinish = game.GetComponentInChildren<LevelFinish>().gameObject;
         SetGameObjectTransform(levelFinish, element);
         levelFinish.GetComponent<LevelFinish>().nextLevel = element.GetNextLevel();
     }
 
     public void ModifyLevelStart(GameObject game, MapLevelStart element)
     {
-        GameObject levelStart = game.GetComponentInChildren<LevelStart>().gameObject;
+        var levelStart = game.GetComponentInChildren<LevelStart>().gameObject;
         SetGameObjectTransform(levelStart, element);
         ChangeGameObjectColor(levelStart, element);
-        LevelStart levelStartScript = levelStart.GetComponent<LevelStart>();
+        var levelStartScript = levelStart.GetComponent<LevelStart>();
         levelStartScript.startX = element.GetStartX();
         levelStartScript.startY = element.GetStartY();
         levelStartScript.startRot = element.GetStartRot();
@@ -184,13 +187,13 @@ public class MapCreator : MonoBehaviour{
         Debug.Log("Obstacle : " + element);
         switch (element.GetObstacleType())
         {
-            case MapObstacle.MapObstacleType.CAMERA:
+            case MapObstacle.MapObstacleType.Camera:
                 CreateCamera((MapCamera)element);
                 break;
-            case MapObstacle.MapObstacleType.DETECTOR:
+            case MapObstacle.MapObstacleType.Detector:
                 CreateDetector((MapDetector)element);
                 break;
-            case MapObstacle.MapObstacleType.RAY:
+            case MapObstacle.MapObstacleType.Ray:
                 CreateRay((MapRay)element);
                 break;
             default:
@@ -200,10 +203,10 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateCamera(MapCamera element)
     {
-        GameObject camera = Instantiate(cameraPrefab, levelContainer.transform);
+        var camera = Instantiate(cameraPrefab, levelContainer.transform);
         SetGameObjectTransform(camera, element);
         ChangeGameObjectColor(camera, element);
-        CameraController cameraController = camera.GetComponent<CameraController>();
+        var cameraController = camera.GetComponent<CameraController>();
         cameraController.degA = element.GetDegA();
         cameraController.degB = element.GetDegB();
         cameraController.rotSpeed = element.GetRotSpeed();
@@ -213,21 +216,21 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateDetector(MapDetector element)
     {
-        GameObject detector = Instantiate(detectorPrefab, levelContainer.transform);
+        var detector = Instantiate(detectorPrefab, levelContainer.transform);
         SetGameObjectTransform(detector, element);
-        GameObject detectorRay = detector.GetComponentInChildren<DetectorController>().gameObject;
+        var detectorRay = detector.GetComponentInChildren<DetectorController>().gameObject;
         ChangeGameObjectColor(detectorRay, element);
-        DetectorController detectorController = detectorRay.GetComponent<DetectorController>();
+        var detectorController = detectorRay.GetComponent<DetectorController>();
         detectorController.speed = element.GetSpeed();
         detectorController.timeStop = element.GetTimeStop();
     }
 
     public void CreateRay(MapRay element)
     {
-        GameObject ray = Instantiate(rayPrefab, levelContainer.transform);
+        var ray = Instantiate(rayPrefab, levelContainer.transform);
         SetGameObjectTransform(ray, element);
         ChangeGameObjectColor(ray, element);
-        RayController rayController = ray.GetComponent<RayController>();
+        var rayController = ray.GetComponent<RayController>();
         rayController.speed = element.GetSpeed();
         rayController.range = element.GetRange();
         rayController.timeStop = element.GetTimeStop();
@@ -236,10 +239,10 @@ public class MapCreator : MonoBehaviour{
 
     public void ModifyPlayer(GameObject game, MapPlayer element)
     {
-        GameObject player = game.GetComponentInChildren<PlayerController>().gameObject;
+        var player = game.GetComponentInChildren<PlayerController>().gameObject;
         SetGameObjectTransform(player, element);
         ChangeGameObjectColor(player, element);
-        PlayerController playerController = player.GetComponent<PlayerController>();
+        var playerController = player.GetComponent<PlayerController>();
         playerController.speed = element.GetSpeed();
         playerController.decceleration = element.GetDecceleration();
         playerController.dead = element.GetDead();
@@ -252,7 +255,7 @@ public class MapCreator : MonoBehaviour{
 
     public void CreateWall(MapElement element)
     {
-        GameObject wall = Instantiate(wallPrefab, levelContainer.transform);
+        var wall = Instantiate(wallPrefab, levelContainer.transform);
         SetGameObjectTransform(wall, element);
     }
 

@@ -1,96 +1,96 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using System;
 
-[Serializable]
-public class Level {
+namespace Objects
+{
+	[Serializable]
+	public class Level {
 
-	public string name;
-	public float timer;
-	public bool completed;
-	public bool blocked;
-	public string sceneName;
-    public int id;
+		public string name;
+		public float timer;
+		public bool completed;
+		public bool blocked;
+		public string sceneName;
+		public int id;
 
-    public Level(string name, string sceneName, float timer, bool completed, bool blocked, int id)
-    {
-        this.name = name;
-        this.sceneName = sceneName;
-        this.timer = timer;
-        this.completed = completed;
-        this.blocked = blocked;
-        this.id = id;
-    }
+		public Level(string name, string sceneName, float timer, bool completed, bool blocked, int id)
+		{
+			this.name = name;
+			this.sceneName = sceneName;
+			this.timer = timer;
+			this.completed = completed;
+			this.blocked = blocked;
+			this.id = id;
+		}
 
-	public Level setName(string name){
-		this.name = name;
-		return this;
+		public Level SetName(string name){
+			this.name = name;
+			return this;
+		}
+		public string GetName(){
+			return name;
+		}
+
+		public Level SetId(int id)
+		{
+			this.id = id;
+			return this;
+		}
+
+		public int GetId()
+		{
+			return id;
+		}
+
+		public Level SetTimer(float timer){
+			this.timer = timer;
+			return this;
+		}
+		public float GetTimer(){
+			return timer;
+		}
+
+		public Level SetCompleted(bool completed){
+			this.completed = completed;
+			return this;
+		}
+		public bool GetCompleted(){
+			return completed;
+		}
+
+		public Level SetBlocked(bool blocked){
+			this.blocked = blocked;
+			return this;
+		}
+		public bool GetBlocked(){
+			return blocked;
+		}
+
+		public Level SetSceneName(string sceneName){
+			this.sceneName = sceneName;
+			return this;
+		}
+		public string GetSceneName(){
+			return sceneName;
+		}
+
+		public string ToString() {
+			return "Level : \n name : " 
+			       + name
+			       + "\n id : "
+			       + id.ToString()
+			       + "\n completed : " 
+			       + completed.ToString () 
+			       + "\n blocked : " 
+			       + blocked.ToString () 
+			       + "\n scene name : " 
+			       + sceneName
+			       + "\n timer : "
+			       + timer;
+		}
+
+		public Level Clone()
+		{
+			return new Level(name, sceneName, timer, completed, blocked, id);
+		}
 	}
-	public string getName(){
-		return this.name;
-	}
-
-    public Level setId(int id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public int getId()
-    {
-        return this.id;
-    }
-
-	public Level setTimer(float timer){
-		this.timer = timer;
-		return this;
-	}
-	public float getTimer(){
-		return this.timer;
-	}
-
-	public Level setCompleted(bool completed){
-		this.completed = completed;
-		return this;
-	}
-	public bool getCompleted(){
-		return this.completed;
-	}
-
-	public Level setBlocked(bool blocked){
-		this.blocked = blocked;
-		return this;
-	}
-	public bool getBlocked(){
-		return this.blocked;
-	}
-
-	public Level setSceneName(string sceneName){
-		this.sceneName = sceneName;
-		return this;
-	}
-	public string getSceneName(){
-		return this.sceneName;
-	}
-
-	public string toString() {
-		return "Level : \n name : " 
-			+ this.name
-            + "\n id : "
-            + this.id.ToString()
-			+ "\n completed : " 
-			+ this.completed.ToString () 
-			+ "\n blocked : " 
-			+ this.blocked.ToString () 
-			+ "\n scene name : " 
-			+ this.sceneName
-            + "\n timer : "
-            + this.timer;
-	}
-
-    public Level Clone()
-    {
-        return new Level(this.name, this.sceneName, this.timer, this.completed, this.blocked, this.id);
-    }
 }

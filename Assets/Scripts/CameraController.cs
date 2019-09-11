@@ -16,24 +16,24 @@ public class CameraController : MonoBehaviour {
 	 * */
 
 	private bool directionA;
-	private bool stop = false;
+	private bool stop;
 
-	void Start () {
+	private void Start () {
         directionA = true;
 		transform.rotation = Quaternion.Euler (0, 0, degA);
 	}
 
-	void Update(){
+	private void Update(){
 		if (directionA)
 			Rotate (-dir, degA);
 		else
 			Rotate (dir, degB);
 	}
 
-	void Rotate(int dir,int deg){
-		Vector3 target = new Vector3 (0, 0, deg);
+	private void Rotate(int direction,int degrees){
+		var target = new Vector3 (0, 0, degrees);
 		if (!stop)
-			transform.Rotate (Vector3.forward * dir, rotSpeed * Time.deltaTime);
+			transform.Rotate (Vector3.forward * direction, rotSpeed * Time.deltaTime);
 		if (Vector3.Distance(transform.eulerAngles, target) < 1f) {
 			directionA = !directionA;
 			transform.eulerAngles = target;
@@ -41,7 +41,7 @@ public class CameraController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator Wait(){
+	private IEnumerator Wait(){
 		stop = true;
 		yield return new WaitForSeconds (timeStop);
 		stop = false;

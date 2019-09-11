@@ -1,39 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapGame : MapElement {
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapGame : MapElement {
 
-    private MapElement background;
-    private MapPlayer player;
-    private MapLevelFinish levelFinish;
-    private MapLevelStart levelStart;
+        private MapElement background;
+        private MapPlayer player;
+        private MapLevelFinish levelFinish;
+        private MapLevelStart levelStart;
 
-    private GameObject GetChildWithTag(GameObject obj, string tag)
-    {
-        GameObject child;
-        for(int i = 0; i < obj.transform.childCount; i++)
+        private GameObject GetChildWithTag(GameObject obj, string tag)
         {
-            child = obj.transform.GetChild(i).gameObject;
-            if (child.CompareTag(tag))
-                return child;
+            GameObject child;
+            for(var i = 0; i < obj.transform.childCount; i++)
+            {
+                child = obj.transform.GetChild(i).gameObject;
+                if (child.CompareTag(tag))
+                    return child;
+            }
+            return null;
         }
-        return null;
-    }
 
-    public MapGame(GameObject obj) : base(obj)
-    {
-        base.ChangeType(MapElementType.GAME);
-        this.background = new MapElement(GetChildWithTag(obj,"MainBackground"));
-        this.player = new MapPlayer(obj.GetComponentInChildren<PlayerController>().gameObject);
-        this.levelFinish = new MapLevelFinish(obj.GetComponentInChildren<LevelFinish>().gameObject);
-        this.levelStart = new MapLevelStart(obj.GetComponentInChildren<LevelStart>().gameObject);
-    }
+        public MapGame(GameObject obj) : base(obj)
+        {
+            ChangeType(MapElementType.Game);
+            background = new MapElement(GetChildWithTag(obj,"MainBackground"));
+            player = new MapPlayer(obj.GetComponentInChildren<PlayerController>().gameObject);
+            levelFinish = new MapLevelFinish(obj.GetComponentInChildren<LevelFinish>().gameObject);
+            levelStart = new MapLevelStart(obj.GetComponentInChildren<LevelStart>().gameObject);
+        }
 
-    public MapElement GetBackground() { return this.background; }
-    public MapPlayer GetPlayer() { return this.player; }
-    public MapLevelFinish GetLevelFinish() { return this.levelFinish; }
-    public MapLevelStart GetLevelStart() { return this.levelStart; }
+        public MapElement GetBackground() { return background; }
+        public MapPlayer GetPlayer() { return player; }
+        public MapLevelFinish GetLevelFinish() { return levelFinish; }
+        public MapLevelStart GetLevelStart() { return levelStart; }
+    }
 }

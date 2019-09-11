@@ -1,38 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapPlayer : MapElementColored {
-    private float speed;
-    private float decceleration;
-    private bool dead;
-    private bool respawn;
-    private bool finish;
-    private bool obstacleCollide;
-    private bool obstacleKill;
-    private string obstacle;
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapPlayer : MapElementColored {
+        private float speed;
+        private float decceleration;
+        private bool dead;
+        private bool respawn;
+        private bool finish;
+        private bool obstacleCollide;
+        private bool obstacleKill;
+        private string obstacle;
 
-    public MapPlayer(GameObject obj) : base(obj)
-    {
-        PlayerController player = obj.GetComponent<PlayerController>();
-        this.speed = player.speed;
-        this.decceleration = player.decceleration;
-        this.dead = player.dead;
-        this.respawn = player.respawn;
-        this.finish = player.finish;
-        this.obstacleCollide = player.obstacleCollide;
-        this.obstacleKill = player.obstacleKill;
-        this.obstacle = player.obstacle;
+        public MapPlayer(GameObject obj) : base(obj)
+        {
+            var player = obj.GetComponent<PlayerController>();
+            speed = player.speed;
+            decceleration = player.decceleration;
+            dead = player.dead;
+            respawn = player.respawn;
+            finish = player.finish;
+            obstacleCollide = player.obstacleCollide;
+            obstacleKill = player.obstacleKill;
+            obstacle = player.obstacle;
+        }
+
+        public float GetSpeed() { return speed; }
+        public float GetDecceleration() { return decceleration; }
+        public bool GetDead() { return dead; }
+        public bool GetRespawn() { return respawn; }
+        public bool GetFinish() { return finish; }
+        public bool GetObstacleCollide() { return obstacleCollide; }
+        public bool GetObstacleKill() { return obstacleKill; }
+        public string GetObstacle() { return obstacle; }
     }
-
-    public float GetSpeed() { return this.speed; }
-    public float GetDecceleration() { return this.decceleration; }
-    public bool GetDead() { return this.dead; }
-    public bool GetRespawn() { return this.respawn; }
-    public bool GetFinish() { return this.finish; }
-    public bool GetObstacleCollide() { return this.obstacleCollide; }
-    public bool GetObstacleKill() { return this.obstacleKill; }
-    public string GetObstacle() { return this.obstacle; }
 }

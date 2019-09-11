@@ -8,20 +8,20 @@ public class EditorLevelSelector : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+    private void Start () {
         GetAllDirectories(Path.Combine(Application.persistentDataPath, "maps"));
         GetAllFiles(Path.Combine(Application.persistentDataPath,"maps"));
     }
 	
 	// Update is called once per frame
-	void Update () {
+    private void Update () {
 		
 	}
 
     private void GetAllFiles(string path)
     {
-        DirectoryInfo info = new DirectoryInfo(path);
-        foreach(FileInfo file in info.GetFiles())
+        var info = new DirectoryInfo(path);
+        foreach(var file in info.GetFiles())
         {
             Debug.Log("file : " + file.Name);
         }
@@ -29,8 +29,8 @@ public class EditorLevelSelector : MonoBehaviour {
 
     private void GetAllDirectories(string path)
     {
-        DirectoryInfo info = new DirectoryInfo(path);
-        foreach (DirectoryInfo dir in info.GetDirectories())
+        var info = new DirectoryInfo(path);
+        foreach (var dir in info.GetDirectories())
         {
             Debug.Log("directory : " + dir.Name);
         }

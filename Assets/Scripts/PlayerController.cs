@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,22 +9,22 @@ public class PlayerController : MonoBehaviour {
 	public float speed;
 	public float decceleration;
 
-	public bool dead = false;
-	public bool respawn = false;
-	public bool finish = false;
-	public bool obstacleCollide = false;
-	public bool obstacleKill = false;
+	public bool dead;
+	public bool respawn;
+	public bool finish;
+	public bool obstacleCollide;
+	public bool obstacleKill;
 	public string obstacle;
 
 	private Rigidbody2D rd2d;
 	private Animation anim;
 
-	private float moveHDelay = 0;
-	private float moveVDelay = 0;
+	private float moveHDelay;
+	private float moveVDelay;
 
     private Joystick joystick;
 
-	void Start () {
+    private void Start () {
 #if UNITY_ANDROID
         joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
 #endif
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour {
 		anim = GetComponent<Animation> ();
 	}
 
-	void Update() {
+    private void Update() {
 		if (Input.GetKeyDown (KeyCode.R)) {
 			Refresh ();
 		}
@@ -40,20 +41,20 @@ public class PlayerController : MonoBehaviour {
             MapSaveLoad.SaveMapFromScene();
         }
 	}
-	
-	void FixedUpdate () {
+
+    private void FixedUpdate () {
 		if(IsMoving())
 			MovePlayer ();
 	}
 
 	public void Refresh(){
-		if (!respawn && !dead) {
-			respawn = true;
-			dead = true;
-            GameObject timerCanvas = GameObject.Find("TimerCanvas");
-            if (timerCanvas) {
-                timerCanvas.GetComponent<TimerScript>().ResetTimer();
-            }
+		if (respawn || dead) return;
+		
+		respawn = true;
+		dead = true;
+		var timerCanvas = GameObject.Find("TimerCanvas");
+		if (timerCanvas) {
+			timerCanvas.GetComponent<TimerScript>().ResetTimer();
 		}
 	}
 
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour {
         return !dead && !finish;
     }
 
-	void MovePlayer(){
+    private void MovePlayer(){
         float moveHorizontal = 0;
         float moveVertical = 0;
 #if UNITY_ANDROID
@@ -76,10 +77,10 @@ public class PlayerController : MonoBehaviour {
 #else
         moveHorizontal = Input.GetAxis("Horizontal");
 		moveVertical = Input.GetAxis("Vertical");
-        Debug.Log(new Vector2(moveHorizontal,moveVertical));
+//        Debug.Log(new Vector2(moveHorizontal,moveVertical));
 #endif
-        float speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
-		float rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
+        var speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
+		var rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
         if ((Mathf.Abs (moveHorizontal) != 0 && Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) >= 0 )
             || (Mathf.Abs (moveVertical) != 0 & Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) >= 0)) {
 			rd2d.rotation = rot;
@@ -87,16 +88,16 @@ public class PlayerController : MonoBehaviour {
 		}
         moveHDelay = moveHorizontal;
 		moveVDelay = moveVertical;
-		transform.Translate (speed * speedRate * Vector3.up * Time.deltaTime);
+		transform.Translate (speed * speedRate * Time.deltaTime * Vector3.up);
 	}
 
-	void OnTriggerEnter2D(Collider2D coll) 
+    private void OnTriggerEnter2D(Collider2D coll) 
 	{
 		if(coll.gameObject.CompareTag("Obstacles") && !finish && !dead)
 		{
 			obstacleCollide = true;
 			obstacle = coll.gameObject.name;
-            if (!GetComponent<ColorElement>().SameColor(coll.GetComponent<ColorElement>())) {
+            if (!GetComponent<ColorElement>().SameColor(coll.GetComponent<ColorElement>().colorSo)) {
 				dead = true;
 				obstacleKill = true;
 				StartCoroutine (Death());
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		if (coll.gameObject.CompareTag ("LevelFinish")) {
 			if (!finish) {
-                GameObject timerCanvas = GameObject.Find("TimerCanvas");
+                var timerCanvas = GameObject.Find("TimerCanvas");
                 if (timerCanvas != null) {
                     Debug.Log("Saving Timer");
 					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ()
@@ -116,9 +117,9 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (coll.gameObject.CompareTag ("TutoTransition")) {
-			GameObject tuto = GameObject.Find ("TutoCanvas");
+			var tuto = GameObject.Find ("TutoCanvas");
 			if (tuto != null) {
-				tuto.GetComponent<TutoScript> ().transObjective.setDone (true);
+				tuto.GetComponent<TutoScript> ().transObjective.SetDone (true);
 			}
 		}
 	}
@@ -130,15 +131,15 @@ public class PlayerController : MonoBehaviour {
 		} while(Vector3.Distance (transform.eulerAngles, new Vector3(0,0,180)) > 1f);
 	}
 
-	private IEnumerator WaitForAnimation ( Animation animation )
+	private IEnumerator WaitForAnimation ( Animation animationPlayed )
 	{
 		do
 		{
 			yield return null;
-		} while ( animation.isPlaying );
+		} while ( animationPlayed.isPlaying );
 	}
 
-	IEnumerator Death(){
+	private IEnumerator Death(){
 		yield return StartCoroutine (RotateAnimation ());
 		anim.PlayQueued ("DeathAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
@@ -146,12 +147,12 @@ public class PlayerController : MonoBehaviour {
 		respawn = true;
 	}
 
-	IEnumerator Finish(){
+	private IEnumerator Finish(){
 		finish = true;
 		yield return StartCoroutine (RotateAnimation ());
 		anim.PlayQueued ("FinishAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
-		GameObject levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish");
+		var levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish");
 		finish = false;
         if (levelFinish.GetComponent<LevelFinish>())
         {
@@ -166,13 +167,13 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-	void OnTriggerStay2D(Collider2D coll){
+	private void OnTriggerStay2D(Collider2D coll){
 		if(coll.gameObject.CompareTag("Colorer")){
-            GetComponent<ColorElement>().ChangeColor(coll.GetComponent<ColorElement>().GetColor());
+            GetComponent<ColorElement>().ChangeColor(coll.GetComponent<ColorElement>().Color);
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D coll){
+	private void OnTriggerExit2D(Collider2D coll){
 		if (coll.gameObject.CompareTag ("Obstacles"))
 			obstacleCollide = false;
 	}

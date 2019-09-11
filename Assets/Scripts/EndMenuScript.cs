@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class EndMenuScript : MonoBehaviour {
 
-	public string Level;
+	public string level;
 
 	public void Replay(){
-		SceneManager.LoadScene (Level, LoadSceneMode.Single);
+		SceneManager.LoadScene (level, LoadSceneMode.Single);
 	}
 
 	public void Quit(){

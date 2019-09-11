@@ -5,110 +5,71 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
+using Objects;
 
 public class SaveLoad {
-
-	static string path = Path.Combine(Application.persistentDataPath,"save.gd");
+	private static readonly string Path = System.IO.Path.Combine(Application.persistentDataPath,"save.gd");
 
 	private static Level SearchLevelNameInSave(List<Category> categories,string levelName){
         Debug.Log("Level name : " + levelName);
-		foreach (Category category in categories) {
-			foreach (Level level in category.getLevels()) {
-                Debug.Log("Level in Save : " + level.getSceneName());
-				if (level.getSceneName ().CompareTo (levelName) == 0)
-					return level;
-			}
+		foreach (var level in categories.SelectMany(category => category.GetLevels()))
+		{
+			Debug.Log("Level in Save : " + level.GetSceneName());
+			if (string.CompareOrdinal (level.GetSceneName (), levelName) == 0)
+				return level;
 		}
 		return null;
 	}
 
-	private static Category SearchLevelNameInCategory(List<Category> categories,string levelName){
-		foreach (Category category in categories) {
-			foreach (Level level in category.getLevels()) {
-				if (level.getSceneName ().CompareTo (levelName) == 0)
-					return category;
-			}
-		}
-		return null;
+	private static Category SearchLevelNameInCategory(List<Category> categories,string levelName)
+	{
+		return (from category in categories from level in category.GetLevels() where string.CompareOrdinal(level.GetSceneName(), levelName) == 0 select category).FirstOrDefault();
 	}
 
-	private static List<Category> GetListOfCategories (){
-		PlayerData data = Load ();
-		if (data != null && data.categories != null)
-			return data.categories;
-		else
-			return new List<Category> ();
+	private static List<Category> GetListOfCategories ()
+	{
+		var data = Load ();
+		return data?.categories ?? new List<Category> ();
 	}
 
-	private static bool GetVolume (){
-		PlayerData data = Load ();
-		if (data != null) {
-			return data.volume;
-		} else {
-			return true;
-		}
+	private static bool GetVolume ()
+	{
+		var data = Load ();
+		return data == null || data.volume;
 	}
 
     private static bool GetTutorial()
     {
-        PlayerData data = Load();
-        if (data != null)
-        {
-            return data.tutorial;
-        }
-        else
-        {
-            return false;
-        }
+	    var data = Load();
+	    return data != null && data.tutorial;
     }
 
     private static string GetLanguage()
     {
-        PlayerData data = Load();
-        if (data != null)
-        {
-            return data.language;
-        }
-        else
-        {
-            return "English";
-        }
+	    var data = Load();
+	    return data != null ? data.language : "English";
     }
 
     private static bool GetFirstTime()
     {
-        PlayerData data = Load();
-        if (data != null)
-        {
-            return data.firstTime;
-        }
-        else
-        {
-            return true;
-        }
+	    var data = Load();
+	    return data == null || data.firstTime;
     }
 
-    private static void SetAllCompletedCategories(List<Category> categories) {
-		foreach (Category category in categories) {
-			if (category.getCompletedLevels ().Count == category.getLevels ().Count) {
-				category.setCompleted (true);
-			}
-		}
-	}
+    private static void SetAllCompletedCategories(List<Category> categories)
+    {
+	    foreach (var category in categories.Where(category => category.GetCompletedLevels ().Count == category.GetLevels ().Count))
+	    {
+		    category.SetCompleted (true);
+	    }
+    }
 
     private static PlayerData SaveData(PlayerData data)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file;
+        var bf = new BinaryFormatter();
 
-        if (!File.Exists(path))
-        {
-            file = File.Create(path);
-        }
-        else
-        {
-            file = File.Open(path, FileMode.Open);
-        }
+        var file = !File.Exists(Path) ? File.Create(Path) : File.Open(Path, FileMode.Open);
 
         bf.Serialize(file, data);
         file.Close();
@@ -118,8 +79,8 @@ public class SaveLoad {
 
 	public static PlayerData SaveInit(List<Category> categories){
 
-        PlayerData data = LoadNew();
-		data.setCategories (categories);
+        var data = LoadNew();
+		data.SetCategories (categories);
 
         return SaveData(data);
 		
@@ -131,20 +92,16 @@ public class SaveLoad {
     }
 
 	public static PlayerData SaveLevel(string levelName) {
-		List<Category> categories = GetListOfCategories ();
-		Level level = SearchLevelNameInSave (categories, levelName);
-		if (level != null) {
-			level.setBlocked (false);
-		}
+		var categories = GetListOfCategories ();
+		var level = SearchLevelNameInSave (categories, levelName);
+		level?.SetBlocked (false);
 
-		Category category = SearchLevelNameInCategory (categories, levelName);
-		if (category != null) {
-			category.setBlocked (false);
-		}
+		var category = SearchLevelNameInCategory (categories, levelName);
+		category?.SetBlocked (false);
 		SetAllCompletedCategories (categories);
 
-        PlayerData data = LoadNew();
-        data.setCategories(categories);
+        var data = LoadNew();
+        data.SetCategories(categories);
         //new PlayerData(categories, path, GetVolume(), GetTutorial(), GetLanguage(), GetFirstTime());
 
         return SaveData(data);
@@ -153,19 +110,19 @@ public class SaveLoad {
 	public static PlayerData SaveTimer(float timer,string levelName){
         Debug.Log("Save Timer : " + timer);
 		//string levelName = SceneManager.GetActiveScene ().name;
-		List<Category> categories = GetListOfCategories ();
-		Level level = SearchLevelNameInSave (categories, levelName);
+		var categories = GetListOfCategories ();
+		var level = SearchLevelNameInSave (categories, levelName);
 		if (level != null) {
-			level.setCompleted (true);
-			level.setBlocked (false);
-			if (timer < level.getTimer () || level.getTimer () == 0)
-				level.setTimer (timer);
+			level.SetCompleted (true);
+			level.SetBlocked (false);
+			if (timer < level.GetTimer () || level.GetTimer () == 0)
+				level.SetTimer (timer);
 		}
 
 		SetAllCompletedCategories (categories);
 
-        PlayerData data = LoadNew();
-        data.setCategories(categories);
+        var data = LoadNew();
+        data.SetCategories(categories);
         //new PlayerData (categories,path,GetVolume(),GetTutorial(),GetLanguage(),GetFirstTime());
 
         return SaveData(data);
@@ -173,8 +130,8 @@ public class SaveLoad {
 
 	public static PlayerData SaveVolume(bool volume){
 
-        PlayerData data = LoadNew();
-        data.setVolume(volume);
+        var data = LoadNew();
+        data.SetVolume(volume);
         //new PlayerData (GetListOfCategories(), path, volume, GetTutorial(), GetLanguage(), GetFirstTime());
 
         return SaveData(data);
@@ -182,8 +139,8 @@ public class SaveLoad {
 
     public static PlayerData SaveTutorial(bool tutorial)
     {
-        PlayerData data = LoadNew();
-        data.setTutorial(tutorial);
+        var data = LoadNew();
+        data.SetTutorial(tutorial);
         //new PlayerData(GetListOfCategories(), path, GetVolume(), tutorial, GetLanguage(), GetFirstTime());
 
         return SaveData(data);
@@ -191,8 +148,8 @@ public class SaveLoad {
 
     public static PlayerData SaveLanguage(string language)
     {
-        PlayerData data = LoadNew();
-        data.setLanguage(language);
+        var data = LoadNew();
+        data.SetLanguage(language);
         //new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), language, GetFirstTime());
 
         return SaveData(data);
@@ -200,8 +157,8 @@ public class SaveLoad {
 
     public static PlayerData SaveFirstTime(bool firstTime)
     {
-        PlayerData data = LoadNew();
-        data.setFirstTime(firstTime);
+        var data = LoadNew();
+        data.SetFirstTime(firstTime);
         //new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), GetLanguage(), firstTime);
 
         return SaveData(data);
@@ -209,16 +166,15 @@ public class SaveLoad {
 
     public static PlayerData LoadNew()
     {
-        PlayerData data = Load();
-        if (data == null) data = new PlayerData(GetListOfCategories(), path, GetVolume(), GetTutorial(), GetLanguage(), GetFirstTime());
+        var data = Load() ?? new PlayerData(GetListOfCategories(), Path, GetVolume(), GetTutorial(), GetLanguage(), GetFirstTime());
         return data;
     }
 
     public static PlayerData Load() {
-		if (File.Exists (path)) {
-			BinaryFormatter bf = new BinaryFormatter ();
-			FileStream file = File.Open (path, FileMode.Open);
-			PlayerData data = (PlayerData)bf.Deserialize (file);
+		if (File.Exists (Path)) {
+			var bf = new BinaryFormatter ();
+			var file = File.Open (Path, FileMode.Open);
+			var data = (PlayerData)bf.Deserialize (file);
 			file.Close ();
 			return data;
 		} else {

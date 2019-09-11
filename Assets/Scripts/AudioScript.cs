@@ -1,38 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Objects;
 using UnityEngine;
 
 public class AudioScript : MonoBehaviour {
 
     private AudioSource source;
-    private static GameObject instance;
+    private static GameObject _instance;
 
-    void Awake()
+    private void Awake()
     {
         source = GetComponent<AudioSource>();
-        if(instance != null && instance != this)
+        if(_instance != null && _instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         else
         {
-            instance = this.gameObject;
+            _instance = gameObject;
         }
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
-    void Start () {
+    private void Start () {
         UpdateVolume();
     }
 
     public void UpdateVolume()
     {
-        PlayerData data = SaveLoad.Load();
-        bool volume = false;
+        var data = SaveLoad.Load();
+        var volume = false;
         if (data != null)
         {
-            volume = data.getVolume();
+            volume = data.GetVolume();
         }
         if (volume)
         {

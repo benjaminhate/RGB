@@ -9,16 +9,16 @@ public class DetectorController : MonoBehaviour {
 
 	private int dir=1;
 	private Vector3 initialScale;
-	private bool stop=false;
+	private bool stop;
 
-	void Start () {
+	private void Start () {
 		if (speed > 0) {
 			initialScale = transform.localScale;
 		}
 	}
 
-	void Update(){
-        Transform t = transform;
+	private void Update(){
+        var t = transform;
 		if (dir == 1) {
 			if (t.localScale.x >= initialScale.x && t.localScale.y >= initialScale.y && t.localScale.z >= initialScale.z) {
 				dir = -1;
@@ -30,14 +30,17 @@ public class DetectorController : MonoBehaviour {
 				StartCoroutine (Wait ());
 			}
 		}
-		if (!stop) {
-			float add = dir * Time.deltaTime * speed;
-			t.localScale = new Vector3 (t.localScale.x + add
-                ,t.localScale.y + add,t.localScale.z + add);
-		}
+
+		if (stop) return;
+		
+		var add = dir * Time.deltaTime * speed;
+		var localScale = t.localScale;
+		localScale = new Vector3 (localScale.x + add
+			,localScale.y + add,localScale.z + add);
+		t.localScale = localScale;
 	}
 
-	IEnumerator Wait(){
+	private IEnumerator Wait(){
 		stop = true;
 		yield return new WaitForSeconds (timeStop);
 		stop = false;

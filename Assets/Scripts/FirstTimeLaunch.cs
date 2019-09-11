@@ -13,12 +13,12 @@ public class FirstTimeLaunch {
 
     public static void LoadMaps()
     {
-        TextAsset[] maps = Resources.LoadAll<TextAsset>("maps");
+        var maps = Resources.LoadAll<TextAsset>("maps");
         if (!Directory.Exists(MapSaveLoad.defaultPath))
         {
             Directory.CreateDirectory(MapSaveLoad.defaultPath);
         }
-        foreach(TextAsset map in maps)
+        foreach(var map in maps)
         {
             File.WriteAllBytes(Path.Combine(MapSaveLoad.defaultPath, map.name + ".bytes"), map.bytes);
         }
@@ -26,7 +26,7 @@ public class FirstTimeLaunch {
 
     public static void LoadLanguages()
     {
-        TextAsset language = Resources.Load<TextAsset>("languages");
+        var language = Resources.Load<TextAsset>("languages");
         File.WriteAllBytes(LanguageController.path, language.bytes);
     }
 }

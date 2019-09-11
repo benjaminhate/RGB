@@ -1,22 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapDetector : MapObstacle {
-    private float speed;
-    private float timeStop;
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapDetector : MapObstacle {
+        private float speed;
+        private float timeStop;
 
-    public MapDetector(GameObject obj) : base(obj)
-    {
-        base.ChangeObstacleType(MapObstacleType.DETECTOR);
-        base.ChangeColorType(obj.GetComponentInChildren<DetectorController>().gameObject.GetComponent<ColorElement>().GetColor());
-        DetectorController detector = obj.GetComponentInChildren<DetectorController>();
-        this.speed = detector.speed;
-        this.timeStop = detector.timeStop;
+        public MapDetector(GameObject obj) : base(obj)
+        {
+            ChangeObstacleType(MapObstacleType.Detector);
+            ChangeColor(obj.GetComponentInChildren<DetectorController>().gameObject.GetComponent<ColorElement>().Color);
+            var detector = obj.GetComponentInChildren<DetectorController>();
+            speed = detector.speed;
+            timeStop = detector.timeStop;
+        }
+
+        public float GetSpeed() { return speed; }
+        public float GetTimeStop() { return timeStop; }
     }
-
-    public float GetSpeed() { return this.speed; }
-    public float GetTimeStop() { return this.timeStop; }
 }

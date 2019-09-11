@@ -1,30 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MapObstacle : MapElementColored {
-    public enum MapObstacleType { DETECTOR, CAMERA, RAY };
-    private MapObstacleType obstacleType;
+namespace Objects.Map
+{
+    [Serializable]
+    public class MapObstacle : MapElementColored {
+        public enum MapObstacleType { Detector, Camera, Ray };
+        private MapObstacleType obstacleType;
 
-    public MapObstacle(GameObject obj) : base(obj)
-    {
-        base.ChangeType(MapElementType.OBSTACLE);
-    }
+        public MapObstacle(GameObject obj) : base(obj)
+        {
+            ChangeType(MapElementType.Obstacle);
+        }
 
-    public MapObstacle() : base()
-    {
+        public MapObstacle() : base()
+        {
 
-    }
+        }
 
-    public void ChangeObstacleType(MapObstacleType type)
-    {
-        this.obstacleType = type;
-    }
+        public void ChangeObstacleType(MapObstacleType type)
+        {
+            obstacleType = type;
+        }
 
-    public MapObstacleType GetObstacleType()
-    {
-        return this.obstacleType;
+        public MapObstacleType GetObstacleType()
+        {
+            return obstacleType;
+        }
     }
 }

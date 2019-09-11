@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Objects.Map;
 
 public class MapSaveLoad : MonoBehaviour {
 
@@ -12,18 +13,10 @@ public class MapSaveLoad : MonoBehaviour {
 
     public static MapData SaveMap(MapData data)
     {
-        string path = Path.Combine(defaultPath, data.GetLevelName() + ".bytes");
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file;
+        var path = Path.Combine(defaultPath, data.GetLevelName() + ".bytes");
+        var bf = new BinaryFormatter();
 
-        if (!File.Exists(path))
-        {
-            file = File.Create(path);
-        }
-        else
-        {
-            file = File.Open(path, FileMode.Open);
-        }
+        var file = !File.Exists(path) ? File.Create(path) : File.Open(path, FileMode.Open);
 
         bf.Serialize(file, data);
         file.Close();
@@ -33,58 +26,58 @@ public class MapSaveLoad : MonoBehaviour {
 
     public static MapData SaveMapFromScene()
     {
-        MapData mapData = new MapData(SceneManager.GetActiveScene().name);
-        List<GameObject> rootGameObjects = new List<GameObject>();
-        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
+        var mapData = new MapData(SceneManager.GetActiveScene().name);
+        var rootGameObjects = new List<GameObject>();
+        var scene = SceneManager.GetActiveScene();
         scene.GetRootGameObjects(rootGameObjects);
-        foreach(GameObject obj in rootGameObjects)
+        foreach(var obj in rootGameObjects)
         {
             Debug.Log(obj.name);
             if (obj.CompareTag("Wall"))
             {
-                MapElement wall = new MapElement(obj);
-                wall.ChangeType(MapElement.MapElementType.WALL);
+                var wall = new MapElement(obj);
+                wall.ChangeType(MapElement.MapElementType.Wall);
                 mapData.AddElement(wall);
             }
             if (obj.CompareTag("Colorer"))
             {
-                MapElementColored colorer = new MapElementColored(obj);
-                colorer.ChangeType(MapElement.MapElementType.COLORER);
+                var colorer = new MapElementColored(obj);
+                colorer.ChangeType(MapElement.MapElementType.Colorer);
                 mapData.AddElement(colorer);
             }
             if (obj.CompareTag("Game"))
             {
-                MapGame game = new MapGame(obj);
+                var game = new MapGame(obj);
                 mapData.AddElement(game);
             }
             if (obj.GetComponent<RayController>()!=null)
             {
-                MapRay ray = new MapRay(obj);
+                var ray = new MapRay(obj);
                 mapData.AddElement(ray);
             }
             if (obj.GetComponent<CameraController>()!=null)
             {
-                MapCamera camera = new MapCamera(obj);
+                var camera = new MapCamera(obj);
                 mapData.AddElement(camera);
             }
             if (obj.GetComponentInChildren<DetectorController>()!=null)
             {
-                MapDetector detector = new MapDetector(obj);
+                var detector = new MapDetector(obj);
                 mapData.AddElement(detector);
             }
             if (obj.GetComponent<PlayerController>()!=null)
             {
-                MapPlayer player = new MapPlayer(obj);
+                var player = new MapPlayer(obj);
                 mapData.AddElement(player);
             }
             if (obj.GetComponent<LevelStart>()!=null)
             {
-                MapLevelStart levelStart = new MapLevelStart(obj);
+                var levelStart = new MapLevelStart(obj);
                 mapData.AddElement(levelStart);
             }
             if (obj.GetComponent<LevelFinish>()!=null)
             {
-                MapLevelFinish levelFinish = new MapLevelFinish(obj);
+                var levelFinish = new MapLevelFinish(obj);
                 mapData.AddElement(levelFinish);
             }
         }
@@ -93,13 +86,13 @@ public class MapSaveLoad : MonoBehaviour {
 
     public static MapData LoadMap(string levelName)
     {
-        string path = Path.Combine(defaultPath, levelName + ".bytes");
+        var path = Path.Combine(defaultPath, levelName + ".bytes");
         Debug.Log(path);
         if (File.Exists(path))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(path, FileMode.Open);
-            MapData mapData = (MapData)bf.Deserialize(file);
+            var bf = new BinaryFormatter();
+            var file = File.Open(path, FileMode.Open);
+            var mapData = (MapData)bf.Deserialize(file);
             file.Close();
             return mapData;
         }

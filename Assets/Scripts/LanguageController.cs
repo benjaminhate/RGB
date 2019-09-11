@@ -6,7 +6,7 @@ using System.Xml;
 
 public class LanguageController {
 
-    private Hashtable Strings;
+    private Hashtable strings;
 
     public static string path = Path.Combine(Application.persistentDataPath, "languages.xml");
 
@@ -17,18 +17,18 @@ public class LanguageController {
 
     public void SetLanguage(string language)
     {
-        XmlDocument xml = new XmlDocument();
+        var xml = new XmlDocument();
         xml.Load(path);
 
-        Strings = new Hashtable();
-        XmlElement element = xml.DocumentElement[language];
+        strings = new Hashtable();
+        var element = xml.DocumentElement?[language];
         if (element != null)
         {
-            IEnumerator elemEnum = element.GetEnumerator();
+            var elemEnum = element.GetEnumerator();
             while (elemEnum.MoveNext())
             {
-                XmlElement xmlElement = (XmlElement) elemEnum.Current;
-                Strings.Add(xmlElement.GetAttribute("name"), xmlElement.InnerText);
+                var xmlElement = (XmlElement) elemEnum.Current;
+                if (xmlElement != null) strings.Add(xmlElement.GetAttribute("name"), xmlElement.InnerText);
             }
         }
         else
@@ -39,12 +39,10 @@ public class LanguageController {
 
     public string GetString(string name)
     {
-        if (!Strings.ContainsKey(name))
-        {
-            Debug.LogError("The specified string does not exist: " + name);
-            return "";
-        }
-        return (string) Strings[name];
+        if (strings.ContainsKey(name)) return (string) strings[name];
+        
+        Debug.LogError("The specified string does not exist: " + name);
+        return "";
     }
 
 }
