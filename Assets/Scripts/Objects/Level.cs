@@ -73,19 +73,10 @@ namespace Objects
 			return sceneName;
 		}
 
-		public string ToString() {
-			return "Level : \n name : " 
-			       + name
-			       + "\n id : "
-			       + id.ToString()
-			       + "\n completed : " 
-			       + completed.ToString () 
-			       + "\n blocked : " 
-			       + blocked.ToString () 
-			       + "\n scene name : " 
-			       + sceneName
-			       + "\n timer : "
-			       + timer;
+		public override string ToString()
+		{
+			return
+				$"Level : \n name : {name}\n id : {id}\n completed : {completed}\n blocked : {blocked}\n scene name : {sceneName}\n timer : {timer}";
 		}
 
 		public Level Clone()

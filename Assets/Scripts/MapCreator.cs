@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Objects;
+﻿using Objects;
 using Objects.Map;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MapCreator : MonoBehaviour{
 
@@ -105,7 +102,7 @@ public class MapCreator : MonoBehaviour{
     {
         if (obj != null && element != null && obj.GetComponent<ColorElement>() != null)
         {
-            obj.GetComponent<ColorElement>().ChangeColor(element.Color);
+            obj.GetComponent<ColorElement>().ChangeColor(element.ColorSO);
         }
     }
 

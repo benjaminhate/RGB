@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Objects
 {
@@ -20,8 +21,8 @@ namespace Objects
 			this.id = id;
 		}
 
-		public Category SetName(string name) {
-			this.name = name;
+		public Category SetName(string levelName) {
+			name = levelName;
 			return this;
 		}
 
@@ -29,9 +30,9 @@ namespace Objects
 			return name;
 		}
 
-		public Category SetId(int id)
+		public Category SetId(int levelId)
 		{
-			this.id = id;
+			id = levelId;
 			return this;
 		}
 
@@ -40,24 +41,25 @@ namespace Objects
 			return id;
 		}
 
-		public Category SetCompleted(bool completed){
-			this.completed = completed;
+		public Category SetCompleted(bool levelCompleted){
+			completed = levelCompleted;
 			return this;
 		}
+		
 		public bool GetCompleted(){
 			return completed;
 		}
 
-		public Category SetBlocked(bool blocked){
-			this.blocked = blocked;
+		public Category SetBlocked(bool levelBlocked){
+			blocked = levelBlocked;
 			return this;
 		}
 		public bool GetBlocked(){
 			return blocked;
 		}
 
-		public Category SetLevels(List<Level> levels) {
-			this.levels = levels;
+		public Category SetLevels(List<Level> setLevels) {
+			levels = setLevels;
 			return this;
 		}
 
@@ -65,84 +67,43 @@ namespace Objects
 			return levels;
 		}
 
-		public List<Level> GetCompletedLevels() {
-			var levels = new List<Level> ();
-			foreach (var level in this.levels) {
-				if (level.completed) {
-					levels.Add (level);
-				}
-			}
-			return levels;
-		}
-
-		public List<Level> GetUnblockedLevels() {
-			var levels = new List<Level> ();
-			foreach (var level in this.levels) {
-				if (!level.blocked) {
-					levels.Add (level);
-				}
-			}
-			return levels;
-		}
-
-		public List<Level> GetBlockedLevels() {
-			var levels = new List<Level> ();
-			foreach (var level in this.levels) {
-				if (level.blocked) {
-					levels.Add (level);
-				}
-			}
-			return levels;
-		}
-
-		public Level GetLevelWithName(String name)
+		public List<Level> GetCompletedLevels()
 		{
-			foreach(var level in levels)
-			{
-				if (level.name == name)
-				{
-					return level;
-				}
-			}
-			return null;
+			return levels.Where(level => level.completed).ToList();
 		}
 
-		public Level GetLevelWithId(int id)
+		public List<Level> GetUnblockedLevels()
 		{
-			foreach(var level in levels)
-			{
-				if (level.id == id)
-				{
-					return level;
-				}
-			}
-			return null;
+			return levels.Where(level => !level.blocked).ToList();
 		}
 
-		public string ToString() {
-			var sb = "Category : \n name : "
-			            + name
-			            + "\n id : "
-			            + id.ToString()
-			            + "\n completed : "
-			            + completed.ToString ()
-			            + "\n blocked : "
-			            + blocked.ToString ()
-			            + "\n levels : [";
-			foreach(var level in levels) {
-				sb += "\n" + level.ToString ();
-			}
+		public List<Level> GetBlockedLevels()
+		{
+			return levels.Where(level => level.blocked).ToList();
+		}
+
+		public Level GetLevelWithName(string levelName)
+		{
+			return levels.FirstOrDefault(level => level.name == levelName);
+		}
+
+		public Level GetLevelWithId(int levelId)
+		{
+			return levels.FirstOrDefault(level => level.id == levelId);
+		}
+
+		public override string ToString()
+		{
+			var sb =
+				$"Category : \n name : {name}\n id : {id}\n completed : {completed}\n blocked : {blocked}\n levels : [";
+			sb = levels.Aggregate(sb, (current, level) => current + ($"\n{level}"));
 			return sb + "\n]";
 		}
 
 		public Category Clone()
 		{
-			var levels = new List<Level>();
-			foreach(var lvl in this.levels)
-			{
-				levels.Add(lvl.Clone());
-			}
-			return new Category(name, levels, completed, blocked, id);
+			var cloneLevels = levels.Select(lvl => lvl.Clone()).ToList();
+			return new Category(name, cloneLevels, completed, blocked, id);
 		}
 	}
 }

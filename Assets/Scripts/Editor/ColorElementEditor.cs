@@ -1,22 +1,16 @@
-﻿using System;
-using Objects;
+﻿using Objects;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(ColorElement))]
     public class ColorElementEditor : UnityEditor.Editor
     {
-        private ColorElement colorElement;
-
-        private void Awake()
-        {
-            colorElement = (ColorElement) target;
-        }
-
         public void OnSceneGUI()
         {
+            var colorElement = (ColorElement) target;
             var spriteRenderer = colorElement.GetComponent<SpriteRenderer>();
             if (spriteRenderer == null) return;
 

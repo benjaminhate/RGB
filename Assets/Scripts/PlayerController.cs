@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -93,10 +92,10 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D coll) 
 	{
-		if(coll.gameObject.CompareTag("Obstacles") && !finish && !dead)
+		if(coll.CompareTag("Obstacles") && !finish && !dead)
 		{
 			obstacleCollide = true;
-			obstacle = coll.gameObject.name;
+			obstacle = coll.name;
             if (!GetComponent<ColorElement>().SameColor(coll.GetComponent<ColorElement>().colorSo)) {
 				dead = true;
 				obstacleKill = true;
@@ -104,19 +103,21 @@ public class PlayerController : MonoBehaviour {
 			}
 				
 		}
-		if (coll.gameObject.CompareTag ("LevelFinish")) {
+		if (coll.CompareTag ("LevelFinish")) {
 			if (!finish) {
                 var timerCanvas = GameObject.Find("TimerCanvas");
                 if (timerCanvas != null) {
                     Debug.Log("Saving Timer");
-					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer ()
-                        ,GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>().GetMapData().GetLevelName());
+                    var mapCreator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
+                    var levelName = mapCreator == null ? SceneManager.GetActiveScene().name : mapCreator.GetMapData().GetLevelName();
+//					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer (), levelName);
+					// TODO fix Serialization bug
 				}
 				StartCoroutine (Finish ());
 			}
 		}
 
-		if (coll.gameObject.CompareTag ("TutoTransition")) {
+		if (coll.CompareTag ("TutoTransition")) {
 			var tuto = GameObject.Find ("TutoCanvas");
 			if (tuto != null) {
 				tuto.GetComponent<TutoScript> ().transObjective.SetDone (true);
@@ -152,13 +153,11 @@ public class PlayerController : MonoBehaviour {
 		yield return StartCoroutine (RotateAnimation ());
 		anim.PlayQueued ("FinishAnimation");
 		yield return StartCoroutine (WaitForAnimation (anim));
-		var levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish");
+		var levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish")?.GetComponent<LevelFinish>();
 		finish = false;
-        if (levelFinish.GetComponent<LevelFinish>())
+        if (levelFinish != null)
         {
-            GameObject.FindGameObjectWithTag("MapCreator").GetComponent<MapCreator>()
-                .ChangeLevel(levelFinish.GetComponent<LevelFinish>().nextLevel);
-            //SceneManager.LoadScene (levelFinish.GetComponent<LevelFinish> ().nextLevel, LoadSceneMode.Single);
+            ChangeLevel(levelFinish.nextLevel);
             Cursor.visible = true;
         }
         if (levelFinish.GetComponent<EndTutorial>())
@@ -167,9 +166,16 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-	private void OnTriggerStay2D(Collider2D coll){
-		if(coll.gameObject.CompareTag("Colorer")){
-            GetComponent<ColorElement>().ChangeColor(coll.GetComponent<ColorElement>().Color);
+	private void ChangeLevel(string levelName)
+	{
+		var mapCreator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
+		if (mapCreator == null)
+		{
+			SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+		}
+		else
+		{
+			mapCreator.ChangeLevel(levelName);
 		}
 	}
 

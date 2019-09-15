@@ -11,7 +11,7 @@ namespace Objects.Map
         public MapDetector(GameObject obj) : base(obj)
         {
             ChangeObstacleType(MapObstacleType.Detector);
-            ChangeColor(obj.GetComponentInChildren<DetectorController>().gameObject.GetComponent<ColorElement>().Color);
+            ChangeColor(obj.GetComponentInChildren<DetectorController>().gameObject.GetComponent<ColorElement>().colorSo);
             var detector = obj.GetComponentInChildren<DetectorController>();
             speed = detector.speed;
             timeStop = detector.timeStop;

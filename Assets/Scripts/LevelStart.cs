@@ -48,6 +48,6 @@ public class LevelStart : MonoBehaviour {
 		player.transform.position = new Vector3 (startX, startY, 0);
 		player.transform.eulerAngles = new Vector3 (0, 0, startRot);
 		mainCamera.transform.position = new Vector3 (startX, startY, -1);
-        player.GetComponent<ColorElement>().ChangeColor(GetComponent<ColorElement>().Color);
+        player.GetComponent<ColorElement>().ChangeColor(GetComponent<ColorElement>().colorSo);
 	}
 }

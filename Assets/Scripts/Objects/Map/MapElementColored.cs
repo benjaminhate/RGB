@@ -1,4 +1,5 @@
 ﻿using System;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Objects.Map
@@ -6,13 +7,13 @@ namespace Objects.Map
     [Serializable]
     public class MapElementColored : MapElement {
         // Colorer, LevelStart, Obstacles
-        public Color Color { get; private set; }
+        public ColorScriptableObject ColorSO { get; private set; }
 
         public MapElementColored(GameObject obj) : base(obj)
         {
-            var color = obj.GetComponent<ColorElement>();
-            if(color != null)
-                Color = color.Color;
+            var element = obj.GetComponent<ColorElement>();
+            if(element != null)
+                ColorSO = element.colorSo;
         }
 
         public MapElementColored() : base()
@@ -20,9 +21,9 @@ namespace Objects.Map
 
         }
 
-        public void ChangeColor(Color other)
+        public void ChangeColor(ColorScriptableObject other)
         {
-            Color = other;
+            ColorSO = other;
         }
     }
 }

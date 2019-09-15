@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Objects
 {
@@ -106,18 +107,10 @@ namespace Objects
             return tutorial;
         }
 
-        public String ToString()
+        public override string ToString()
         {
-            var sb = "PlayerData : "
-                        + "\n volume : "
-                        + volume.ToString()
-                        + "\n path : "
-                        + path;
-            foreach(var category in categories)
-            {
-                sb += "\n" + category.ToString();
-            }
-            return sb;
+            var sb = $"PlayerData : \n volume : {volume}\n path :{path}";
+            return categories.Aggregate(sb, (current, category) => current + ($"\n{category}"));
         }
     }
 }
