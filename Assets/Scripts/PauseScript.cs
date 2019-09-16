@@ -38,6 +38,10 @@ public class PauseScript : MonoBehaviour {
 		}
 		VolumeButton ();
 		Menu (false);
+
+		if (string.IsNullOrEmpty(levelName))
+			levelName = SceneManager.GetActiveScene().name;
+		
 		var levelType = levelName.Substring (levelName.Length-1, 1);
 		var textLevel = levelName.Substring (levelName.Length-2, 1);
 		if (string.CompareOrdinal(levelType,"E")==0) {

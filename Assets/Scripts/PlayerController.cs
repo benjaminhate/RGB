@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour {
 
     private Joystick joystick;
 
+    public bool IsMoving => !dead && !finish;
+
     private void Start () {
 #if UNITY_ANDROID
         joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
@@ -42,7 +44,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
     private void FixedUpdate () {
-		if(IsMoving())
+		if(IsMoving)
 			MovePlayer ();
 	}
 
@@ -56,11 +58,6 @@ public class PlayerController : MonoBehaviour {
 			timerCanvas.GetComponent<TimerScript>().ResetTimer();
 		}
 	}
-
-    public bool IsMoving()
-    {
-        return !dead && !finish;
-    }
 
     private void MovePlayer(){
         float moveHorizontal = 0;
@@ -90,40 +87,12 @@ public class PlayerController : MonoBehaviour {
 		transform.Translate (speed * speedRate * Time.deltaTime * Vector3.up);
 	}
 
-    private void OnTriggerEnter2D(Collider2D coll) 
-	{
-		if(coll.CompareTag("Obstacles") && !finish && !dead)
-		{
-			obstacleCollide = true;
-			obstacle = coll.name;
-            if (!GetComponent<ColorElement>().SameColor(coll.GetComponent<ColorElement>().colorSo)) {
-				dead = true;
-				obstacleKill = true;
-				StartCoroutine (Death());
-			}
-				
-		}
-		if (coll.CompareTag ("LevelFinish")) {
-			if (!finish) {
-                var timerCanvas = GameObject.Find("TimerCanvas");
-                if (timerCanvas != null) {
-                    Debug.Log("Saving Timer");
-                    var mapCreator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
-                    var levelName = mapCreator == null ? SceneManager.GetActiveScene().name : mapCreator.GetMapData().GetLevelName();
-//					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer (), levelName);
-					// TODO fix Serialization bug
-				}
-				StartCoroutine (Finish ());
-			}
-		}
-
-		if (coll.CompareTag ("TutoTransition")) {
-			var tuto = GameObject.Find ("TutoCanvas");
-			if (tuto != null) {
-				tuto.GetComponent<TutoScript> ().transObjective.SetDone (true);
-			}
-		}
-	}
+    public void Dead()
+    {
+	    dead = true;
+	    obstacleKill = true;
+	    StartCoroutine (Death());
+    }
 
 	private IEnumerator RotateAnimation(){
 		do {
@@ -139,6 +108,19 @@ public class PlayerController : MonoBehaviour {
 			yield return null;
 		} while ( animationPlayed.isPlaying );
 	}
+	
+	public IEnumerator Finish(){
+		finish = true;
+		yield return StartCoroutine (RotateAnimation ());
+		anim.PlayQueued ("FinishAnimation");
+		yield return StartCoroutine (WaitForAnimation (anim));
+		finish = false;
+		
+		if (GetComponent<EndTutorial>())
+		{
+			SceneManager.LoadScene("StartMenu", LoadSceneMode.Single);
+		}
+	}
 
 	private IEnumerator Death(){
 		yield return StartCoroutine (RotateAnimation ());
@@ -148,39 +130,14 @@ public class PlayerController : MonoBehaviour {
 		respawn = true;
 	}
 
-	private IEnumerator Finish(){
-		finish = true;
-		yield return StartCoroutine (RotateAnimation ());
-		anim.PlayQueued ("FinishAnimation");
-		yield return StartCoroutine (WaitForAnimation (anim));
-		var levelFinish = GameObject.FindGameObjectWithTag ("LevelFinish")?.GetComponent<LevelFinish>();
-		finish = false;
-        if (levelFinish != null)
-        {
-            ChangeLevel(levelFinish.nextLevel);
-            Cursor.visible = true;
-        }
-        if (levelFinish.GetComponent<EndTutorial>())
-        {
-            SceneManager.LoadScene("StartMenu", LoadSceneMode.Single);
-        }
-	}
-
-	private void ChangeLevel(string levelName)
-	{
-		var mapCreator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
-		if (mapCreator == null)
-		{
-			SceneManager.LoadScene(levelName, LoadSceneMode.Single);
-		}
-		else
-		{
-			mapCreator.ChangeLevel(levelName);
-		}
-	}
-
 	private void OnTriggerExit2D(Collider2D coll){
 		if (coll.gameObject.CompareTag ("Obstacles"))
 			obstacleCollide = false;
+	}
+
+	public void OnEndFinishAnimation()
+	{
+		var levelFinish = GameObject.FindGameObjectWithTag("LevelFinish")?.GetComponent<LevelFinish>();
+		if(levelFinish != null) levelFinish.ChangeLevel();
 	}
 }

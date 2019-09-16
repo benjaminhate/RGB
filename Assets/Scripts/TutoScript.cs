@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -82,16 +83,17 @@ public class MoveObjective : Objective {
 		var moveHorizontal = Input.GetAxis("Horizontal");
 		var moveVertical = Input.GetAxis("Vertical");
 		var floor = 0.15f;
-		if (moveVertical > floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
+		var player = GameObject.Find("Player").GetComponent<PlayerController>();
+		if (moveVertical > floor && !player.dead) {
 			UpPressed ();
 		}
-		if (moveVertical < -floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
+		if (moveVertical < -floor && !player.dead) {
 			DownPressed ();
 		}
-		if (moveHorizontal > floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
+		if (moveHorizontal > floor && !player.dead) {
 			RightPressed ();
 		}
-		if (moveHorizontal < -floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
+		if (moveHorizontal < -floor && !player.dead) {
 			LeftPressed ();
 		}
 	}
@@ -99,27 +101,27 @@ public class MoveObjective : Objective {
 
 public class DiagObjective : Objective {
 
-	private bool upright;
-	private bool downleft;
+	private bool upRight;
+	private bool downLeft;
 
-	public void UprightPressed(){
-		upright = true;
+	public void UpRightPressed(){
+		upRight = true;
 	}
-	public void DownleftPressed(){
-		downleft = true;
+	public void DownLeftPressed(){
+		downLeft = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var uprightColor = upright ? "green" : "red";
-		var downleftColor = downleft ? "green" : "red";
+        var upRightColor = upRight ? "green" : "red";
+		var downLeftColor = downLeft ? "green" : "red";
         return lang.GetString("tutoDiagonal") + "\n" +
-        "<color=" + uprightColor + ">" + lang.GetString("tutoDiagonalUpRight") + "</color>\n" +
-        "<color=" + downleftColor + ">" + lang.GetString("tutoDiagonalDownLeft") + "</color>\n";
+        "<color=" + upRightColor + ">" + lang.GetString("tutoDiagonalUpRight") + "</color>\n" +
+        "<color=" + downLeftColor + ">" + lang.GetString("tutoDiagonalDownLeft") + "</color>\n";
 	}
 
 	public override bool IsCompleted(){
-		return (upright && downleft);
+		return (upRight && downLeft);
 	}
 
 	public override void Check(){
@@ -130,11 +132,12 @@ public class DiagObjective : Objective {
 		var moveHorizontal = Input.GetAxis("Horizontal");
 		var moveVertical = Input.GetAxis("Vertical");
 		var floor = 0.3f;
-		if (moveVertical > floor && moveHorizontal > floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
-			UprightPressed ();
+		var player = GameObject.Find("Player").GetComponent<PlayerController>();
+		if (moveVertical > floor && moveHorizontal > floor && !player.dead) {
+			UpRightPressed ();
 		}
-		if (moveVertical < -floor && moveHorizontal < -floor && !GameObject.Find("Player").GetComponent<PlayerController> ().dead) {
-			DownleftPressed ();
+		if (moveVertical < -floor && moveHorizontal < -floor && !player.dead) {
+			DownLeftPressed ();
 		}
 	}
 }
@@ -142,7 +145,7 @@ public class DiagObjective : Objective {
 public class RayObjective : Objective {
 	private bool rayDead;
 
-	public void Raydead(){
+	public void RayDead(){
 		rayDead = true;
 	}
 
@@ -162,15 +165,16 @@ public class RayObjective : Objective {
 		start.startX=7.25f;
 		start.startY=-1.5f;
 		start.startRot = 180;
-		if (GameObject.Find("Player").GetComponent<PlayerController> ().obstacleKill && GameObject.Find ("Player").GetComponent<PlayerController> ().obstacle.Contains("Ray"))
-			Raydead ();
+		var player = GameObject.Find("Player").GetComponent<PlayerController>();
+		if (player.obstacleKill && player.obstacle.Contains("Ray"))
+			RayDead ();
 	}
 }
 
 public class DetectorObjective : Objective {
 	private bool detectorDead;
 
-	public void Detectordead(){
+	public void DetectorDead(){
 		detectorDead = true;
 	}
 
@@ -190,15 +194,16 @@ public class DetectorObjective : Objective {
 		start.startX=7.25f;
 		start.startY=-11.5f;
 		start.startRot = 180;
-		if (GameObject.Find("Player").GetComponent<PlayerController> ().obstacleKill && GameObject.Find ("Player").GetComponent<PlayerController> ().obstacle.Contains("Detector"))
-			Detectordead ();
+		var player = GameObject.Find("Player").GetComponent<PlayerController>();
+		if (player.obstacleKill && player.obstacle.Contains("Detector"))
+			DetectorDead ();
 	}
 }
 
 public class CameraObjective : Objective {
 	private bool cameraDead;
 
-	public void Cameradead(){
+	public void CameraDead(){
 		cameraDead = true;
 	}
 
@@ -218,8 +223,9 @@ public class CameraObjective : Objective {
 		start.startX=-2f;
 		start.startY=-16f;
 		start.startRot = 90;
-		if (GameObject.Find("Player").GetComponent<PlayerController> ().obstacleKill && GameObject.Find ("Player").GetComponent<PlayerController> ().obstacle.Contains("Camera"))
-			Cameradead ();
+		var player = GameObject.Find("Player").GetComponent<PlayerController>();
+		if (player.obstacleKill && player.obstacle.Contains("Camera"))
+			CameraDead ();
 	}
 }
 
@@ -298,13 +304,14 @@ public class ColorerObjective : Objective {
 		start.startX=-7.25f;
 		start.startY=1.5f;
 		start.startRot = 0;
-		if (CompareColor (GameObject.Find ("Player").GetComponent<SpriteRenderer> ().color, redC,init))
+		var playerSpriteRenderer = GameObject.Find("Player").GetComponent<SpriteRenderer>();
+		if (CompareColor (playerSpriteRenderer.color, redC,init))
 			red = true;
-		if (CompareColor (GameObject.Find ("Player").GetComponent<SpriteRenderer> ().color, greenC, true)) {
+		if (CompareColor (playerSpriteRenderer.color, greenC, true)) {
 			green = true;
 			init = true;
 		}
-		if (CompareColor (GameObject.Find ("Player").GetComponent<SpriteRenderer> ().color, blueC, true)) {
+		if (CompareColor (playerSpriteRenderer.color, blueC, true)) {
 			blue = true;
 			init = true;
 		}
@@ -451,5 +458,13 @@ public class TutoScript : MonoBehaviour {
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("StartMenu", LoadSceneMode.Single);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+	    if (other.CompareTag("Player"))
+	    {
+		    transObjective.SetDone (true);
+	    }
     }
 }

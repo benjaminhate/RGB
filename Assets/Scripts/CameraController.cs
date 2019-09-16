@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Objects;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : ObstacleController {
 	
 	[Range(0,360)]public int degA;
 	[Range(0,360)]public int degB;
 	public int rotSpeed;
-	public float timeStop;
 	public int dir; // = 1 || -1
 	/* degA is the first angle and degB the second
 	 * it will go from degA to degB clockwise
@@ -15,7 +16,6 @@ public class CameraController : MonoBehaviour {
 	 * */
 
 	private bool directionA;
-	private bool stop;
 
 	private void Start () {
         directionA = true;
@@ -38,11 +38,5 @@ public class CameraController : MonoBehaviour {
 			transform.eulerAngles = target;
 			StartCoroutine(Wait ());
 		}
-	}
-
-	private IEnumerator Wait(){
-		stop = true;
-		yield return new WaitForSeconds (timeStop);
-		stop = false;
 	}
 }

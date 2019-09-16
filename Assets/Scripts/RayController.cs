@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class RayController : MonoBehaviour {
+public class RayController : ObstacleController {
 
 	public float speed;
 	public float range;
-	public float timeStop;
-	private bool stop;
 	public int dir=1;
 
 	private Vector3 currentPos;
@@ -27,11 +25,5 @@ public class RayController : MonoBehaviour {
 		dir *= -1;
 		currentPos = transform.position;
 		StartCoroutine (Wait ());
-	}
-
-	private IEnumerator Wait(){
-		stop = true;
-		yield return new WaitForSeconds (timeStop);
-		stop = false;
 	}
 }

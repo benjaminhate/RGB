@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class DetectorController : MonoBehaviour {
+public class DetectorController : ObstacleController {
 
 	public float speed;
-	public float timeStop;
 
 	private int dir=1;
 	private Vector3 initialScale;
-	private bool stop;
 
 	private void Start () {
 		if (speed > 0) {
@@ -37,11 +35,5 @@ public class DetectorController : MonoBehaviour {
 		localScale = new Vector3 (localScale.x + add
 			,localScale.y + add,localScale.z + add);
 		t.localScale = localScale;
-	}
-
-	private IEnumerator Wait(){
-		stop = true;
-		yield return new WaitForSeconds (timeStop);
-		stop = false;
 	}
 }
