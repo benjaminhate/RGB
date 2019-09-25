@@ -3,6 +3,8 @@ using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent((typeof(Animator)))]
 public class PlayerController : MonoBehaviour {
 
 	public float speed;
@@ -15,13 +17,18 @@ public class PlayerController : MonoBehaviour {
 	public bool obstacleKill;
 	public string obstacle;
 
+	public LevelFinish levelFinish;
+	public LevelStart levelStart;
+	
 	private Rigidbody2D rd2d;
-	private Animation anim;
+	public Animator Animator { get; private set; }
 
 	private float moveHDelay;
 	private float moveVDelay;
 
     private Joystick joystick;
+    private static readonly int IsFinishAnimator = Animator.StringToHash("IsFinish");
+    private static readonly int IsDeadAnimator = Animator.StringToHash("IsDead");
 
     public bool IsMoving => !dead && !finish;
 
@@ -30,7 +37,7 @@ public class PlayerController : MonoBehaviour {
         joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
 #endif
 		rd2d = GetComponent<Rigidbody2D>();
-		anim = GetComponent<Animation> ();
+		Animator = GetComponent<Animator> ();
 	}
 
     private void Update() {
@@ -100,20 +107,18 @@ public class PlayerController : MonoBehaviour {
 			yield return null;
 		} while(Vector3.Distance (transform.eulerAngles, new Vector3(0,0,180)) > 1f);
 	}
-
-	private IEnumerator WaitForAnimation ( Animation animationPlayed )
-	{
-		do
-		{
-			yield return null;
-		} while ( animationPlayed.isPlaying );
-	}
 	
 	public IEnumerator Finish(){
 		finish = true;
 		yield return StartCoroutine (RotateAnimation ());
-		anim.PlayQueued ("FinishAnimation");
-		yield return StartCoroutine (WaitForAnimation (anim));
+		Animator.SetBool(IsFinishAnimator, true);
+	}
+
+	public void OnFinishAnimationEnd()
+	{
+		Animator.SetBool(IsFinishAnimator, false);
+		if(levelFinish != null) levelFinish.ChangeLevel();
+		
 		finish = false;
 		
 		if (GetComponent<EndTutorial>())
@@ -124,10 +129,14 @@ public class PlayerController : MonoBehaviour {
 
 	private IEnumerator Death(){
 		yield return StartCoroutine (RotateAnimation ());
-		anim.PlayQueued ("DeathAnimation");
-		yield return StartCoroutine (WaitForAnimation (anim));
+		Animator.SetBool(IsDeadAnimator, true);
+	}
+
+	public void OnDeathAnimationEnd()
+	{
+		Animator.SetBool(IsDeadAnimator, false);
 		obstacleKill = false;
-		respawn = true;
+        respawn = true;
 	}
 
 	private void OnTriggerExit2D(Collider2D coll){
@@ -135,9 +144,8 @@ public class PlayerController : MonoBehaviour {
 			obstacleCollide = false;
 	}
 
-	public void OnEndFinishAnimation()
+	public void OnRespawnAnimationEnd()
 	{
-		var levelFinish = GameObject.FindGameObjectWithTag("LevelFinish")?.GetComponent<LevelFinish>();
-		if(levelFinish != null) levelFinish.ChangeLevel();
+		if(levelStart != null) levelStart.OnPlayerRespawnAnimationEnd();
 	}
 }
