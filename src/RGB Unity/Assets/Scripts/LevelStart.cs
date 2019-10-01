@@ -9,10 +9,11 @@ public class LevelStart : MonoBehaviour {
 	public float startY;
 	public float startRot;
 
-	public GameObject player;
+	public PlayerController player;
 	public Camera mainCamera;
 	
 	private LevelManager levelManager;
+	private static readonly int IsSpawnAnimator = Animator.StringToHash("IsSpawn");
 
 	private void Start(){
 		Cursor.visible = false;
@@ -24,26 +25,21 @@ public class LevelStart : MonoBehaviour {
 	}
 
 	private void Update(){
-		if (player.GetComponent<PlayerController> ().respawn) {
-			StartCoroutine (Respawn ());
+		if (player.respawn) {
+			Respawn();
 		}
 	}
 
-	private IEnumerator WaitForAnimation ( Animation animationPlaying )
-	{
-		do
-		{
-			yield return null;
-		} while ( animationPlaying.isPlaying );
+	private void Respawn(){
+		PlacePlayer ();
+		player.respawn = false;
+		player.Animator.SetBool(IsSpawnAnimator, true);
 	}
 
-	private IEnumerator Respawn(){
-		PlacePlayer ();
-		player.GetComponent<PlayerController> ().respawn = false;
-		var anim = player.GetComponent<Animation> ();
-		anim.PlayQueued ("RespawnAnimation");
-		yield return StartCoroutine (WaitForAnimation (anim));
-		player.GetComponent<PlayerController> ().dead = false;
+	public void OnPlayerRespawnAnimationEnd()
+	{
+		player.Animator.SetBool(IsSpawnAnimator, true);
+		player.dead = false;
 	}
 
 	private void PlacePlayer(){
