@@ -26,7 +26,7 @@ public class LevelFinish : MonoBehaviour {
 				// TODO fix Serialization bug
 			}
 
-			StartCoroutine (playerController.Finish ());
+			playerController.Finish ();
 		}
 	}
 

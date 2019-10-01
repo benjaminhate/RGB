@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,8 @@ public class PlayerController : MonoBehaviour {
     private Joystick joystick;
     private static readonly int IsFinishAnimator = Animator.StringToHash("IsFinish");
     private static readonly int IsDeadAnimator = Animator.StringToHash("IsDead");
+    private static readonly int FaceYAnimator = Animator.StringToHash("FaceY");
+    private static readonly int FaceXAnimator = Animator.StringToHash("FaceX");
 
     public bool IsMoving => !dead && !finish;
 
@@ -82,35 +85,35 @@ public class PlayerController : MonoBehaviour {
 		moveVertical = Input.GetAxis("Vertical");
 //        Debug.Log(new Vector2(moveHorizontal,moveVertical));
 #endif
+	    var horizontalNotNull = Math.Abs(moveHorizontal) > 0.000001;
+	    var verticalNotNull = Mathf.Abs(moveVertical) > 0.000001;
+	    
         var speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
 		var rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
-        if ((Mathf.Abs (moveHorizontal) != 0 && Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) >= 0 )
-            || (Mathf.Abs (moveVertical) != 0 & Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) >= 0)) {
-			rd2d.rotation = rot;
+        if ((horizontalNotNull && Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) >= 0 )
+            || (verticalNotNull & Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) >= 0)) {
+			rd2d.SetRotation(rot);
 			speedRate *= decceleration;
 		}
         moveHDelay = moveHorizontal;
 		moveVDelay = moveVertical;
 		transform.Translate (speed * speedRate * Time.deltaTime * Vector3.up);
+		if (Math.Abs(moveHorizontal) > 0.1 || Mathf.Abs(moveVertical) > 0.1)
+		{
+			Animator.SetFloat(FaceXAnimator, moveHorizontal);
+			Animator.SetFloat(FaceYAnimator, moveVertical);
+		}
 	}
 
     public void Dead()
     {
 	    dead = true;
 	    obstacleKill = true;
-	    StartCoroutine (Death());
+	    Death();
     }
-
-	private IEnumerator RotateAnimation(){
-		do {
-			transform.eulerAngles = Vector3.Lerp (transform.rotation.eulerAngles, new Vector3(0,0,180), Time.deltaTime*10);
-			yield return null;
-		} while(Vector3.Distance (transform.eulerAngles, new Vector3(0,0,180)) > 1f);
-	}
 	
-	public IEnumerator Finish(){
+	public void Finish(){
 		finish = true;
-		yield return StartCoroutine (RotateAnimation ());
 		Animator.SetBool(IsFinishAnimator, true);
 	}
 
@@ -127,8 +130,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator Death(){
-		yield return StartCoroutine (RotateAnimation ());
+	private void Death(){
 		Animator.SetBool(IsDeadAnimator, true);
 	}
 

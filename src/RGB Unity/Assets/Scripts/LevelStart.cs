@@ -14,6 +14,8 @@ public class LevelStart : MonoBehaviour {
 	
 	private LevelManager levelManager;
 	private static readonly int IsSpawnAnimator = Animator.StringToHash("IsSpawn");
+	private static readonly int FaceYAnimator = Animator.StringToHash("FaceY");
+	private static readonly int FaceXAnimator = Animator.StringToHash("FaceX");
 
 	private void Start(){
 		Cursor.visible = false;
@@ -34,11 +36,14 @@ public class LevelStart : MonoBehaviour {
 		PlacePlayer ();
 		player.respawn = false;
 		player.Animator.SetBool(IsSpawnAnimator, true);
+		player.Animator.SetFloat(FaceYAnimator,1);
+		player.Animator.SetFloat(FaceXAnimator,0);
 	}
 
 	public void OnPlayerRespawnAnimationEnd()
 	{
-		player.Animator.SetBool(IsSpawnAnimator, true);
+		player.Animator.SetBool(IsSpawnAnimator, false);
+		player.respawn = false;
 		player.dead = false;
 	}
 
