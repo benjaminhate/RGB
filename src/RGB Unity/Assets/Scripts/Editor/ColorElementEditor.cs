@@ -1,6 +1,7 @@
 ﻿using Objects;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Editor
 {
@@ -10,11 +11,30 @@ namespace Editor
     {
         public void OnSceneGUI()
         {
-            var colorElement = (ColorElement) target;
-            var spriteRenderer = colorElement.GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null) return;
+            RefreshColor((ColorElement) target);
+        }
 
-            spriteRenderer.color = colorElement.colorSo == null ? Color.white : colorElement.colorSo.color;
+        public override void OnInspectorGUI()
+        {
+            RefreshColor((ColorElement) target);
+            base.OnInspectorGUI();
+        }
+
+        private static void RefreshColor(ColorElement colorElement)
+        {
+            var color = colorElement.colorSo == null ? Color.white : colorElement.colorSo.color;
+            
+            var spriteRenderer = colorElement.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = color;
+            }
+
+            var light = colorElement.GetComponentInChildren<Light2D>();
+            if (light != null)
+            {
+                light.color = color;
+            }
         }
     }
 }
