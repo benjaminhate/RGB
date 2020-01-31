@@ -23,7 +23,7 @@ namespace Objects
 
             spriteRenderer.color = Color;
 
-            var colorLight = GetComponentInChildren<Light2D>();
+            var colorLight = GetComponentInChildren<UnityEngine.Experimental.Rendering.Universal.Light2D>();
             if (colorLight == null || !canColorLight) return;
             colorLight.color = Color;
         }

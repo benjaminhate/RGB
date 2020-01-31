@@ -4,36 +4,40 @@ using UnityEngine;
 public class DetectorController : ObstacleController {
 
 	public float speed;
+	
+	private Animator animator;
+	private static readonly int IsShrinkAnimator = Animator.StringToHash("IsShrink");
+	private static readonly int PlayAnimator = Animator.StringToHash("Play");
 
-	private int dir=1;
-	private Vector3 initialScale;
-
-	private void Start () {
-		if (speed > 0) {
-			initialScale = transform.localScale;
+	private void Start ()
+	{
+		animator = GetComponent<Animator>();
+		if (speed > 0)
+		{
+			animator.SetBool(IsShrinkAnimator, true);
+			PlayAnimation();
 		}
 	}
 
-	private void Update(){
-        var t = transform;
-		if (dir == 1) {
-			if (t.localScale.x >= initialScale.x && t.localScale.y >= initialScale.y && t.localScale.z >= initialScale.z) {
-				dir = -1;
-				StartCoroutine (Wait ());
-			}
-		} else {
-			if (t.localScale.x <= 0f && t.localScale.y <= 0f && t.localScale.z <= 0f) {
-				dir = 1;
-				StartCoroutine (Wait ());
-			}
-		}
+	public IEnumerator OnEndShrinkAnimation()
+	{
+		animator.speed = 1f;
+		animator.SetBool(IsShrinkAnimator, false);
+		yield return Wait();
+		PlayAnimation();
+	}
 
-		if (stop) return;
-		
-		var add = dir * Time.deltaTime * speed;
-		var localScale = t.localScale;
-		localScale = new Vector3 (localScale.x + add
-			,localScale.y + add,localScale.z + add);
-		t.localScale = localScale;
+	public IEnumerator OnEndExpandAnimation()
+	{
+		animator.speed = 1f;
+		animator.SetBool(IsShrinkAnimator, true);
+		yield return Wait();
+		PlayAnimation();
+	}
+
+	private void PlayAnimation()
+	{
+		animator.speed = speed;
+		animator.SetTrigger(PlayAnimator);
 	}
 }
