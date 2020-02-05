@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Joystick_Pack.Scripts.Base;
 using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -73,8 +74,7 @@ public class PlayerController : MonoBehaviour {
         float moveHorizontal = 0;
         float moveVertical = 0;
 #if UNITY_ANDROID
-        Vector2 dir = joystick.GetDirection();
-        dir *= 1.5f;
+        var dir = joystick.Direction * 1.5f;
         if (Mathf.Abs(dir.x) > 1f) dir.x = Mathf.Sign(dir.x) * 1f;
         if (Mathf.Abs(dir.y) > 1f) dir.y = Mathf.Sign(dir.y) * 1f;
         Debug.Log(dir);
