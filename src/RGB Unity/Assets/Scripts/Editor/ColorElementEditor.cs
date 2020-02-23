@@ -20,7 +20,7 @@ namespace Editor
             base.OnInspectorGUI();
         }
 
-        private static void RefreshColor(ColorElement colorElement)
+        public static void RefreshColor(ColorElement colorElement)
         {
             var color = colorElement.colorSo == null ? Color.white : colorElement.colorSo.color;
             

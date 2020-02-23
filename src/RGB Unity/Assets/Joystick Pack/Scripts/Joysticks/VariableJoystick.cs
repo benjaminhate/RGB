@@ -12,6 +12,8 @@ namespace Joystick_Pack.Scripts.Joysticks
         [SerializeField] private float moveThreshold = 1;
         [SerializeField] private JoystickType joystickType = JoystickType.Fixed;
 
+        public JoystickType Mode => joystickType;
+
         private Vector2 fixedPosition = Vector2.zero;
 
         public void SetMode(JoystickType joystickType)
