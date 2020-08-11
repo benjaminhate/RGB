@@ -5,15 +5,15 @@ namespace Objects.Map
 {
     [Serializable]
     public class MapElement {
-        private float posX;
-        private float posY;
-        private float rotZ;
-        private float scaleX;
-        private float scaleY;
+        public float posX;
+        public float posY;
+        public float rotZ;
+        public float scaleX;
+        public float scaleY;
 
-        public enum MapElementType { Wall, Background, Player, Levelstart
-            , Levelfinish, Obstacle, Colorer, Game };
-        private MapElementType type;
+        public enum MapElementType { Wall, Background, Player, LevelStart
+            , LevelFinish, Obstacle, Colorer, Game };
+        public MapElementType type;
 
         public MapElement(GameObject obj)
         {
@@ -26,22 +26,12 @@ namespace Objects.Map
 
         public MapElement()
         {
-            ChangeType(MapElementType.Wall);
+            type = MapElementType.Wall;
             posX = 0;
             posY = 0;
             rotZ = 0;
             scaleX = 0;
             scaleY = 0;
-        }
-
-        public void ChangeType(MapElementType type)
-        {
-            this.type = type;
-        }
-
-        public MapElementType GetElementType()
-        {
-            return type;
         }
 
         public Vector2 GetPosition()

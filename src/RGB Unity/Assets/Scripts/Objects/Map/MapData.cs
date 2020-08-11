@@ -5,8 +5,8 @@ namespace Objects.Map
 {
     [Serializable]
     public class MapData {
-        private List<MapElement> elements;
-        private string levelName;
+        public List<MapElement> elements;
+        public string levelName;
 
         public MapData()
         {

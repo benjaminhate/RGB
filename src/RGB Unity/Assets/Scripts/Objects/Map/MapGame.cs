@@ -6,17 +6,16 @@ namespace Objects.Map
     [Serializable]
     public class MapGame : MapElement {
 
-        private MapElement background;
-        private MapPlayer player;
-        private MapLevelFinish levelFinish;
-        private MapLevelStart levelStart;
+        public MapElement background;
+        public MapPlayer player;
+        public MapLevelFinish levelFinish;
+        public MapLevelStart levelStart;
 
         private GameObject GetChildWithTag(GameObject obj, string tag)
         {
-            GameObject child;
             for(var i = 0; i < obj.transform.childCount; i++)
             {
-                child = obj.transform.GetChild(i).gameObject;
+                var child = obj.transform.GetChild(i).gameObject;
                 if (child.CompareTag(tag))
                     return child;
             }
@@ -25,16 +24,11 @@ namespace Objects.Map
 
         public MapGame(GameObject obj) : base(obj)
         {
-            ChangeType(MapElementType.Game);
+            type = MapElementType.Game;
             background = new MapElement(GetChildWithTag(obj,"MainBackground"));
             player = new MapPlayer(obj.GetComponentInChildren<PlayerController>().gameObject);
             levelFinish = new MapLevelFinish(obj.GetComponentInChildren<LevelFinish>().gameObject);
             levelStart = new MapLevelStart(obj.GetComponentInChildren<LevelStart>().gameObject);
         }
-
-        public MapElement GetBackground() { return background; }
-        public MapPlayer GetPlayer() { return player; }
-        public MapLevelFinish GetLevelFinish() { return levelFinish; }
-        public MapLevelStart GetLevelStart() { return levelStart; }
     }
 }

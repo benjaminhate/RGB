@@ -21,52 +21,6 @@ namespace Objects
 			this.id = id;
 		}
 
-		public Category SetName(string levelName) {
-			name = levelName;
-			return this;
-		}
-
-		public string GetName() {
-			return name;
-		}
-
-		public Category SetId(int levelId)
-		{
-			id = levelId;
-			return this;
-		}
-
-		public int GetId()
-		{
-			return id;
-		}
-
-		public Category SetCompleted(bool levelCompleted){
-			completed = levelCompleted;
-			return this;
-		}
-		
-		public bool GetCompleted(){
-			return completed;
-		}
-
-		public Category SetBlocked(bool levelBlocked){
-			blocked = levelBlocked;
-			return this;
-		}
-		public bool GetBlocked(){
-			return blocked;
-		}
-
-		public Category SetLevels(List<Level> setLevels) {
-			levels = setLevels;
-			return this;
-		}
-
-		public List<Level> GetLevels() {
-			return levels;
-		}
-
 		public List<Level> GetCompletedLevels()
 		{
 			return levels.Where(level => level.completed).ToList();

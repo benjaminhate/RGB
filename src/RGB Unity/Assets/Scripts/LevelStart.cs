@@ -12,15 +12,15 @@ public class LevelStart : MonoBehaviour {
 	public PlayerController player;
 	public Camera mainCamera;
 	
-	private LevelManager levelManager;
+	private LevelManager _levelManager;
 	private static readonly int IsSpawnAnimator = Animator.StringToHash("IsSpawn");
 	private static readonly int FaceYAnimator = Animator.StringToHash("FaceY");
 	private static readonly int FaceXAnimator = Animator.StringToHash("FaceX");
 
 	private void Start(){
 		Cursor.visible = false;
-		levelManager = LevelManager.Instance;
-		var levelName = levelManager.LevelName;
+		_levelManager = LevelManager.Instance;
+		var levelName = _levelManager.LevelName;
         Debug.Log(levelName);
         SaveLoad.SaveLevel (levelName);
 		PlacePlayer ();

@@ -15,16 +15,16 @@ public class LevelMenu : MonoBehaviour {
 	public Button categorySelector;
 	public Button returnButton;
 	public TextMeshProUGUI menuText;
-	private List<Category> categories;
+	private List<Category> _categories;
 
-	private int actualScroll;
-	private int maxScroll;
-	private int selectorWidth;
-	private int selectorHeight;
+	private int _actualScroll;
+	private int _maxScroll;
+	private int _selectorWidth;
+	private int _selectorHeight;
 
 	private Category GetCategoryWithName(string categoryName)
 	{
-		return categories.FirstOrDefault(category => string.Compare(category.GetName(), categoryName, StringComparison.Ordinal) == 0);
+		return _categories.FirstOrDefault(category => string.Compare(category.name, categoryName, StringComparison.Ordinal) == 0);
 	}
 
 	private void SetCategoryMenu(List<Category> categories) {
@@ -34,44 +34,40 @@ public class LevelMenu : MonoBehaviour {
 			SceneManager.LoadScene("StartMenu",LoadSceneMode.Single);
 		});
 		var i = 0;
-		maxScroll = 0;
+		_maxScroll = 0;
 		foreach (var category in categories) {
-			maxScroll += 1;
+			_maxScroll += 1;
+			
 			var categorySel = Instantiate (categorySelector, selector.transform);
 			categorySel.gameObject.SetActive (true);
             var value = categorySel.GetComponent<RectTransform>().rect.width + 10;
 			selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
 			categorySel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
+			
 			i += 1;
+			
 			var lockImg = categorySel.transform.Find ("Lock").GetComponent<Image> ();
 			var completedImg = categorySel.transform.Find ("Completed").GetComponent<Image> ();
 			var categorySelName = categorySel.transform.Find ("Name").GetComponent<TextMeshProUGUI> ();
 			var categorySelLevels = categorySel.transform.Find ("Levels").GetComponent<TextMeshProUGUI> ();
 			var categorySelLevelCount = categorySelLevels.transform.Find ("Level Count").GetComponent<TextMeshProUGUI> ();
-			if (category.GetBlocked ()) {
-				lockImg.gameObject.SetActive (true);
-				categorySelName.gameObject.SetActive (false);
-				categorySelLevels.gameObject.SetActive (false);
-				categorySelLevelCount.gameObject.SetActive (false);
-				completedImg.gameObject.SetActive (false);
-				categorySel.interactable = false;
-			} else {
-				lockImg.gameObject.SetActive (false);
-				categorySelName.gameObject.SetActive (true);
-				categorySelLevels.gameObject.SetActive (true);
-				categorySelLevelCount.gameObject.SetActive (true);
-				if (category.GetCompleted ()) {
-					completedImg.gameObject.SetActive (true);
-				} else {
-					completedImg.gameObject.SetActive (false);
-				}
-				categorySelName.text = category.GetName ();
+
+			var blocked = category.blocked;
+			
+			lockImg.gameObject.SetActive(blocked);
+			categorySelName.gameObject.SetActive(!blocked);
+			categorySelLevels.gameObject.SetActive(!blocked);
+			categorySelLevelCount.gameObject.SetActive(!blocked);
+			completedImg.gameObject.SetActive(!blocked);
+			categorySel.interactable = !blocked;
+			
+			if (!blocked)
+			{
+				completedImg.gameObject.SetActive(category.completed);
+				categorySelName.text = category.name;
 				categorySelLevels.text = "Levels";
-				categorySelLevelCount.text = category.GetUnblockedLevels ().Count + " / " + category.GetLevels ().Count;
-				categorySel.interactable = true;
-				categorySel.onClick.AddListener (() => {
-					OnClickCategoryButton (categories,category);
-				});
+				categorySelLevelCount.text = category.GetUnblockedLevels().Count + " / " + category.levels.Count;
+				categorySel.onClick.AddListener(() => { OnClickCategoryButton(categories, category); });
 			}
 		}
 	}
@@ -82,54 +78,53 @@ public class LevelMenu : MonoBehaviour {
 			ResetMenuButton();
 			SetCategoryMenu(categories);
 		});
-		if (category != null) {
-			menuText.text = category.GetName ();
-			var i = 0;
-			maxScroll = 0;
-			foreach (var level in category.GetLevels()) {
-				maxScroll += 1;
-				var levelSel = Instantiate (levelSelector, selector.transform);
-				levelSel.gameObject.SetActive (true);
-                var value = levelSel.GetComponent<RectTransform>().rect.width + 10;
-				selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
-				levelSel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
-				i += 1;
-				var lockImg = levelSel.transform.Find ("Lock").GetComponent<Image> ();
-				var completedImg = levelSel.transform.Find ("Completed").GetComponent<Image> ();
-				var levelSelName = levelSel.transform.Find ("Name").GetComponent<TextMeshProUGUI> ();
-				var levelSelTimer = levelSel.transform.Find ("Timer").GetComponent<TextMeshProUGUI> ();
-				var levelSelTimerText = levelSelTimer.transform.Find ("Timer Text").GetComponent<TextMeshProUGUI> ();
-				if (level.GetBlocked ()) {
-					lockImg.gameObject.SetActive (true);
-					levelSelName.gameObject.SetActive (false);
-					levelSelTimer.gameObject.SetActive (false);
-					completedImg.gameObject.SetActive (false);
-					levelSel.interactable = false;
+		
+		if (category == null) return;
+		
+		menuText.text = category.name;
+		var i = 0;
+		_maxScroll = 0;
+		foreach (var level in category.levels) {
+			_maxScroll += 1;
+			var levelSel = Instantiate (levelSelector, selector.transform);
+			levelSel.gameObject.SetActive (true);
+			var value = levelSel.GetComponent<RectTransform>().rect.width + 10;
+			selector.GetComponent<RectTransform> ().sizeDelta += i * value * Vector2.right;
+			levelSel.GetComponent<RectTransform> ().localPosition += value * i * Vector3.right;
+			i += 1;
+			var lockImg = levelSel.transform.Find ("Lock").GetComponent<Image> ();
+			var completedImg = levelSel.transform.Find ("Completed").GetComponent<Image> ();
+			var levelSelName = levelSel.transform.Find ("Name").GetComponent<TextMeshProUGUI> ();
+			var levelSelTimer = levelSel.transform.Find ("Timer").GetComponent<TextMeshProUGUI> ();
+			var levelSelTimerText = levelSelTimer.transform.Find ("Timer Text").GetComponent<TextMeshProUGUI> ();
+
+			var blocked = level.blocked;
+			var completed = level.completed;
+				
+			lockImg.gameObject.SetActive (blocked);
+			levelSelName.gameObject.SetActive (!blocked);
+			levelSelTimer.gameObject.SetActive (!blocked);
+			completedImg.gameObject.SetActive (!blocked && completed);
+			levelSel.interactable = !blocked;
+				
+			if (!blocked) {
+				levelSelName.text = level.name;
+				if (completed) {
+					levelSelTimer.text = "Best time";
+					levelSelTimerText.text = $"{Mathf.Round (level.timer * 100f) / 100f}";
 				} else {
-					lockImg.gameObject.SetActive (false);
-					levelSelName.gameObject.SetActive (true);
-					levelSelTimer.gameObject.SetActive (true);
-					levelSelName.text = level.GetName ();
-					if (level.GetCompleted()) {
-						levelSelTimer.text = "Best time";
-						levelSelTimerText.text = (Mathf.Round (level.GetTimer () * 100f) / 100f).ToString ();
-						completedImg.gameObject.SetActive (true);
-					} else {
-						levelSelTimer.gameObject.SetActive (false);
-						completedImg.gameObject.SetActive (false);
-					}
-					levelSel.interactable = true;
-					levelSel.onClick.AddListener (() => {
-						OnClickLevelButton (level);
-					});
+					levelSelTimer.gameObject.SetActive (false);
 				}
+				levelSel.onClick.AddListener (() => {
+					OnClickLevelButton (level);
+				});
 			}
 		}
 	}
 
 	private void ResetMenuButton(){
-		actualScroll = 1;
-		selector.GetComponent<RectTransform> ().sizeDelta = selectorWidth * Vector2.right + selectorHeight * Vector2.up;
+		_actualScroll = 1;
+		selector.GetComponent<RectTransform> ().sizeDelta = _selectorWidth * Vector2.right + _selectorHeight * Vector2.up;
 		var menuButtonList = selector.GetComponentsInChildren<Button> ();
 		foreach (var menuButton in menuButtonList) {
 			Destroy (menuButton.gameObject);
@@ -137,16 +132,16 @@ public class LevelMenu : MonoBehaviour {
 	}
 
 	private void Start () {
-		actualScroll = 1;
-		selectorWidth = 100;
-		selectorHeight = 90;
+		_actualScroll = 1;
+		_selectorWidth = 100;
+		_selectorHeight = 90;
 		var data = SaveLoad.Load ();
 		if (data != null) {
 			SetCategoryMenu (data.categories);
-			categories = data.GetCategories ();
+			_categories = data.GetCategories ();
 		} else {
-			SetCategoryMenu (categories);
-			SaveLoad.SaveInit (categories);
+			SetCategoryMenu (_categories);
+			SaveLoad.SaveInit (_categories);
 		}
 	}
 
@@ -157,7 +152,7 @@ public class LevelMenu : MonoBehaviour {
 
 	private void OnClickLevelButton(Level level)
 	{
-		var sceneName = level.GetSceneName();
+		var sceneName = level.sceneName;
         Debug.Log(sceneName);
         var levelGameObject = new GameObject(sceneName);
         levelGameObject.gameObject.tag = "LevelSelector";
@@ -167,24 +162,24 @@ public class LevelMenu : MonoBehaviour {
 
 	public void OnClickRightButton(){
 		var levelSelectors = selector.GetComponentsInChildren<Button> ();
-		if (actualScroll >= maxScroll) return;
+		if (_actualScroll >= _maxScroll) return;
 		
 		foreach (var button in levelSelectors) {
 			button.GetComponent<RectTransform>().localPosition -=
 				(button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 		}
-		actualScroll += 1;
+		_actualScroll += 1;
 	}
 
 	public void OnClickLeftButton(){
 		var levelSelectors = selector.GetComponentsInChildren<Button> ();
-		if (actualScroll <= 1) return;
+		if (_actualScroll <= 1) return;
 		
 		foreach (var button in levelSelectors) {
 			button.GetComponent<RectTransform>().localPosition +=
 				(button.GetComponent<RectTransform>().rect.width + 10) * Vector3.right;
 		}
-		actualScroll -= 1;
+		_actualScroll -= 1;
 	}
 	
 

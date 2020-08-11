@@ -5,39 +5,39 @@ namespace Objects.Map
 {
     [Serializable]
     public class MapRay : MapObstacle {
-        private float speed;
-        private float range;
-        private float timeStop;
-        private int dir;
+        private float _speed;
+        private float _range;
+        private float _timeStop;
+        private int _dir;
 
         public MapRay(GameObject obj) : base(obj)
         {
-            ChangeObstacleType(MapObstacleType.Ray);
+            obstacleType = MapObstacleType.Ray;
             var ray = obj.GetComponent<RayController>();
-            speed = ray.speed;
-            range = ray.range;
-            timeStop = ray.timeStop;
-            dir = ray.dir;
+            _speed = ray.speed;
+            _range = ray.range;
+            _timeStop = ray.timeStop;
+            _dir = ray.dir;
         }
 
         public float GetSpeed()
         {
-            return speed;
+            return _speed;
         }
 
         public float GetRange()
         {
-            return range;
+            return _range;
         }
 
         public float GetTimeStop()
         {
-            return timeStop;
+            return _timeStop;
         }
 
         public int GetDir()
         {
-            return dir;
+            return _dir;
         }
     }
 }

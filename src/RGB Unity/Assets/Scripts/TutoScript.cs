@@ -27,10 +27,10 @@ public class Objective {
 }
 
 public class TransitionObjective : Objective {
-	private bool done;
+	private bool _done;
 
 	public void SetDone(bool doneChange){
-		done = doneChange;
+		_done = doneChange;
 	}
 
 	public override string GetDescription(){
@@ -39,36 +39,36 @@ public class TransitionObjective : Objective {
 	}
 
 	public override bool IsCompleted(){
-		return done;
+		return _done;
 	}
 }
 
 public class MoveObjective : Objective {
 
-	private bool up;
-	private bool down;
-	private bool left;
-	private bool right;
+	private bool _up;
+	private bool _down;
+	private bool _left;
+	private bool _right;
 
 	public void UpPressed(){
-		up = true;
+		_up = true;
 	}
 	public void DownPressed(){
-		down = true;
+		_down = true;
 	}
 	public void LeftPressed(){
-		left = true;
+		_left = true;
 	}
 	public void RightPressed(){
-		right = true;
+		_right = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var upColor = up ? "green" : "red";
-		var downColor = down ? "green" : "red";
-		var rightColor = right ? "green" : "red";
-		var leftColor = left ? "green" : "red";
+        var upColor = _up ? "green" : "red";
+		var downColor = _down ? "green" : "red";
+		var rightColor = _right ? "green" : "red";
+		var leftColor = _left ? "green" : "red";
         return lang.GetString("tutoMove") + "\n" +
             "<color=" + upColor + ">" + lang.GetString("tutoMoveUp") + "</color>\n" +
             "<color=" + downColor + ">" + lang.GetString("tutoMoveDown") + "</color>\n" +
@@ -77,7 +77,7 @@ public class MoveObjective : Objective {
 	}
 
 	public override bool IsCompleted(){
-		return (up && down && left && right);
+		return (_up && _down && _left && _right);
 	}
 
 	public override void Check(){
@@ -102,27 +102,27 @@ public class MoveObjective : Objective {
 
 public class DiagObjective : Objective {
 
-	private bool upRight;
-	private bool downLeft;
+	private bool _upRight;
+	private bool _downLeft;
 
 	public void UpRightPressed(){
-		upRight = true;
+		_upRight = true;
 	}
 	public void DownLeftPressed(){
-		downLeft = true;
+		_downLeft = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var upRightColor = upRight ? "green" : "red";
-		var downLeftColor = downLeft ? "green" : "red";
+        var upRightColor = _upRight ? "green" : "red";
+		var downLeftColor = _downLeft ? "green" : "red";
         return lang.GetString("tutoDiagonal") + "\n" +
         "<color=" + upRightColor + ">" + lang.GetString("tutoDiagonalUpRight") + "</color>\n" +
         "<color=" + downLeftColor + ">" + lang.GetString("tutoDiagonalDownLeft") + "</color>\n";
 	}
 
 	public override bool IsCompleted(){
-		return (upRight && downLeft);
+		return (_upRight && _downLeft);
 	}
 
 	public override void Check(){
@@ -144,21 +144,21 @@ public class DiagObjective : Objective {
 }
 
 public class RayObjective : Objective {
-	private bool rayDead;
+	private bool _rayDead;
 
 	public void RayDead(){
-		rayDead = true;
+		_rayDead = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var deadColor = rayDead ? "green" : "red";
+        var deadColor = _rayDead ? "green" : "red";
         return lang.GetString("tutoRay") + "\n" +
             "<color=" + deadColor + ">" + lang.GetString("tutoRayDeath") + "</color>";
 	}
 
 	public override bool IsCompleted(){
-		return rayDead;
+		return _rayDead;
 	}
 
 	public override void Check(){
@@ -173,21 +173,21 @@ public class RayObjective : Objective {
 }
 
 public class DetectorObjective : Objective {
-	private bool detectorDead;
+	private bool _detectorDead;
 
 	public void DetectorDead(){
-		detectorDead = true;
+		_detectorDead = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var deadColor = detectorDead ? "green" : "red";
+        var deadColor = _detectorDead ? "green" : "red";
         return lang.GetString("tutoDetector") + "\n" +
             "<color=" + deadColor + ">" + lang.GetString("tutoDetectorDeath") + "</color>";
 	}
 
 	public override bool IsCompleted(){
-		return detectorDead;
+		return _detectorDead;
 	}
 
 	public override void Check (){
@@ -202,21 +202,21 @@ public class DetectorObjective : Objective {
 }
 
 public class CameraObjective : Objective {
-	private bool cameraDead;
+	private bool _cameraDead;
 
 	public void CameraDead(){
-		cameraDead = true;
+		_cameraDead = true;
 	}
 
 	public override string GetDescription(){
         Init();
-        var deadColor = cameraDead ? "green" : "red";
+        var deadColor = _cameraDead ? "green" : "red";
         return lang.GetString("tutoCamera") + "\n" +
             "<color=" + deadColor + ">" + lang.GetString("tutoCameraDeath") + "</color>";
 	}
 
 	public override bool IsCompleted(){
-		return cameraDead;
+		return _cameraDead;
 	}
 
 	public override void Check (){
@@ -231,21 +231,21 @@ public class CameraObjective : Objective {
 }
 
 public class RespawnObjective : Objective {
-	private bool key;
+	private bool _key;
 
 	public void KeyPressed(){
-		key = true;
+		_key = true;
 	}
 
 	public override string GetDescription (){
         Init();
-        var keyColor = key ? "green" : "red";
+        var keyColor = _key ? "green" : "red";
         return lang.GetString("tutoRespawn") + "\n" +
             "<color=" + keyColor + ">" + lang.GetString("tutoRespawnTouch") + "</color>";
 	}
 
 	public override bool IsCompleted (){
-		return key;
+		return _key;
 	}
 
 	public override void Check (){
@@ -259,25 +259,25 @@ public class RespawnObjective : Objective {
 }
 
 public class ColorerObjective : Objective {
-	private bool red;
-	private bool green;
-	private bool blue;
-	private bool init;
+	private bool _red;
+	private bool _green;
+	private bool _blue;
+	private bool _init;
 
-	private Color redC = new Color (1f, 0.2f, 0.2f, 1f);
-	private Color greenC = new Color(0f,0.8f,0f,1f);
-	private Color blueC = new Color (0.1f, 0.3f, 1f, 1f);
+	private Color _redC = new Color (1f, 0.2f, 0.2f, 1f);
+	private Color _greenC = new Color(0f,0.8f,0f,1f);
+	private Color _blueC = new Color (0.1f, 0.3f, 1f, 1f);
 
 	public void RedChange(){
-		red = true;
+		_red = true;
 	}
 
 	public void BlueChange(){
-		blue = true;
+		_blue = true;
 	}
 
 	public void GreenChange(){
-		green = true;
+		_green = true;
 	}
 
 	private bool CompareColor(Color color1,Color color2,bool init)
@@ -287,9 +287,9 @@ public class ColorerObjective : Objective {
 
 	public override string GetDescription (){
         Init();
-        var redColor = red ? "green" : "red";
-		var greenColor = green ? "green" : "red";
-		var blueColor = blue ? "green" : "red";
+        var redColor = _red ? "green" : "red";
+		var greenColor = _green ? "green" : "red";
+		var blueColor = _blue ? "green" : "red";
         return lang.GetString("tutoColorer") + "\n" +
             "<color=" + greenColor + ">" + lang.GetString("tutoColorerGreen") + "</color>\n" +
             "<color=" + blueColor + ">" + lang.GetString("tutoColorerBlue") + "</color>\n" +
@@ -297,7 +297,7 @@ public class ColorerObjective : Objective {
 	}
 
 	public override bool IsCompleted (){
-		return (red && blue && green);
+		return (_red && _blue && _green);
 	}
 
 	public override void Check (){
@@ -306,15 +306,15 @@ public class ColorerObjective : Objective {
 		start.startY=1.5f;
 		start.startRot = 0;
 		var playerSpriteRenderer = GameObject.Find("Player").GetComponent<SpriteRenderer>();
-		if (CompareColor (playerSpriteRenderer.color, redC,init))
-			red = true;
-		if (CompareColor (playerSpriteRenderer.color, greenC, true)) {
-			green = true;
-			init = true;
+		if (CompareColor (playerSpriteRenderer.color, _redC,_init))
+			_red = true;
+		if (CompareColor (playerSpriteRenderer.color, _greenC, true)) {
+			_green = true;
+			_init = true;
 		}
-		if (CompareColor (playerSpriteRenderer.color, blueC, true)) {
-			blue = true;
-			init = true;
+		if (CompareColor (playerSpriteRenderer.color, _blueC, true)) {
+			_blue = true;
+			_init = true;
 		}
 	}
 }
@@ -353,60 +353,60 @@ public class TutoScript : MonoBehaviour {
     public Image quitTuto;
 
 	public TransitionObjective transObjective=new TransitionObjective();
-	private bool transition;
+	private bool _transition;
 
-	private MoveObjective moveObjective=new MoveObjective();
-	private DiagObjective diagObjective=new DiagObjective();
-	private RayObjective rayObjective=new RayObjective();
-	private DetectorObjective detectorObjective = new DetectorObjective();
-	private CameraObjective cameraObjective = new CameraObjective();
-	private RespawnObjective respawnObjective = new RespawnObjective();
-	private ColorerObjective colorerObjective = new ColorerObjective();
-	private FinishObjective finishObjective = new FinishObjective ();
+	private MoveObjective _moveObjective=new MoveObjective();
+	private DiagObjective _diagObjective=new DiagObjective();
+	private RayObjective _rayObjective=new RayObjective();
+	private DetectorObjective _detectorObjective = new DetectorObjective();
+	private CameraObjective _cameraObjective = new CameraObjective();
+	private RespawnObjective _respawnObjective = new RespawnObjective();
+	private ColorerObjective _colorerObjective = new ColorerObjective();
+	private FinishObjective _finishObjective = new FinishObjective ();
 
-	private List<Objective> objectiveList = new List<Objective>();
-	private List<GameObject> wallList = new List<GameObject> ();
-	private List<GameObject> transitionList = new List<GameObject> ();
-	private int active;
-	private int maxActive;
+	private List<Objective> _objectiveList = new List<Objective>();
+	private List<GameObject> _wallList = new List<GameObject> ();
+	private List<GameObject> _transitionList = new List<GameObject> ();
+	private int _active;
+	private int _maxActive;
 
-    private LanguageController lang;
-    private GameObject quitText;
-    private GameObject quitConfirm;
-    private GameObject quitCancel;
+    private LanguageController _lang;
+    private GameObject _quitText;
+    private GameObject _quitConfirm;
+    private GameObject _quitCancel;
 
     private void Awake()
     {
-        lang = new LanguageController(SaveLoad.Load().GetLanguage());
-        quitText = GameObject.Find("QuitText");
-        quitConfirm = GameObject.Find("QuitConfirm");
-        quitCancel = GameObject.Find("QuitCancel");
+        _lang = new LanguageController(SaveLoad.Load().GetLanguage());
+        _quitText = GameObject.Find("QuitText");
+        _quitConfirm = GameObject.Find("QuitConfirm");
+        _quitCancel = GameObject.Find("QuitCancel");
     }
 
     private void Start(){
-		objectiveList.Add (moveObjective);
-		wallList.Add (moveWall);
-		transitionList.Add (moveTransition);
-		objectiveList.Add (diagObjective);
-		wallList.Add (diagWall);
-		transitionList.Add (diagTransition);
-		objectiveList.Add (rayObjective);
-		wallList.Add (rayWall);
-		transitionList.Add (rayTransition);
-		objectiveList.Add (detectorObjective);
-		wallList.Add (detectorWall);
-		transitionList.Add (detectorTransition);
-		objectiveList.Add (cameraObjective);
-		wallList.Add (cameraWall);
-		transitionList.Add (cameraTransition);
-		objectiveList.Add (respawnObjective);
-		wallList.Add (respawnWall);
-		transitionList.Add (respawnTransition);
-		objectiveList.Add (colorerObjective);
-		wallList.Add (colorerWall);
-		transitionList.Add (colorerTransition);
-		objectiveList.Add (finishObjective);
-		maxActive = objectiveList.Count-1;
+		_objectiveList.Add (_moveObjective);
+		_wallList.Add (moveWall);
+		_transitionList.Add (moveTransition);
+		_objectiveList.Add (_diagObjective);
+		_wallList.Add (diagWall);
+		_transitionList.Add (diagTransition);
+		_objectiveList.Add (_rayObjective);
+		_wallList.Add (rayWall);
+		_transitionList.Add (rayTransition);
+		_objectiveList.Add (_detectorObjective);
+		_wallList.Add (detectorWall);
+		_transitionList.Add (detectorTransition);
+		_objectiveList.Add (_cameraObjective);
+		_wallList.Add (cameraWall);
+		_transitionList.Add (cameraTransition);
+		_objectiveList.Add (_respawnObjective);
+		_wallList.Add (respawnWall);
+		_transitionList.Add (respawnTransition);
+		_objectiveList.Add (_colorerObjective);
+		_wallList.Add (colorerWall);
+		_transitionList.Add (colorerTransition);
+		_objectiveList.Add (_finishObjective);
+		_maxActive = _objectiveList.Count-1;
 
         Resume();
 	}
@@ -414,19 +414,19 @@ public class TutoScript : MonoBehaviour {
     private void Update(){
         UpdateText();
 		if (transObjective.IsCompleted ()) {
-			transition = false;
+			_transition = false;
 			transObjective.SetDone (false);
-			transitionList [active-1].gameObject.SetActive (false);
+			_transitionList [_active-1].gameObject.SetActive (false);
 		}
-		if (!transition)
-			objectiveList [active].Check ();
-		if (objectiveList [active].IsCompleted () && !transition) {
-			wallList [active].gameObject.SetActive (false);
-			transition = true;
-			if (active < maxActive)
-				active++;
+		if (!_transition)
+			_objectiveList [_active].Check ();
+		if (_objectiveList [_active].IsCompleted () && !_transition) {
+			_wallList [_active].gameObject.SetActive (false);
+			_transition = true;
+			if (_active < _maxActive)
+				_active++;
 		}
-		tutoText.text = transition ? transObjective.GetDescription () : objectiveList [active].GetDescription ();
+		tutoText.text = _transition ? transObjective.GetDescription () : _objectiveList [_active].GetDescription ();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -436,9 +436,9 @@ public class TutoScript : MonoBehaviour {
 
     private void UpdateText()
     {
-        quitText.GetComponent<TextMeshProUGUI>().text = lang.GetString("tutoQuit");
-        quitConfirm.GetComponentInChildren<TextMeshProUGUI>().text = lang.GetString("yes");
-        quitCancel.GetComponentInChildren<TextMeshProUGUI>().text = lang.GetString("no");
+        _quitText.GetComponent<TextMeshProUGUI>().text = _lang.GetString("tutoQuit");
+        _quitConfirm.GetComponentInChildren<TextMeshProUGUI>().text = _lang.GetString("yes");
+        _quitCancel.GetComponentInChildren<TextMeshProUGUI>().text = _lang.GetString("no");
     }
 
     private void QuitTuto()

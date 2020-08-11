@@ -5,11 +5,11 @@ public class JoystickController : MonoBehaviour {
 
     public GameObject joystick;
 
-    private VariableJoystick variableJoystick;
+    private VariableJoystick _variableJoystick;
 
 	private void Start () {
 		Activate(false);
-		variableJoystick = joystick.GetComponent<VariableJoystick>();
+		_variableJoystick = joystick.GetComponent<VariableJoystick>();
 	}
 	
 	public void Activate(bool active)
@@ -19,18 +19,18 @@ public class JoystickController : MonoBehaviour {
 	
 	public void ModeChanged(int index)
 	{
-		if (variableJoystick == null)
+		if (_variableJoystick == null)
 			return;
 		switch(index)
 		{
 			case 0:
-				variableJoystick.SetMode(JoystickType.Fixed);
+				_variableJoystick.SetMode(JoystickType.Fixed);
 				break;
 			case 1:
-				variableJoystick.SetMode(JoystickType.Floating);
+				_variableJoystick.SetMode(JoystickType.Floating);
 				break;
 			case 2:
-				variableJoystick.SetMode(JoystickType.Dynamic);
+				_variableJoystick.SetMode(JoystickType.Dynamic);
 				break;
 			default:
 				break;

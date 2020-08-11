@@ -22,13 +22,13 @@ public class PlayerController : MonoBehaviour {
 	public LevelFinish levelFinish;
 	public LevelStart levelStart;
 	
-	private Rigidbody2D rd2d;
+	private Rigidbody2D _rd2d;
 	public Animator Animator { get; private set; }
 
-	private float moveHDelay;
-	private float moveVDelay;
+	private float _moveHDelay;
+	private float _moveVDelay;
 
-    private Joystick joystick;
+    private Joystick _joystick;
     private static readonly int IsFinishAnimator = Animator.StringToHash("IsFinish");
     private static readonly int IsDeadAnimator = Animator.StringToHash("IsDead");
     private static readonly int FaceYAnimator = Animator.StringToHash("FaceY");
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour {
 #if UNITY_ANDROID
         joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
 #endif
-		rd2d = GetComponent<Rigidbody2D>();
+		_rd2d = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator> ();
 	}
 
@@ -90,13 +90,13 @@ public class PlayerController : MonoBehaviour {
 	    
         var speedRate = Mathf.Max (Mathf.Abs (moveVertical), Mathf.Abs (moveHorizontal))/decceleration;
 		var rot = Mathf.Rad2Deg * Mathf.Atan2 (-moveHorizontal, moveVertical);
-        if ((horizontalNotNull && Mathf.Abs (moveHorizontal) - Mathf.Abs (moveHDelay) >= 0 )
-            || (verticalNotNull & Mathf.Abs (moveVertical) - Mathf.Abs (moveVDelay) >= 0)) {
-			rd2d.SetRotation(rot);
+        if ((horizontalNotNull && Mathf.Abs (moveHorizontal) - Mathf.Abs (_moveHDelay) >= 0 )
+            || (verticalNotNull & Mathf.Abs (moveVertical) - Mathf.Abs (_moveVDelay) >= 0)) {
+			_rd2d.SetRotation(rot);
 			speedRate *= decceleration;
 		}
-        moveHDelay = moveHorizontal;
-		moveVDelay = moveVertical;
+        _moveHDelay = moveHorizontal;
+		_moveVDelay = moveVertical;
 		transform.Translate (speed * speedRate * Time.deltaTime * Vector3.up);
 		if (Math.Abs(moveHorizontal) > 0.1 || Mathf.Abs(moveVertical) > 0.1)
 		{

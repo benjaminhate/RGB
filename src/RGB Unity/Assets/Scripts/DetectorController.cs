@@ -5,39 +5,39 @@ public class DetectorController : ObstacleController {
 
 	public float speed;
 	
-	private Animator animator;
+	private Animator _animator;
 	private static readonly int IsShrinkAnimator = Animator.StringToHash("IsShrink");
 	private static readonly int PlayAnimator = Animator.StringToHash("Play");
 
 	private void Start ()
 	{
-		animator = GetComponent<Animator>();
+		_animator = GetComponent<Animator>();
 		if (speed > 0)
 		{
-			animator.SetBool(IsShrinkAnimator, true);
+			_animator.SetBool(IsShrinkAnimator, true);
 			PlayAnimation();
 		}
 	}
 
 	public IEnumerator OnEndShrinkAnimation()
 	{
-		animator.speed = 1f;
-		animator.SetBool(IsShrinkAnimator, false);
+		_animator.speed = 1f;
+		_animator.SetBool(IsShrinkAnimator, false);
 		yield return Wait();
 		PlayAnimation();
 	}
 
 	public IEnumerator OnEndExpandAnimation()
 	{
-		animator.speed = 1f;
-		animator.SetBool(IsShrinkAnimator, true);
+		_animator.speed = 1f;
+		_animator.SetBool(IsShrinkAnimator, true);
 		yield return Wait();
 		PlayAnimation();
 	}
 
 	private void PlayAnimation()
 	{
-		animator.speed = speed;
-		animator.SetTrigger(PlayAnimator);
+		_animator.speed = speed;
+		_animator.SetTrigger(PlayAnimator);
 	}
 }

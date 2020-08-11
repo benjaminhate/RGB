@@ -21,58 +21,7 @@ namespace Objects
 			this.blocked = blocked;
 			this.id = id;
 		}
-
-		public Level SetName(string name){
-			this.name = name;
-			return this;
-		}
-		public string GetName(){
-			return name;
-		}
-
-		public Level SetId(int id)
-		{
-			this.id = id;
-			return this;
-		}
-
-		public int GetId()
-		{
-			return id;
-		}
-
-		public Level SetTimer(float timer){
-			this.timer = timer;
-			return this;
-		}
-		public float GetTimer(){
-			return timer;
-		}
-
-		public Level SetCompleted(bool completed){
-			this.completed = completed;
-			return this;
-		}
-		public bool GetCompleted(){
-			return completed;
-		}
-
-		public Level SetBlocked(bool blocked){
-			this.blocked = blocked;
-			return this;
-		}
-		public bool GetBlocked(){
-			return blocked;
-		}
-
-		public Level SetSceneName(string sceneName){
-			this.sceneName = sceneName;
-			return this;
-		}
-		public string GetSceneName(){
-			return sceneName;
-		}
-
+		
 		public override string ToString()
 		{
 			return

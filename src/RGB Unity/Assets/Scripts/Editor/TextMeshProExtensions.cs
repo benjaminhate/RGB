@@ -9,20 +9,20 @@
     {
         public class TextMeshProSettings
         {
-            public bool Enabled;
-            public FontStyles FontStyle;
-            public float FontSize;
-            public float FontSizeMin;
-            public float FontSizeMax;
-            public float LineSpacing;
-            public bool EnableRichText;
-            public bool EnableAutoSizing;
-            public TextAlignmentOptions TextAlignmentOptions;
-            public bool WrappingEnabled;
-            public TextOverflowModes TextOverflowModes;
-            public string Text;
-            public Color Color;
-            public bool RayCastTarget;
+            public bool enabled;
+            public FontStyles fontStyle;
+            public float fontSize;
+            public float fontSizeMin;
+            public float fontSizeMax;
+            public float lineSpacing;
+            public bool enableRichText;
+            public bool enableAutoSizing;
+            public TextAlignmentOptions textAlignmentOptions;
+            public bool wrappingEnabled;
+            public TextOverflowModes textOverflowModes;
+            public string text;
+            public Color color;
+            public bool rayCastTarget;
         }
      
         [MenuItem("Tools/Text To TextMeshPro", false, 4000)]
@@ -47,20 +47,20 @@
             DestroyImmediate(target.GetComponent<Text>());
      
             TextMeshProUGUI tmp = target.AddComponent<TextMeshProUGUI>();
-            tmp.enabled = settings.Enabled;
-            tmp.fontStyle = settings.FontStyle;
-            tmp.fontSize = settings.FontSize;
-            tmp.fontSizeMin = settings.FontSizeMin;
-            tmp.fontSizeMax = settings.FontSizeMax;
-            tmp.lineSpacing = settings.LineSpacing;
-            tmp.richText = settings.EnableRichText;
-            tmp.enableAutoSizing = settings.EnableAutoSizing;
-            tmp.alignment = settings.TextAlignmentOptions;
-            tmp.enableWordWrapping = settings.WrappingEnabled;
-            tmp.overflowMode = settings.TextOverflowModes;
-            tmp.text = settings.Text;
-            tmp.color = settings.Color;
-            tmp.raycastTarget = settings.RayCastTarget;
+            tmp.enabled = settings.enabled;
+            tmp.fontStyle = settings.fontStyle;
+            tmp.fontSize = settings.fontSize;
+            tmp.fontSizeMin = settings.fontSizeMin;
+            tmp.fontSizeMax = settings.fontSizeMax;
+            tmp.lineSpacing = settings.lineSpacing;
+            tmp.richText = settings.enableRichText;
+            tmp.enableAutoSizing = settings.enableAutoSizing;
+            tmp.alignment = settings.textAlignmentOptions;
+            tmp.enableWordWrapping = settings.wrappingEnabled;
+            tmp.overflowMode = settings.textOverflowModes;
+            tmp.text = settings.text;
+            tmp.color = settings.color;
+            tmp.raycastTarget = settings.rayCastTarget;
         }
      
         static TextMeshProSettings GetTextMeshProSettings(GameObject gameObject)
@@ -74,20 +74,20 @@
      
             return new TextMeshProSettings
             {
-                Enabled = uiText.enabled,
-                FontStyle = FontStyleToFontStyles(uiText.fontStyle),
-                FontSize = uiText.fontSize,
-                FontSizeMin = uiText.resizeTextMinSize,
-                FontSizeMax = uiText.resizeTextMaxSize,
-                LineSpacing = uiText.lineSpacing,
-                EnableRichText = uiText.supportRichText,
-                EnableAutoSizing = uiText.resizeTextForBestFit,
-                TextAlignmentOptions = TextAnchorToTextAlignmentOptions(uiText.alignment),
-                WrappingEnabled = HorizontalWrapModeToBool(uiText.horizontalOverflow),
-                TextOverflowModes = VerticalWrapModeToTextOverflowModes(uiText.verticalOverflow),
-                Text = uiText.text,
-                Color = uiText.color,
-                RayCastTarget = uiText.raycastTarget
+                enabled = uiText.enabled,
+                fontStyle = FontStyleToFontStyles(uiText.fontStyle),
+                fontSize = uiText.fontSize,
+                fontSizeMin = uiText.resizeTextMinSize,
+                fontSizeMax = uiText.resizeTextMaxSize,
+                lineSpacing = uiText.lineSpacing,
+                enableRichText = uiText.supportRichText,
+                enableAutoSizing = uiText.resizeTextForBestFit,
+                textAlignmentOptions = TextAnchorToTextAlignmentOptions(uiText.alignment),
+                wrappingEnabled = HorizontalWrapModeToBool(uiText.horizontalOverflow),
+                textOverflowModes = VerticalWrapModeToTextOverflowModes(uiText.verticalOverflow),
+                text = uiText.text,
+                color = uiText.color,
+                rayCastTarget = uiText.raycastTarget
             };
         }
      

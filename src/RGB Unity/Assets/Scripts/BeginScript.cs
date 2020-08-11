@@ -13,9 +13,9 @@ public class BeginScript : MonoBehaviour {
 
     public string levelName;
 
-	private string textType;
+	private string _textType;
 
-    private JoystickController joystick;
+    private JoystickController _joystick;
 
     private void Start () {
 #if UNITY_ANDROID
@@ -29,15 +29,15 @@ public class BeginScript : MonoBehaviour {
 		var levelType = levelName.Substring (levelName.Length-1, 1);
 		var textLevel = levelName.Substring (levelName.Length-2, 1);
 		if (string.CompareOrdinal(levelType,"E")==0) {
-			textType="Easy";
+			_textType="Easy";
 		}
 		if (string.CompareOrdinal(levelType,"M")==0) {
-			textType="Medium";
+			_textType="Medium";
 		}
 		if (string.CompareOrdinal(levelType,"H")==0) {
-			textType="Hard";
+			_textType="Hard";
 		}
-		levelText.text = textType + "-Level " + textLevel;
+		levelText.text = _textType + "-Level " + textLevel;
 	}
 
     private void Update () {
