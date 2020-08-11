@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class LevelFinish : MonoBehaviour {
 	public string nextLevel;
-	private LevelManager levelManager;
+	private LevelManager _levelManager;
 
 	private void Start()
 	{
-		levelManager = LevelManager.Instance;
+		_levelManager = LevelManager.Instance;
 	}
 
 	private void OnTriggerEnter2D(Collider2D other)
@@ -21,7 +21,7 @@ public class LevelFinish : MonoBehaviour {
 			var timerCanvas = GameObject.Find("TimerCanvas");
 			if (timerCanvas != null) {
 				Debug.Log("Saving Timer");
-				var levelName = levelManager.LevelName;
+				var levelName = _levelManager.LevelName;
 					SaveLoad.SaveTimer (timerCanvas.GetComponent<TimerScript> ().GetTimer (), levelName);
 				// TODO fix Serialization bug
 			}
@@ -34,6 +34,6 @@ public class LevelFinish : MonoBehaviour {
 	{
 		Cursor.visible = true;
 		
-		levelManager.ChangeLevel(nextLevel);
+		_levelManager.ChangeLevel(nextLevel);
 	}
 }

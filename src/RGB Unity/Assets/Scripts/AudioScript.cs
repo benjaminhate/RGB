@@ -2,12 +2,12 @@
 
 public class AudioScript : MonoBehaviour {
 
-    private AudioSource source;
+    private AudioSource _source;
     private static GameObject _instance;
 
     private void Awake()
     {
-        source = GetComponent<AudioSource>();
+        _source = GetComponent<AudioSource>();
         if(_instance != null && _instance != this)
         {
             Destroy(gameObject);
@@ -35,15 +35,15 @@ public class AudioScript : MonoBehaviour {
         if (volume)
         {
             AudioListener.volume = 1f;
-            if (!source.isPlaying)
+            if (!_source.isPlaying)
             {
-                source.Play();
+                _source.Play();
             }
         }
         else
         {
             AudioListener.volume = 0f;
-            source.Stop();
+            _source.Stop();
         }
     }
 }

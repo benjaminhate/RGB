@@ -8,23 +8,23 @@ public class PauseScript : MonoBehaviour {
 	private static bool _pause;
 	private static bool _pauseCheck;
 
-	private PlayerData data;
-	private bool volume;
+	private PlayerData _data;
+	private bool _volume;
 
 	public GameObject menu;
 	public Button volumeButton;
 	public TextMeshProUGUI infoText;
     public bool pauseEnable;
 
-	private string textType;
+	private string _textType;
 
-    private string levelName;
+    private string _levelName;
 
     private static GameObject _pauseMenu;
 
-    private JoystickController joystick;
+    private JoystickController _joystick;
 
-    private LevelManager levelManager;
+    private LevelManager _levelManager;
 
     private void Start(){
 #if UNITY_ANDROID
@@ -33,31 +33,31 @@ public class PauseScript : MonoBehaviour {
 		_pause = false;
 		_pauseCheck = false;
 		_pauseMenu = menu;
-		data = SaveLoad.Load ();
-		if (data != null) {
-			volume = !data.GetVolume ();
+		_data = SaveLoad.Load ();
+		if (_data != null) {
+			_volume = !_data.GetVolume ();
 		} else {
-			volume = false;
+			_volume = false;
 		}
 		VolumeButton ();
 		Menu (false);
 
-		levelManager = LevelManager.Instance;
+		_levelManager = LevelManager.Instance;
 		
-		levelName = levelManager.LevelName;
+		_levelName = _levelManager.LevelName;
 		
-		var levelType = levelName.Substring (levelName.Length-1, 1);
-		var textLevel = levelName.Substring (levelName.Length-2, 1);
+		var levelType = _levelName.Substring (_levelName.Length-1, 1);
+		var textLevel = _levelName.Substring (_levelName.Length-2, 1);
 		if (string.CompareOrdinal(levelType,"E")==0) {
-			textType="Easy";
+			_textType="Easy";
 		}
 		if (string.CompareOrdinal(levelType,"M")==0) {
-			textType="Medium";
+			_textType="Medium";
 		}
 		if (string.CompareOrdinal(levelType,"H")==0) {
-			textType="Hard";
+			_textType="Hard";
 		}
-		infoText.text = textType + "-Level " + textLevel;
+		infoText.text = _textType + "-Level " + textLevel;
 	}
 
     private void Update(){
@@ -80,10 +80,10 @@ public class PauseScript : MonoBehaviour {
 	public void VolumeButton(){
 		var volumeOn = volumeButton.transform.Find ("VolumeOn").GetComponent<Image> ();
 		var volumeOff = volumeButton.transform.Find ("VolumeOff").GetComponent<Image> ();
-		volume = !volume;
-		volumeOn.gameObject.SetActive (volume);
-		volumeOff.gameObject.SetActive (!volume);
-		SaveLoad.SaveVolume (volume);
+		_volume = !_volume;
+		volumeOn.gameObject.SetActive (_volume);
+		volumeOff.gameObject.SetActive (!_volume);
+		SaveLoad.SaveVolume (_volume);
         var audio = GameObject.FindGameObjectWithTag("Audio");
         if (audio != null)
         {
@@ -106,7 +106,7 @@ public class PauseScript : MonoBehaviour {
 
 	public void RefreshButton()
 	{
-		levelManager.ChangeLevel(levelName);
+		_levelManager.ChangeLevel(_levelName);
 	}
 
 	public void MenuButton(){

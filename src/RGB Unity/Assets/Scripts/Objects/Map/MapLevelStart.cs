@@ -5,9 +5,9 @@ namespace Objects.Map
 {
     [Serializable]
     public class MapLevelStart : MapElementColored {
-        private float startX;
-        private float startY;
-        private float startRot;
+        public float startX;
+        public float startY;
+        public float startRot;
 
         public MapLevelStart(GameObject obj) : base(obj)
         {
@@ -16,9 +16,5 @@ namespace Objects.Map
             startY = start.startY;
             startRot = start.startRot;
         }
-
-        public float GetStartX() { return startX; }
-        public float GetStartY() { return startY; }
-        public float GetStartRot() { return startRot; }
     }
 }

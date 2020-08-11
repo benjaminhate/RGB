@@ -18,34 +18,34 @@ public class MapCreator : MonoBehaviour{
     public Camera mainCamera;
     public GameObject levelContainer;
 
-    private string levelName = "Level1E";
+    private string _levelName = "Level1E";
 
-    private MapData mapData;
+    private MapData _mapData;
 
     private void Awake()
     {
         var levelSelector = GameObject.FindGameObjectWithTag("LevelSelector");
         if (levelSelector)
         {
-            levelName = levelSelector.name;
+            _levelName = levelSelector.name;
             Destroy(levelSelector);
         }
     }
 
     private void Start () {
-        CreateLevel(levelName);
+        CreateLevel(_levelName);
     }
 
     private void CreateLevel(string levelName)
     {
         Debug.Log("Creating level : " + levelName);
-        mapData = MapSaveLoad.LoadMap(levelName);
-        Debug.Log(mapData);
-        if (mapData != null)
+        _mapData = MapSaveLoad.LoadMap(levelName);
+        Debug.Log(_mapData);
+        if (_mapData != null)
         {
-            foreach (var element in mapData.GetElements())
+            foreach (var element in _mapData.GetElements())
             {
-                switch (element.GetElementType())
+                switch (element.type)
                 {
                     case MapElement.MapElementType.Game:
                         CreateGame((MapGame)element);
@@ -102,7 +102,7 @@ public class MapCreator : MonoBehaviour{
     {
         if (obj != null && element != null && obj.GetComponent<ColorElement>() != null)
         {
-            obj.GetComponent<ColorElement>().ChangeColor(element.ColorSO);
+            obj.GetComponent<ColorElement>().ChangeColor(element.ColorSo);
         }
     }
 
@@ -123,11 +123,11 @@ public class MapCreator : MonoBehaviour{
     {
         var game = Instantiate(gamePrefab, levelContainer.transform);
         SetGameObjectTransform(game, element);
-        ModifyBackground(game, element.GetBackground());
+        ModifyBackground(game, element.background);
         ModifyMainCamera(game);
-        ModifyLevelFinish(game,element.GetLevelFinish());
-        ModifyLevelStart(game, element.GetLevelStart());
-        ModifyPlayer(game, element.GetPlayer());
+        ModifyLevelFinish(game,element.levelFinish);
+        ModifyLevelStart(game, element.levelStart);
+        ModifyPlayer(game, element.player);
         ModifyBeginCanvas(game);
         mainCamera.enabled = false;
         ModifyBeginCamera(game);
@@ -150,7 +150,7 @@ public class MapCreator : MonoBehaviour{
     {
         var beginCanvas = GetChildWithTag(game, "BeginCanvas");
         beginCanvas.GetComponent<BeginScript>().mainCamera = mainCamera;
-        beginCanvas.GetComponent<BeginScript>().levelName = mapData.GetLevelName();
+        beginCanvas.GetComponent<BeginScript>().levelName = _mapData.GetLevelName();
     }
 
     public void ModifyMainCamera(GameObject game)
@@ -163,7 +163,7 @@ public class MapCreator : MonoBehaviour{
     {
         var levelFinish = game.GetComponentInChildren<LevelFinish>().gameObject;
         SetGameObjectTransform(levelFinish, element);
-        levelFinish.GetComponent<LevelFinish>().nextLevel = element.GetNextLevel();
+        levelFinish.GetComponent<LevelFinish>().nextLevel = element.nextLevel;
     }
 
     public void ModifyLevelStart(GameObject game, MapLevelStart element)
@@ -172,16 +172,16 @@ public class MapCreator : MonoBehaviour{
         SetGameObjectTransform(levelStart, element);
         ChangeGameObjectColor(levelStart, element);
         var levelStartScript = levelStart.GetComponent<LevelStart>();
-        levelStartScript.startX = element.GetStartX();
-        levelStartScript.startY = element.GetStartY();
-        levelStartScript.startRot = element.GetStartRot();
+        levelStartScript.startX = element.startX;
+        levelStartScript.startY = element.startY;
+        levelStartScript.startRot = element.startRot;
         levelStartScript.mainCamera = mainCamera;
     }
 
     public void CreateObstacle(MapObstacle element)
     {
         Debug.Log("Obstacle : " + element);
-        switch (element.GetObstacleType())
+        switch (element.obstacleType)
         {
             case MapObstacle.MapObstacleType.Camera:
                 CreateCamera((MapCamera)element);
@@ -203,11 +203,11 @@ public class MapCreator : MonoBehaviour{
         SetGameObjectTransform(camera, element);
         ChangeGameObjectColor(camera, element);
         var cameraController = camera.GetComponent<CameraController>();
-        cameraController.degA = element.GetDegA();
-        cameraController.degB = element.GetDegB();
-        cameraController.rotSpeed = element.GetRotSpeed();
-        cameraController.timeStop = element.GetTimeStop();
-        cameraController.dir = element.GetDir();
+        cameraController.degA = element.degA;
+        cameraController.degB = element.degB;
+        cameraController.rotSpeed = element.rotSpeed;
+        cameraController.timeStop = element.timeStop;
+        cameraController.dir = element.dir;
     }
 
     public void CreateDetector(MapDetector element)
@@ -217,8 +217,8 @@ public class MapCreator : MonoBehaviour{
         var detectorRay = detector.GetComponentInChildren<DetectorController>().gameObject;
         ChangeGameObjectColor(detectorRay, element);
         var detectorController = detectorRay.GetComponent<DetectorController>();
-        detectorController.speed = element.GetSpeed();
-        detectorController.timeStop = element.GetTimeStop();
+        detectorController.speed = element.speed;
+        detectorController.timeStop = element.timeStop;
     }
 
     public void CreateRay(MapRay element)
@@ -239,14 +239,14 @@ public class MapCreator : MonoBehaviour{
         SetGameObjectTransform(player, element);
         ChangeGameObjectColor(player, element);
         var playerController = player.GetComponent<PlayerController>();
-        playerController.speed = element.GetSpeed();
-        playerController.decceleration = element.GetDecceleration();
-        playerController.dead = element.GetDead();
-        playerController.respawn = element.GetRespawn();
-        playerController.finish = element.GetFinish();
-        playerController.obstacleCollide = element.GetObstacleCollide();
-        playerController.obstacleKill = element.GetObstacleKill();
-        playerController.obstacle = element.GetObstacle();
+        playerController.speed = element.speed;
+        playerController.decceleration = element.decceleration;
+        playerController.dead = element.dead;
+        playerController.respawn = element.respawn;
+        playerController.finish = element.finish;
+        playerController.obstacleCollide = element.obstacleCollide;
+        playerController.obstacleKill = element.obstacleKill;
+        playerController.obstacle = element.obstacle;
     }
 
     public void CreateWall(MapElement element)
@@ -257,6 +257,6 @@ public class MapCreator : MonoBehaviour{
 
     public MapData GetMapData()
     {
-        return mapData;
+        return _mapData;
     }
 }

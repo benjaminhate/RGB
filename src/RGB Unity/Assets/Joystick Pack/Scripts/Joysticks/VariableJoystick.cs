@@ -14,14 +14,14 @@ namespace Joystick_Pack.Scripts.Joysticks
 
         public JoystickType Mode => joystickType;
 
-        private Vector2 fixedPosition = Vector2.zero;
+        private Vector2 _fixedPosition = Vector2.zero;
 
         public void SetMode(JoystickType joystickType)
         {
             this.joystickType = joystickType;
             if(joystickType == JoystickType.Fixed)
             {
-                background.anchoredPosition = fixedPosition;
+                background.anchoredPosition = _fixedPosition;
                 background.gameObject.SetActive(true);
             }
             else
@@ -31,7 +31,7 @@ namespace Joystick_Pack.Scripts.Joysticks
         protected override void Start()
         {
             base.Start();
-            fixedPosition = background.anchoredPosition;
+            _fixedPosition = background.anchoredPosition;
             SetMode(joystickType);
         }
 

@@ -5,14 +5,14 @@ namespace Objects.Map
 {
     [Serializable]
     public class MapPlayer : MapElementColored {
-        private float speed;
-        private float decceleration;
-        private bool dead;
-        private bool respawn;
-        private bool finish;
-        private bool obstacleCollide;
-        private bool obstacleKill;
-        private string obstacle;
+        public float speed;
+        public float decceleration;
+        public bool dead;
+        public bool respawn;
+        public bool finish;
+        public bool obstacleCollide;
+        public bool obstacleKill;
+        public string obstacle;
 
         public MapPlayer(GameObject obj) : base(obj)
         {
@@ -26,14 +26,5 @@ namespace Objects.Map
             obstacleKill = player.obstacleKill;
             obstacle = player.obstacle;
         }
-
-        public float GetSpeed() { return speed; }
-        public float GetDecceleration() { return decceleration; }
-        public bool GetDead() { return dead; }
-        public bool GetRespawn() { return respawn; }
-        public bool GetFinish() { return finish; }
-        public bool GetObstacleCollide() { return obstacleCollide; }
-        public bool GetObstacleKill() { return obstacleKill; }
-        public string GetObstacle() { return obstacle; }
     }
 }

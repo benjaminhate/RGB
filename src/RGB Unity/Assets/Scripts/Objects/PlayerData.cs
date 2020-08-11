@@ -45,28 +45,14 @@ namespace Objects
             return categories;
         }
 
-        public Category GetCategoryWithName(String name)
+        public Category GetCategoryWithName(string name)
         {
-            foreach(var category in categories)
-            {
-                if (category.GetName() == name)
-                {
-                    return category;
-                }
-            }
-            return null;
+            return categories.FirstOrDefault(category => category.name == name);
         }
 
         public Category GetCategoryWithId(int id)
         {
-            foreach(var category in categories)
-            {
-                if (category.id == id)
-                {
-                    return category;
-                }
-            }
-            return null;
+            return categories.FirstOrDefault(category => category.id == id);
         }
 
         public PlayerData SetVolume(bool volume){

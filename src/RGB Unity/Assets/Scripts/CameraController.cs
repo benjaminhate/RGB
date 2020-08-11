@@ -15,15 +15,15 @@ public class CameraController : ObstacleController {
 	 * then go from degB to degA counter-clockwise
 	 * */
 
-	private bool directionA;
+	private bool _directionA;
 
 	private void Start () {
-        directionA = true;
+        _directionA = true;
 		transform.rotation = Quaternion.Euler (0, 0, degA);
 	}
 
 	private void Update(){
-		if (directionA)
+		if (_directionA)
 			Rotate (-dir, degA);
 		else
 			Rotate (dir, degB);
@@ -34,7 +34,7 @@ public class CameraController : ObstacleController {
 		if (!stop)
 			transform.Rotate (Vector3.forward * direction, rotSpeed * Time.deltaTime);
 		if (Vector3.Distance(transform.eulerAngles, target) < 1f) {
-			directionA = !directionA;
+			_directionA = !_directionA;
 			transform.eulerAngles = target;
 			StartCoroutine(Wait ());
 		}

@@ -10,10 +10,10 @@ public class SaveLoad {
 
 	private static Level SearchLevelNameInSave(List<Category> categories,string levelName){
         Debug.Log("Level name : " + levelName);
-		foreach (var level in categories.SelectMany(category => category.GetLevels()))
+		foreach (var level in categories.SelectMany(category => category.levels))
 		{
-			Debug.Log("Level in Save : " + level.GetSceneName());
-			if (string.CompareOrdinal (level.GetSceneName (), levelName) == 0)
+			Debug.Log("Level in Save : " + level.sceneName);
+			if (string.CompareOrdinal (level.sceneName, levelName) == 0)
 				return level;
 		}
 		return null;
@@ -21,7 +21,7 @@ public class SaveLoad {
 
 	private static Category SearchLevelNameInCategory(List<Category> categories,string levelName)
 	{
-		return (from category in categories from level in category.GetLevels() where string.CompareOrdinal(level.GetSceneName(), levelName) == 0 select category).FirstOrDefault();
+		return (from category in categories from level in category.levels where string.CompareOrdinal(level.sceneName, levelName) == 0 select category).FirstOrDefault();
 	}
 
 	private static List<Category> GetListOfCategories ()
@@ -56,9 +56,9 @@ public class SaveLoad {
 
     private static void SetAllCompletedCategories(List<Category> categories)
     {
-	    foreach (var category in categories.Where(category => category.GetCompletedLevels ().Count == category.GetLevels ().Count))
+	    foreach (var category in categories.Where(category => category.GetCompletedLevels ().Count == category.levels.Count))
 	    {
-		    category.SetCompleted (true);
+		    category.completed = true;
 	    }
     }
 
@@ -91,10 +91,10 @@ public class SaveLoad {
 	public static PlayerData SaveLevel(string levelName) {
 		var categories = GetListOfCategories ();
 		var level = SearchLevelNameInSave (categories, levelName);
-		level?.SetBlocked (false);
+		if(level != null) level.blocked = false;
 
 		var category = SearchLevelNameInCategory (categories, levelName);
-		category?.SetBlocked (false);
+		if (category != null) category.blocked = false;
 		SetAllCompletedCategories (categories);
 
         var data = LoadNew();
@@ -110,10 +110,10 @@ public class SaveLoad {
 		var categories = GetListOfCategories ();
 		var level = SearchLevelNameInSave (categories, levelName);
 		if (level != null) {
-			level.SetCompleted (true);
-			level.SetBlocked (false);
-			if (timer < level.GetTimer () || level.GetTimer () == 0)
-				level.SetTimer (timer);
+			level.completed = true;
+			level.blocked = false;
+			if (timer < level.timer || level.timer == 0)
+				level.timer = timer;
 		}
 
 		SetAllCompletedCategories (categories);

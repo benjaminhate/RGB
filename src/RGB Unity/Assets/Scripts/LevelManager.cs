@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 
     public static LevelManager Instance { get; private set; }
 
-    private MapCreator creator;
+    private MapCreator _creator;
 
     private void Awake()
     {
@@ -24,15 +24,15 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        creator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
-        LevelName = creator != null ? creator.GetMapData().GetLevelName() : SceneManager.GetActiveScene().name;
+        _creator = GameObject.FindGameObjectWithTag("MapCreator")?.GetComponent<MapCreator>();
+        LevelName = _creator != null ? _creator.GetMapData().GetLevelName() : SceneManager.GetActiveScene().name;
     }
 
     public void ChangeLevel(string levelName)
     {
-        if (creator != null)
+        if (_creator != null)
         {
-            creator.ChangeLevel(levelName);
+            _creator.ChangeLevel(levelName);
         }
         else
         {

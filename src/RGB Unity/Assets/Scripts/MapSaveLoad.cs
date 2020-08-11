@@ -33,14 +33,18 @@ public class MapSaveLoad : MonoBehaviour {
             Debug.Log(obj.name);
             if (obj.CompareTag("Wall"))
             {
-                var wall = new MapElement(obj);
-                wall.ChangeType(MapElement.MapElementType.Wall);
+                var wall = new MapElement(obj)
+                {
+                    type = MapElement.MapElementType.Wall
+                };
                 mapData.AddElement(wall);
             }
             if (obj.CompareTag("Colorer"))
             {
-                var colorer = new MapElementColored(obj);
-                colorer.ChangeType(MapElement.MapElementType.Colorer);
+                var colorer = new MapElementColored(obj)
+                {
+                    type = MapElement.MapElementType.Colorer
+                };
                 mapData.AddElement(colorer);
             }
             if (obj.CompareTag("Game"))
