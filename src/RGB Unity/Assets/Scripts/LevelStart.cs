@@ -10,7 +10,6 @@ public class LevelStart : MonoBehaviour {
 	public float startRot;
 
 	public PlayerController player;
-	public Camera mainCamera;
 	
 	private LevelManager _levelManager;
 	private static readonly int IsSpawnAnimator = Animator.StringToHash("IsSpawn");
@@ -50,7 +49,6 @@ public class LevelStart : MonoBehaviour {
 	private void PlacePlayer(){
 		player.transform.position = new Vector3 (startX, startY, 0);
 		player.transform.eulerAngles = new Vector3 (0, 0, startRot);
-		mainCamera.transform.position = new Vector3 (startX, startY, -1);
         player.GetComponent<ColorElement>().ChangeColor(GetComponent<ColorElement>().colorSo);
 	}
 }
