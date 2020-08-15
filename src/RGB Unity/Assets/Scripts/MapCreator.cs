@@ -203,11 +203,10 @@ public class MapCreator : MonoBehaviour{
         SetGameObjectTransform(camera, element);
         ChangeGameObjectColor(camera, element);
         var cameraController = camera.GetComponent<CameraController>();
-        cameraController.degA = element.degA;
-        cameraController.degB = element.degB;
+        cameraController.targetAngles = element.targetAngles;
         cameraController.rotSpeed = element.rotSpeed;
         cameraController.timeStop = element.timeStop;
-        cameraController.dir = element.dir;
+        cameraController.initCameraDirection = element.direction;
     }
 
     public void CreateDetector(MapDetector element)
