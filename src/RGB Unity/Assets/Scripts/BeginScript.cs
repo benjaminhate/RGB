@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Cinemachine;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,22 +7,20 @@ public class BeginScript : MonoBehaviour {
     
 	public GameObject timerCanvas;
 	public TextMeshProUGUI levelText;
-	public Camera mainCamera;
-	public Camera beginCamera;
+	public CinemachineVirtualCamera mainCamera;
+	public CinemachineVirtualCamera beginCamera;
     
-	public GameObject player;
+	public PlayerController player;
+	public PauseScript pause;
 
     public string levelName;
 
 	private string _textType;
 
-    private JoystickController _joystick;
+    public JoystickController joystick;
 
     private void Start () {
-#if UNITY_ANDROID
-        joystick = FindObjectOfType<JoystickController>();
-#endif
-        GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = false;
+        pause.pauseEnable = false;
 		Time.timeScale = 0f;
 		mainCamera.enabled = false;
 		beginCamera.enabled = true;
@@ -48,11 +47,12 @@ public class BeginScript : MonoBehaviour {
     private void BeginGame () {
 		gameObject.SetActive (false);
 		timerCanvas.SetActive (true);
+		beginCamera.enabled = false;
 		mainCamera.enabled = true;
 		Time.timeScale = 1f;
-		player.GetComponent<PlayerController> ().respawn = true;
-		player.GetComponent<PlayerController> ().dead = true;
-        GameObject.FindGameObjectWithTag("Game").GetComponent<PauseScript>().pauseEnable = true;
+		player.respawn = true;
+		player.dead = true;
+		pause.pauseEnable = true;
 #if UNITY_ANDROID
         joystick.Activate(true);
 #endif

@@ -1,4 +1,5 @@
-﻿using Objects;
+﻿using Cinemachine;
+using Objects;
 using Objects.Map;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class MapCreator : MonoBehaviour{
     public GameObject detectorPrefab;
     public GameObject rayPrefab;
 
-    public Camera mainCamera;
+    public CinemachineVirtualCamera mainCamera;
     public GameObject levelContainer;
 
     private string _levelName = "Level1E";
@@ -175,7 +176,6 @@ public class MapCreator : MonoBehaviour{
         levelStartScript.startX = element.startX;
         levelStartScript.startY = element.startY;
         levelStartScript.startRot = element.startRot;
-        levelStartScript.mainCamera = mainCamera;
     }
 
     public void CreateObstacle(MapObstacle element)
