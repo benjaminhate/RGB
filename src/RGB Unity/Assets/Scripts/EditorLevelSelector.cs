@@ -10,11 +10,6 @@ public class EditorLevelSelector : MonoBehaviour {
         GetAllDirectories(Path.Combine(Application.persistentDataPath, "maps"));
         GetAllFiles(Path.Combine(Application.persistentDataPath,"maps"));
     }
-	
-	// Update is called once per frame
-    private void Update () {
-		
-	}
 
     private void GetAllFiles(string path)
     {

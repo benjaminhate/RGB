@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using Objects;
+﻿using Objects;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LevelStart : MonoBehaviour {
 

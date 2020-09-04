@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BeginScript : MonoBehaviour {
     

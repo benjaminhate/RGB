@@ -22,14 +22,11 @@ public class PauseScript : MonoBehaviour {
 
     private static GameObject _pauseMenu;
 
-    private JoystickController _joystick;
+    public JoystickController joystick;
 
     private LevelManager _levelManager;
 
     private void Start(){
-#if UNITY_ANDROID
-        joystick = GameObject.FindObjectOfType<JoystickController>();
-#endif
 		_pause = false;
 		_pauseCheck = false;
 		_pauseMenu = menu;

@@ -1,6 +1,5 @@
 ﻿using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.LWRP;
 
 namespace Objects
 {

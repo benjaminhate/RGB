@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Joystick_Pack.Scripts.Joysticks;
+﻿using Joystick_Pack.Scripts.Joysticks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class JoystickDropdownUI : MonoBehaviour
 {

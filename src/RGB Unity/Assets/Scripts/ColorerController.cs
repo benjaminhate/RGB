@@ -1,5 +1,4 @@
-﻿using System;
-using Objects;
+﻿using Objects;
 using UnityEngine;
 
 public class ColorerController : MonoBehaviour

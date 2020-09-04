@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Objects;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class CameraController : ObstacleController 
@@ -13,7 +10,7 @@ public class CameraController : ObstacleController
 	public class TargetAngle
 	{
 		[Range(0,359)] public int angle;
-		public bool changeDirection;
+		public bool changeDirection = true;
 	}
 
 	public List<TargetAngle> targetAngles;
@@ -30,8 +27,6 @@ public class CameraController : ObstacleController
 	private readonly List<Quaternion> paths = new List<Quaternion>();
 	private int indexPath;
 	private Quaternion CurrentPath => paths[IndexToRange(indexPath, paths)];
-
-	private float time;
 	
 	private void Start () {
         currentDirection = initCameraDirection == CameraDirection.Clockwise ? -1 : 1;
@@ -71,7 +66,6 @@ public class CameraController : ObstacleController
 
 	private void NextPath()
 	{
-		time = 0f;
 		indexPath = IndexToRange(indexPath + 1, paths);
 	}
 
@@ -116,5 +110,9 @@ public class CameraController : ObstacleController
 		paths.Add(Quaternion.Euler(0, 0, targetRotation));
 	}
 	
-	private int IndexToRange<T>(int index, IList<T> array) => (index + array.Count) % array.Count;
+	private int IndexToRange<T>(int index, IList<T> array)
+	{
+		if (array.Count == 0) return 0;
+		return (index + array.Count) % array.Count;
+	}
 }

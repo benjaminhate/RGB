@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using Joystick_Pack.Scripts.Base;
-using Objects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +19,7 @@ public class PlayerController : MonoBehaviour {
 
 	public LevelFinish levelFinish;
 	public LevelStart levelStart;
+	public TimerScript timer;
 	
 	private Rigidbody2D _rd2d;
 	public Animator Animator { get; private set; }
@@ -28,7 +27,7 @@ public class PlayerController : MonoBehaviour {
 	private float _moveHDelay;
 	private float _moveVDelay;
 
-    private Joystick _joystick;
+    public Joystick joystick;
     private static readonly int IsFinishAnimator = Animator.StringToHash("IsFinish");
     private static readonly int IsDeadAnimator = Animator.StringToHash("IsDead");
     private static readonly int FaceYAnimator = Animator.StringToHash("FaceY");
@@ -37,9 +36,6 @@ public class PlayerController : MonoBehaviour {
     public bool IsMoving => !dead && !finish;
 
     private void Start () {
-#if UNITY_ANDROID
-        joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponentInChildren<Joystick>();
-#endif
 		_rd2d = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator> ();
 	}
@@ -64,10 +60,7 @@ public class PlayerController : MonoBehaviour {
 		
 		respawn = true;
 		dead = true;
-		var timerCanvas = GameObject.Find("TimerCanvas");
-		if (timerCanvas) {
-			timerCanvas.GetComponent<TimerScript>().ResetTimer();
-		}
+		timer.ResetTimer();
 	}
 
     private void MovePlayer(){
@@ -77,7 +70,6 @@ public class PlayerController : MonoBehaviour {
         var dir = joystick.Direction * 1.5f;
         if (Mathf.Abs(dir.x) > 1f) dir.x = Mathf.Sign(dir.x) * 1f;
         if (Mathf.Abs(dir.y) > 1f) dir.y = Mathf.Sign(dir.y) * 1f;
-        Debug.Log(dir);
         moveHorizontal = dir.x;
         moveVertical = dir.y;
 #else

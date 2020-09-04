@@ -1,7 +1,5 @@
-﻿using System;
-using Objects;
+﻿using Objects;
 using UnityEditor;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Editor
